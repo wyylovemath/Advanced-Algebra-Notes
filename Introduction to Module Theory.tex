@@ -1,0 +1,1389 @@
+\chapter{Introduction to Module Theory}
+
+\section{Basic Definitions and Examples}
+
+\begin{definition}{Modules}\\
+An \textit{$R$-module} $M$ is an abelian additive group with an action of $R$ on $M$, that is a map $\substack{R \times M \;\to\; M\\
+(r,m) \;\mapsto\; rm}$, satisfying that: for any $r,s \in R$, any $m,n \in M$,
+\begin{itemize}
+    \item $r(sm)=(rs)m$
+    \item $(r+s)m =rm+sm$
+    \item $r(m+n) =rm+rn$
+    \item $1_R m=m$
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:} Modules over field $F$ and vector spaces over a field $F$ is the same.
+
+\noindent\textit{Convention:} In this book, unless otherwise specified, the letter "$M$" represents an $R$-module.
+
+\begin{definition}{Submodules}\\
+A $R$-submodule of $M$ is a subgroup $N$ of $M$ which is closed under the action of ring elments, i.e.: for any $r\in R$, any $n \in N$, we have $rn \in N$. Moreover, we call $0$ the trivial $R$-submodule.
+\end{definition}
+
+\noindent\textbf{Example:}
+\begin{itemize}
+    \item $M=R$ is an $R$-module, where the action is just the usual multiplication in $R$. In particular, every field can be considered as a (1-dimensional) vector space over itself. Furthermore, when $R$ is considered as an $R$-module, then the submodules of $R$ are precisely the ideals of $R$.
+
+    \item Let $R=F$ be a field and let $n \in \mathbb{N}_+$. Consider
+    $$F^n:= \{(a_1 ,\cdots, a_n) \mid a_i \in F,\forall i\}$$
+    which is called an \textit{affine $n$-space over $F$}. Make $F^n$ into an $n$-dimensional vector space over $F$ by defining addition and scalar multiplication componentwise: for any $a_i,b_i \in F, \alpha \in F$, we define:
+    \begin{itemize}
+        \item addition by $(a_1 ,\cdots, a_n) + (b_1 ,\cdots, b_n) := (a_1 +b_1 ,\cdots, a_n+b_n)$ and
+        \item multiplication by $\alpha(a_1,\cdots, a_n) := (\alpha a_1,\cdots, \alpha a_n)$.
+    \end{itemize}
+
+    \item Let $n \in \mathbb{N}_+$. Define
+    $$R^n := \{(a_1 ,\cdots, a_n) \mid a_i \in R ,\forall i\}$$
+    with the componentwise addition and multiplication similar as above, which is called the \textit{free module of rank $n$ over $R$}. An obvious submodule of $R^n$ is given by the $i$th component $:=$ the set of all $n$-tuples with arbitrary ring elements in the $i$th position and zeros in the $j$th position for all $j \neq i$.
+
+    \item If $S$ is a subring of $R$, then an $R$-module $M$ is automatically a $S$-module, e.g.: $\mathbb{R}$ is an $R$-module, a $\mathbb{Q}$-module and a $\mathbb{Z}$-module.
+
+    \item Let $I \triangleleft R$ be an ideal that \textit{annihilates} $M$, i.e.: for any $a \in I$, any $m \in M$, $am=0$. Then $M$ is an $(R/I)$-module with an action of $R/I$ on $M$ defined as follows: $\forall m \in M, \forall r+I \in R/I$, we define
+    $$(r+I) m:= rm$$
+    whose well-defined-ness is easy to check by the hypothesis that $I$ annihilates $M$. In particular, if $I$ is a maximal ideal of $R$, then $M$ is a vector space over $R/I$.
+
+    \item We record the next two examples as the later two subsections.
+\end{itemize}
+
+
+\begin{proposition}{Submodule Criterion}\\
+A subset $N \subseteq M$ of an $R$-module $M$ is a submodule of $M$ iff
+\begin{enumerate}
+    \item $N \neq \emptyset$
+    \item $\forall x,y \in N,\forall r \in R$, we have $x+ry \in N$.
+\end{enumerate}
+\end{proposition}
+
+\begin{definition}{$R$-algebra}\\
+An $R$-algebra is a ring $A$ with a homomorphism $\varphi :R \to A$ such that
+$$\varphi (R) \subseteq Z(A)$$
+where $Z(A) := \{ a \in A \mid ar=ra ,\forall r \in A \}$ denotes the center of $A$.
+\end{definition}
+
+\noindent\textbf{Remark:} If $A$ is an $R$-algebra, then it is easy to check that $A$ is an $R$-module with the action of $R$ on $A$ defined by
+$$ra := \varphi(r) \cdot_A a$$
+
+\begin{definition}{Algebra Homomorphisms and Isomorphisms}\\
+Let $A,B$ be $R$-algebras. An \textit{$R$-algebra homomorphism} (or \textit{isomorphism}) is a homomorphism (respectively isomorphism) $\varphi :A \to B$ such that $\varphi (r \cdot a) := r \cdot \varphi (a)$ for all $r\in R, a\in A$.
+\end{definition}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Any ring with identity (may \textbf{NOT} commutative) is a $\mathbb{Z}$-algebra.
+    \item A commutative unital ring $A$ is an $R$-algebra for any subring $R$ of $A$.
+\end{itemize}
+
+\subsection{$\mathbb{Z}$-modules}
+
+Let $R=\mathbb{Z}$ and let $(A,+)$ be any abelian additive group. Define the action of $\mathbb{Z}$ on $A$ by
+$$na:= \begin{cases}
+    \overbrace{a+ \cdots +a}^{n-times} &,if\;n>0\\
+    0 &,if\; n=0\\
+    \underbrace{(-a) + \cdots + (-a)}_{(-n)-times} &,if \;n<0
+\end{cases}$$
+and hence $A$ is a $\mathbb{Z}$-module. Conversely, every $\mathbb{Z}$-module, by def, is an abelian group. Hence,
+$$\mathbb{Z} {-}modules \;\;\Leftrightarrow \;\; abelian \;groups$$
+Furthermore, we also have
+$$\mathbb{Z} {-}submodules \;\;\Leftrightarrow \;\; abelian \;subgroups$$
+
+
+
+\noindent If $A$ is an abelian additive group containing an element $x$ of order $n < \infty$, then $nx=0$. Hence, a $\mathbb{Z}$-module may have nonzero elements $x$ such that $nx =0$ for some nonzero ring element $n$. In particular, if $A$ has order $m$, then by Lagrange's Theorem, for any $x \in A$, $mx=0$. Therefore, $A$ is a $(\mathbb{Z}/m \mathbb{Z})$-module. Furthermore, if $m=p$ is prime, then $A$ is a vector space over the field $\mathbb{F}_p = \mathbb{Z}/p \mathbb{Z}$.
+
+\subsection{$F[x]$-modules}
+
+Let $F$ be a field, let $R=F[x]$ be the polynomial ring, let $V$ be a vector space over $F$ and let $T$ be a linear transformation from $V$ to $V$. Then we're already seen that $V$ is an $F$-module.
+
+\begin{proposition}{Vector Spaces-Polynomial Rings-Modules Proposition}\\
+$V$ can be regarded as an $F[x]$-module.
+\end{proposition}
+
+
+\begin{proof}
+    We only find the "legal" action of $F[x]$ on $V$ here and omit the check of axioms of modules. We need some preparations:
+    \begin{enumerate}
+        \item For any $n \in \mathbb{N} \cup \{0\}$, we define
+        $$T^n:= \begin{cases}
+            id_V &,if \;n=0\\
+            T \circ T \circ \cdots \circ T \;(n\;times) &,if \;n\in \mathbb{N}_+
+        \end{cases}$$
+        which is again a linear transformation from $V$ to $V$.
+
+        \item It's easy to check that the linear combinations of linear transformations are again linear transformations.
+    \end{enumerate}
+    Now we can define the action of $F[x]$ on $V$: for any $a_i \in F$, any $v \in V$, we define:
+    $$(a_n x^n + \cdots + a_1 x +a_0) v := (a_n T^n + \cdots + a_1 T^1 +a_0 T^0) (v) \overset{2}{=} a_n T^n (v) + \cdots + a_1 T(v) +a_0 v$$
+\end{proof}
+
+\noindent\textbf{Remark:}
+\begin{itemize}
+    \item Note that $F$ is naturally the subring of $F[x]$ (the constant polynomials) and by the first preparation in the proof of Vector Spaces-Polynomial Rings-Modules Proposition, the action of $F[x]$ on $V$ is consistent with the action of $F$ on $V$. Hence, the def of the action of $F[x]$ on $V$ is an extension of the action of $F$ on $V$.
+    \vspace{1em}\\
+    
+    \noindent\textbf{Example:} Let $V=F^n$ be the affine $n$-space, defined in the second example of modules and submodules, and let $T$ be the "shift operator"
+    $$T(a_1 ,a_2,\cdots, a_n) := (a_2 ,a_3 ,\cdots, a_n ,0)$$
+    Then given $k \in \mathbb{N} \cup \{0\}$ and $i \in \{ 1 ,\cdots, n\}$, 
+    $$T^k (e_i) := \begin{cases}
+        e_{i-k} &,if\;i>k\\
+        0 &,if\; i \leq k
+    \end{cases}$$
+    and hence, for example, if $m<n$,
+    $$(a_m x^m + \cdots + a_1 x+a_0) e_n := a_m T^m (e_n) + \cdots + a_1 T(e_n)+a_0 e_n = (0, \cdots, 0,a_m ,\cdots, a_1,a_0)$$
+    From this, we can determine the action of any polynomial on any vector in $F^n$.
+    \vspace{1em}\\
+    
+    \noindent Conversely, if $V$ is an $F[x]$-module, then $V$ is an $F$-module and the action of the ring element $x$ on $V$ is a linear transformation from $V$ to $V$. Hence, there is a bijection between the collection of $F[x]$-modules and the collection of all pairs $(V,T: V \to V)$:
+    \[
+    \left\{ V \text{ an } F[x]\text{-module} \right\} \longleftrightarrow 
+    \left\{ 
+    \begin{matrix}
+    V \text{ a vector space over } F \\
+    \text{and} \\
+    T : V \to V \text{ a linear transformation}
+    \end{matrix}
+    \right\}
+    \]
+    given by the element $x$ acts on $V$ as the linear transformation $T$.
+
+    \item Consider the $F[x]$-submodules of $V$ where $V$ is any $F[x]$-module and $T$ is the linear transformation$:V \to V$ given by the action of $x$. An $F[x]$-submodule $W$ of $V$ must be an $F$-submodule of $V$, i.e.: $W$ must be a vector subspace of $V$. For any $w \in W$, $T(w) \in W$, i.e.: $W$ is \textit{$T$-stable} (or \textit{$T$-invariant}) and hence $T^n (W) \subseteq W$ $\forall n \in \mathbb{N} \cup \{0\}$. Therefore, if $W$ is \textit{$T$-stable} (or \textit{$T$-invariant}), then the action of $F[x]$ on $W$ is closed in $W$. So we see that
+    $$the \; F[x] -submodules\; of\;V \Leftrightarrow the\;T-stable\; vector\;subspaces\; of \;V$$
+    i.e.: we have the bijection:
+    \[
+    \left\{ W \text{ an } F[x]\text{-submodule of }V \right\} \longleftrightarrow 
+    \left\{ 
+    \begin{matrix}
+    W \text{ a vector subspace of } V \\
+    \text{and} \\
+    W \text{ is } T\text{-stable}
+    \end{matrix}
+    \right\}
+    \]
+    e.g.: If $T$ is the shift operator defined on affine $n$-space above and $k \in \{0 ,1 ,\cdots, n\}$, then the subspace
+    $$U_k:= \{ (a_1,\cdots, a_k ,0,\cdots, 0) \mid a_i \in F\}$$
+    is clearly $T$-stable and hence is an $F[x]$-submodule of $V$.
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{definition}{Annihilators}\\
+The \textit{annihilater} of $M$ is defined as
+$$ann M:= \{r\in R \mid rM=0\}$$
+\end{definition}
+
+\noindent\textbf{Example:} $R/I$ is an $R$-module and $ann R/I=I$.
+
+\begin{definition}
+    \begin{itemize}
+        \item Let $I,J \triangleleft R$ be ideals of $R$. We define the \textit{ideal quotient} by
+        $$(I:J):= \{r\in R\mid rJ \subseteq I\}$$
+        (which can be supposed to suggest division: $I=(i),J=(j)$ with $i$ nonzerodivisor).
+
+        \item Then we extend the ideal quotients to submodules $M,N$ of $R$-module $P$ and write
+        $$(M:N) := \{ r\in R \mid rN \subseteq M\}$$
+
+        \item Let $I \triangleleft R$ be an ideal of $R$ and let $M$ be a submodule of $R$-module $P$. Then we define
+        $$(M:I) =(M:_PI) := \{p \in P \mid Ip \subseteq M\} \subseteq P$$
+        which is a submodule of $P$.
+    \end{itemize}
+\end{definition}
+
+\section{Module Homomorphisms}
+
+
+\begin{definition}{Module Homomorphisms}
+\begin{itemize}
+    \item A \textit{homomorphism of $R$-modules} is a homomorphism $\varphi:M \to N$ of abelian groups such that $\varphi (rm) =r\varphi(m)$.
+    \item If $\varphi$ is injective, then we say it is a \textit{monomorphism}; if $\varphi$ is surjective, then we say it is a \textit{epimorphism}; if $\varphi$ is bijective, then we say it is a \textit{isomorphism}.
+
+    \item Similarly as the ring homomorphisms, we define the kernel and image of module homomorphisms.
+
+    \item Let $M,N$ be $R$-modules. Define $Hom_R(M,N)$ to be the set of all $R$-module homomorphisms from $M$ into $N$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+    Kernels and images of $R$-module homomorphisms are submodules.
+\end{proposition}
+
+\noindent\textbf{Example:} 
+\begin{itemize}
+    \item $R$-module homomorphisms need NOT be ring homomorphisms and ring homomorphisms need NOT be $R$-module homomorphisms:
+    \begin{itemize}
+        \item $R=\mathbb{Z}$. The $\mathbb{Z}$-mordule homomorphism $x \mapsto 2x$ is NOT a ring homomorphism.
+        \item $R=F[x]$. The ring homomorphism $f(x) \mapsto f(x^2)$ is NOT an $F[x]$-module homomorphism.
+    \end{itemize}
+
+    \item Let $n \in \mathbb{N}_+$ and let $M =R^n$. For any $i \in \{1 ,\cdots, n\}$, the projection map $\pi_i:R^n \to R$ given by
+    $$\pi_i (x_1 ,\cdots, x_n) := x_i$$
+    is a surjective $R$-module homomorphism with $\ker \pi_i :=$ the submodule of $n$-tuples which have a zero in position $i$.
+
+    \item If $R=F$ is a field, then $F$-module homomorphisms are called linear transformations.
+    \item Recall that $\mathbb{Z}$-modules $\Leftrightarrow$ abelian groups. Similarly, we have:
+    \[ \mathbb{Z} \text{-module homomorphisms} \Leftrightarrow \text{abelian group homomorphisms} \]
+
+    \item Let $I \triangleleft R$ be an ideal of $R$ and let $M,N$ be $R$-modules annihilated by $I$, i.e.: $\forall i\in I,m\in M,n\in N$, we have $im=0,in=0$. Any $R$-module homomorphism from $M$ to $N$ is then automatically a homomorphism of $(R/I)$-modules. In particular, if $A$ is an abelian additive group of order $p$ prime, then any group homomorphism from $A$ to itself is a $\mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$-module homomorphism, i.e.: is a linear transformation over the field $\mathbb{F}_p$. In particular, the group of all (group) automorphisms of $A$ is the group of invertible linear transformations from $A$ to itself: $GL(A)$.
+\end{itemize}
+
+\begin{proposition}{Module Homomorphisms-Properties Proposition}\\
+Let $M,N,L$ be $R$-modules.
+\begin{enumerate}
+    \item A map $\varphi: M \to N$ is an $R$-module homomorphism iff $\forall x,y \in M, r\in R$, we have
+    $$\varphi (rx+y) = r\varphi (x)+\varphi(y)$$
+
+    \item Let $\Phi,\Psi \in Hom_R(M,N)$. Consider the map $\Phi+\Psi$ given by
+    $$(\Phi+ \Psi)(m) := \Phi(m) + \Psi(m), \forall m \in M$$
+    Then $\Phi+\Psi \in Hom_R(M,N)$ and hence $(Hom_R(M,N),+)$ is an abelian group. Furthermore, given $r\in R$, define $r\Phi$ by
+    $$(r\Phi)(m) := r(\Phi(m)), \forall m\in M$$
+    Then $r\Phi \in Hom_R(M,N)$ and hence this action of $R$ on $Hom_R(M,N)$ gives that $Hom_R(M,N)$ is an $R$-module.
+
+    \item Let $\varphi_1 \in Hom_R(L,M),\varphi_2 \in Hom_R(M,N)$. Then $\varphi_2 \circ \varphi_1 \in Hom_R(L,N)$.
+
+    \item With the addition as above and multiplication defined as map composition, $Hom_R(M,N)$ is a ring (commutative unital ring).
+    \item $Hom_R(M,M)$ is an $R$-algebra.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item \begin{itemize}
+            \item ($\Rightarrow$) holds immediately by definition.
+            \item ($\Leftarrow$): Take $r=1$ to check that $\varphi$ is additive and take $y=0$ to check that $\varphi$ commutes with the action of $R$ on $M$.
+        \end{itemize}
+
+        \item Omitted.
+        \item For any $r\in R$, any $x,y\in L$, we have
+        $$(\Psi \circ \Phi) (rx+y) = \Psi (\Phi(rx+y)) \overset{1}{=} \Psi (r \Phi(x) + \Phi(y)) \overset{1}{=} r(\Psi\circ \Phi) (x)+ (\Psi\circ \Phi) (y)$$
+        Hence, by 1, we're done.
+
+        \item Omitted.
+        \item Omitted.
+    \end{enumerate}
+\end{proof}
+
+
+\begin{definition}{Endomorphisms}\\
+The ring $Hom_R(M,M)$ is called the \textit{endomorphism ring} of $M$, denoted as $End_R(M):= Hom_R(M,M)$ and the elements of $End_R(M)$ are called \textit{endomorphisms}.
+\end{definition}
+
+\noindent\textbf{Remark:} There is a \textit{natural map} from $R$ to $End_R(M)$ given by $r \mapsto r\cdot id_R$. If the image of $R$ is contained in $Z(End_R(M)):=$ the center of $End_R(M)$, then $End_R(M)$ is an $R$-algebra. Note that $R=\mathbb{Z},M=\mathbb{Z}/2\mathbb{Z},r=2 \Rightarrow rm=0, \forall m\in M$. Hence, the natural map from $R$ to $End_R(M)$, which can be shown that it is a ring homomorphism, may NOT be injective. But when $R=F$ is a field, this map is injective and the copy of $R$ in $End_R(M)$ is called the (subring of) \textit{scalar transformations}.
+
+\begin{proposition}{Quotient Module Proposition}\\
+Let $N$ be an $R$-submodule of an $R$-module $M$. The abelian (additive) quotient group $M/N$ can be made into an $R$-module by defining an action of $R$ on $M/N$ by
+$$r(x+N) := (rx) +N,\forall r\in R,\forall x+N \in M/N$$
+The natural projection map $\pi: M\to M/N$ given by $x \mapsto x+N$ is an $R$-module homomorphism with kernel $N$.
+\end{proposition}
+
+\begin{proof}
+    \begin{itemize}
+        \item Since $M$ is an abelian additive group, then the quotient group $M/N$ is defined and is an abelian additive group.
+        \item The action of $R$ on $M/N$ is well-defined: $\forall x+N=y +N \in M/N$, i.e.: $y-x\in N$, since $N$ is an $R$-submodule, then $ry -rx= r(y-x) \in N$ and hence $rx+N = ry+N$.
+    \end{itemize}
+    Therefore, $M/N$ is an $R$-module.
+    \begin{itemize}
+        \item $\pi$ is an $R$-module homomorphism, i.e.: $\pi(rm) = r\pi(m)$:
+        $$\pi(rm) := (rm)+N := r(m+N) := r\pi(m)$$
+        \item The kernel of any module homomorphism is the same as its kernel when viewed as a homomorphism of the abelian group structures.
+    \end{itemize}
+\end{proof}
+
+\begin{definition}{Sum of Submodules}\\
+Let $A,B$ be $R$-submodules of an $R$-module $M$. The \textit{sum} of $A$ and $B$ is defined as
+$$A+B:= \{a+b \mid a\in A,b\in B\}$$
+\end{definition}
+
+\begin{proposition}{Sum of Submodules-Property Proposition}\\
+The sum of two submodules $B$ is again a submodule and is the smallest submodule containing them.
+\end{proposition}
+
+\begin{proof}
+    The proof of the first statement is going to omitted. Let $A,B$ be two submodules and let $N$ be any submodule that contains both $A$ and $B$. Then $\forall a\in A \subseteq N,b\in B \subseteq N$, by the additive closed-ness of submodule, $a+b \in N$ and hence $A+B \subseteq N$.
+\end{proof}
+
+\begin{theorem}{Isomorphism Theorem for Modules}
+\begin{itemize}
+    \item \textbf{The First Isomorphism Theorem for Modules:} Let $M,N$ be $R$-modules and let $\varphi: M\to N$ be an $R$-module homomorphism. Then $\ker \varphi$ is a submodule of $M$ and we have the isomorphism:
+    $$M /\ker \varphi \cong im \varphi$$
+
+    \item \textbf{The Second Isomorphism Theorem for Modules:} Let $A,B$ be $R$-submodules of an $R$-modules $M$. Then we have the isomorphism:
+    $$(A+B)/B \cong A/(A \cap B)$$
+
+    \item \textbf{The Third Isomorphism Theorem for Modules:} Let $A,B$ be $R$-submodules of an $R$-module $M$ such that $A \subseteq B$. Then we have the isomorphism:
+    $$(M/A)/ (B/A) \cong M/B$$
+
+    \item \textbf{The Fourth} (or \textbf{Lattice}) \textbf{Isomorphism Theorem for Modules:} Let $N$ be an $R$-submodule of an $R$-module $M$. Then there is a bijection between the submodules of $M$ containing $N$ and the submodules of $M/N$
+\end{itemize}
+\end{theorem}
+
+\section{Generation of Modules}
+
+\begin{definition}{Generation of Modules}\\
+Let $N_1 ,\cdots, N_n$ be $R$-submodules of an $R$-module $M$.
+\begin{itemize}
+    \item We generalize the sum of two submodules into the $n$ submodules case:
+    $$N_1 + \cdots +N_n:= \{ a_1 + \cdots + a_n \mid a_i\in N_i\}$$
+    is the \textit{sum} of $N_1 ,\cdots, N_n$.
+
+    \item For any subset $A \subseteq M$ of $M$, we define the \textit{submodule of $M$ generated by $A$} as
+    $$RA:= \{r_1a_1 +\cdots+ r_ma_m \mid r_1,\cdots, r_m \in R, a_1 ,\cdots, a_m \in A, m\in \mathbb{N}_+\}$$
+    (where by convention $RA:=\{0\}$ if $A\neq \emptyset$). If $A$ is the finite set $\{a_1 ,\cdots, a_n\}$, then we write:
+    $$RA= Ra_1 +\cdots +Ra_n$$
+    If $N$ is a submodule of $M$ and if $N=RA$ for some $A\subseteq M$, then we call $A$ a \textit{set of generators} or \textit{generating set for $N$} and we say that $N$ is \textit{generated by $A$}.A submodule $N$ of $M$ is \textit{finitely generated} if $N$ is generated by some finite subset of $M$.
+
+    \item A submodule $N$ of $M$ is \textit{cyclic} if there exists $a\in M$, s.t.: $N= Ra:=R\{a\}$.
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item These definitions do \textbf{NOT} require that $R$ is unital, but this condition ensures that $A$ is contained in $RA$.
+
+    \item It's easy to see using the Submodule Criterion that for any subset $A \subseteq M$ of $M$, $RA$ is a submodule of $M$, and is the smallest submodule of $M$ that contains $A$.
+
+    \item In particular, for submodules $N_1,\cdots,N_n$ of $M$, $N_1+\cdots +N_n$ is the submodule generated by the set $N_1 \cup \cdots \cup N_n$ and is the smallest submodule of $M$ that contains $N_i$ for all $i$. If $N_1 ,\cdots, N_n$ are generated by sets $A_1 ,\cdots, A_n$, respectively, then $N_1 +\cdots+ N_n$ is generated by $A_1 \cup \cdots \cup A_n$.
+
+    \item A submodule $N$ of an $R$-module $M$ may have many different generating sets (e.g.: the above remark). If $N$ is finitely generated, then there is a smallest non-negative integer $d$ such that $N$ is generated by $d$ elements (and no fewer), where every generating set consisting of $d$ elements is called a \textit{minimal set of generators for $N$} (it is NOT unique in general). If $N$ is NOT finitely generated, then it need NOT have a minimal generating set.
+\end{itemize}
+
+\noindent\textbf{Example:}\begin{itemize}
+    \item Let $R=\mathbb{Z}$ and let $M$ be any $\mathbb{Z}$-module, that is, any abelian group. If $a\in M$, then $\mathbb{Z}a$ is precisely the cyclic subgroup of $M$ generated by $a$, say $\langle a\rangle$.
+
+    \item Let $M=R$. Note that $R$ is a finitely generated, in fact cyclic, $R$-module since $R=R1$. Hence, we say $I$ is a cyclic $R$-submodule of $R$-module $R$ is precisely that $I$ is a principal ideal of $R$. Therefore, a PID is a commutative unital ID with every $R$-submodule of $R$ cyclic.
+
+    \item Consider a vector space over $F$ as an $F[x]$-module wia $T$. $V$ is a cyclic $F[x]$-module with generator $v$ $\Leftrightarrow$ $V= \{p(x) v\mid p(x) \in F[x]\}$ $\Leftrightarrow$ every elements of $V$ can be written as an $F$-linear combination of elements of $\{ T^n(v) \mid n \in \mathbb{N} \cup \{0\} \}$ $\Leftrightarrow$ $\{v ,T(v) ,T^2(v) ,\cdots \}$ spans $V$ as a vector space over $F$.\\
+    \noindent For instance, if $T=id_V$ is the identity linear transformation from $V$ to $V$ or if $T=0$ is the zero linear transformation, then $\{v, T(v) ,T^2(v) ,\cdots\}$ consists of one single elements $v$ or $0$, respectively. Hence, if $\dim_F(V) >1$, then $V$ can \textbf{NOT} be a cyclic $F[x]$-module corresponding $T=id_V$ or $T=0$.\\
+    For another example, let $V=F^n$ be an affine $n$-space and let $T$ be the "shift operator". Recall that
+    $$T^k(e_n) = \begin{cases}
+        e_{n-k} &,if\;1 \leq k<n\\
+        0 &,if \;k\geq n
+    \end{cases}$$
+    Hence, V is spanned by the elements $e_n ,T(e_n) ,T^2(e_n) ,\cdots, T^{n-1}(e_n)$, that is, $V$ is a cyclic $F[x ]$-module with generator $e_n$.
+\end{itemize}
+
+
+\section{Direct Products, (Direct Sums,) and Free Modules}
+
+\begin{definition}{Direct Product}\\
+Let $M_1 ,\cdots, M_k$ be $R$-modules. We define the \textit{direct product} of $M_1 ,\cdots, M_k$ by
+$$M_1 \times \cdots \times M_k := \{(m_1 ,\cdots, m_k) \mid m_i \in M_i \}$$
+with addition and action of $R$ defined componentwise.
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item The direct product of a collection of $R$-modules is again an $R$-module.
+    \item In the finite case, the direct product is also referred to as the \textit{(external) direct sum}, i.e.:
+    $$M_1 \times \cdots \times M_k = M_1 \oplus \cdots \oplus M_k$$
+\end{itemize}
+
+\begin{proposition}{Module-Isomorphic-to-Direct Product of its Submodules Proposition}\\
+Let $N_1 ,\cdots, N_k$ be submodules of an $R$-module $M$. The followings are equivalent:
+\begin{enumerate}
+    \item The map $\pi: N_1 \times \cdots \times N_k \to N_1+ \cdots +N_k$ given by
+    $$\pi(a_1 ,\cdots, a_k) := a_1+ \cdots + a_k$$
+    is an isomorphism of $R$-modules.
+
+    \item For any $j \in \{1,\cdots, k\}$, we have
+    $$N_j \cap (N_1 +\cdots+ \hat{N_j} +\cdots+ N_k)=0$$
+    \item Every $x \in N_1+ \cdots+ N_k$ can be \textit{uniquely} written in the form $a_1+\cdots +a_k$ with $a_i \in N_i$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{itemize}
+        \item ($1\Rightarrow2$): Suppose on the contrary that 2 fails for some $j$ and then we can pick $0 \neq a_j \in (N_1 +\cdots+ \hat{N_j} +\cdots+ N_k) \cap N_j$. Then $\forall i\neq j$, there exists $a_i \in N_i$, s.t.:
+        $$a_j= a_1 +\cdots+ a_{j-1} + a_{j+1}+ \cdots +a_k$$
+        Hence, there is a contradiction to the injectivity of $\pi$:
+        $$0= a_1+ \cdots + a_{j-1} +(-a_j)+ a_{j+1}+ \cdots +a_k = \pi(a_1 ,\cdots, a_{j-1}, -a_j, a_{j+1}, \cdots, a_k) \neq \pi(0)$$
+
+        \item ($2\Rightarrow3$): It suffices to prove the uniqueness of the form. Suppose that $a_1+ \cdots +a_k =b_1+ \cdots +b_k$ for some $a_i,b_i\in N_i$. Then given any fixed $j$, we have
+        $$N_j \ni a_j-b_j = (b_1-a_1) +\cdots+ (b_{j-1}- a_{j-1}) + (b_{j+1}-a_{j+1})+ \cdots +(b_k-a_k) \in (N_1 +\cdots+ \hat{N_j} +\cdots+ N_k)$$
+        Hence, by 2, for any $j$, $a_j-b_j=0$.
+
+        \item ($3\Rightarrow1$): Note that $\pi$ is clearly a surjective $R$-module homomorphism. Since 3 implies the injectivity of $\pi$, then 1 holds.
+    \end{itemize}
+\end{proof}
+
+\noindent\textbf{Remark:} If an $R$-module $M= N_1 +\cdots+ N_k$ is the sum of submodules $N_1,\cdots,N_k$ of $M$ satisfying the equivalent conditions of the Module-Isomorphic-to-Direct Product of its Submodules Proposition, then $M$ is said to be the \textit{(internal) direct sum} of $N_1 ,\cdots, N_k$, written
+$$M=N_1 \oplus \cdots \oplus N_k$$
+(The reason why we identity the external direct sum and the interval direct sum is the Module-Isomorphic-to-Direct Product of its Submodules Proposition.1.)
+
+\begin{definition}{Free Modules}\\
+An $R$-module $F$ is said to be \textit{free} on the subset $A \subseteq F$ of $F$ if $\forall 0\neq x\in F, \exists! 0\neq r_1 ,\cdots,r_n \in R, \exists! a_1 ,\cdots, a_n \in A$, with some $n\in \mathbb{N}_+$, s.t.:
+$$x=r_1a_1 +\cdots +r_na_n$$
+In this situation, we say that $A$ is a \textit{basis} or \textit{set of free generators for $F$}. And then we define the \textit{rank} of $F$ := the cardinality of $A$.
+\end{definition}
+
+\noindent\textbf{Remark:} We need to pay attention on the difference of the uniqueness property of direct sums and the uniqueness property of free modules. Namely,
+\begin{itemize}
+    \item in the direct sum of two modules, say $N_1 \oplus N_2$, each element can be written \textit{uniquely} as $n_1+n_2$, where the uniqueness is on the \textit{module elements} $n_1,n_2$,
+    \item while in the case of free modules, the uniqueness is on the \textit{ring elements and the module elements}.
+\end{itemize}
+For example, let $R=\mathbb{Z}$ and let $N_1=N_2= \mathbb{Z}/2\mathbb{Z}$. Then each element of $N_1 \oplus N_2$ has a unique representation in the form $n_1+n_2$, \textbf{but} $n_1 =3n_1 = 5n_1= \cdots$ and hence each element does NOT have a unique representation in the form $r_1a_1 + r_2a_2$. Therefore, $\mathbb{Z}/2\mathbb{Z}\oplus \mathbb{Z}/2\mathbb{Z}$ is NOT a free $\mathbb{Z}$-module on the set $\{(1,0),(0,1)\}$. Similarly, it is NOT free on any set.
+
+\begin{theorem}{Universal Property of Free Modules}\\
+For any set $A$, there exists a free $R$-module $F(A)$ on the set $A$ and $F(A)$ satisfies the following \textit{universal property}: if $M$ is any $R$-module and $\varphi:A \to M$ is any map of sets, then there exists an $R$-module homomorphism $\Phi:F(A) \to M$, s.t.: $\Phi(a) =\varphi(a) ,\forall a\in A$, i.e.: the following diagram commutes:
+$$\begin{tikzcd}[row sep=large, column sep=large]
+    A \hookrightarrow \arrow[dr, "\varphi"'] & P \arrow[d, "\Phi"] \\
+    & X_i
+\end{tikzcd}$$
+When $A=\{a_1 ,\cdots, a_n\}$ is finite, $F(A)= Ra_1 \oplus \cdots \oplus Ra_n \cong R^n$.
+\end{theorem}
+
+\begin{proof}
+    If $A=\emptyset$, then let $F(A):=\{0\}$. Otherwise, if $A \neq \emptyset$, then let $F(A)$ be the collection of all set functions $f:A \to R$ such that $f(a)=0$ for all but finitely many $a \in A$. Make $F(A)$ into an $R$-module by pointwise addition of functions and pointwise multiplication of a ring elements times a function, i.e.: for any $a\in A$, any $r\in R$, any $f,g \in F(A)$, we define:
+    $$(f+g) (a) := f(a)+g(a) ,(rf)(a) := r(f(a))$$
+    (The details of checking the axioms of $R$-module are omitted.) Identity $A$ as a subset of $F(A)$ by $a \mapsto f_a$ where $f_a$ is the function defined by
+    $$f_a (x) :=\begin{cases}
+        1 &,if\;x=a\\
+        0 &,if\;x \in A \setminus \{a\}
+    \end{cases}$$
+    Then, in this way, we can refer to $F(A)$ as all finite $R$-linear combinations of elements of $A$ by identifying each function $f$ with the sum $r_1a_1+ \cdots +r_na_n$ where $f$ takes on the value $r_i$ at $a_i$ and zero at all other elements of $A$. Moreover, each element of $F(A)$ has a unique expression as such a formal sum.\\
+    Now define $\Phi: F(A) \to M$ by
+    $$\Phi (\sum_{i=1}^n r_ia_i) := \sum_{i=1}^n r_i \varphi(a_i)$$
+    By the uniqueness of the expression for the elements of $F(A)$ as linear combinations of $a_i$, we see that $\Phi$ is a well-defined $R$-module homomorphism (where the details are omitted). Then by def, $\Phi|_A =\varphi$.\\
+    As for the uniqueness of $\Phi$, since $F(A)$ is generated by $A$ and since we know the values of an $R$-module homomorphism on $A$, then its values on every element of $F(A)$ are uniquely determined.\\
+    When $A= \{a_1 ,\cdots, a_n\}$ is finite, the Module-Isomorphic-to-Direct Product of its Submodule Proposition.3 shows that $F(A)= Ra_1 \oplus \cdots \oplus Ra_n$. Since the map$:R \overset{\cong}{\to} Ra_i$ given by $r \mapsto ra_i$ is an isomorphism for every $i$, then $F(A) \cong R^n$.
+\end{proof}
+
+\begin{corollary}{of the Universal Property of Free Modules}\\
+\begin{enumerate}
+    \item If $F_1$ and $F_2$ are free modules on the same set $A$, then there exists an unique isomorphism between $F_1$ and $F_2$ which is the identity map on $A$.
+
+    \item If $F$ is any free $R$-module with basis $A$, then $F \cong F(A)$. In particular, $F$ enjoys the same universal property with respect with $A$ as $F(A)$ does in the Universal Property of Free Module.
+\end{enumerate}
+\end{corollary}
+
+\noindent\textbf{Remark:} When $R=\mathbb{Z}$, the free module on a set $A$ is called the \textit{free abelian group on $A$}. If $|A|=n$, then $F(A)$ is called the free abelian group of \textit{rank} $n$ and is isomorphic to $\underbrace{\mathbb{Z} \oplus \cdots \oplus \mathbb{Z}}_{n \;times}$.
+
+\section{Tensor Products}
+
+\subsection{Tensor Products of Modules}
+
+\begin{definition}{Bilinear Maps of Modules}\\
+Let $M,N,P$ be $R$-modules. A map $\alpha: M \times N \to P$ is called \textit{bilinear} if for any $m\in M$, any $n\in N$, the maps
+$$\alpha_n := \alpha (\cdot, n) : M \to P \;\;\;and\;\;\; \alpha_m := \alpha(m,\cdot): N \to P$$
+are $R$-linear.
+\end{definition}
+
+
+\begin{definition}{Tensor Product of Modules}\\
+Let $M,N$ be $R$-modules. A \textit{tensor product} of $M$ and $N$ over $R$ is an $R$-module $T$ together with a bilinear map $\tau: M\times N \to T$ satisfying the following \textit{universal property}:\\
+for any bilinear map $\alpha:M \times N \to P$ to any module $P$, there exists a unique linear map $\Phi:T \to P$ such that $\alpha= \Phi \circ \tau$, i.e.: the following diagram commutes:
+\[
+\begin{tikzcd}
+M \times N \arrow[rr, "\alpha"] \arrow[dd, "\tau"'] & & P \\
+& & \\
+T \arrow[uurr, dashed, "\exists !\Phi"'] & &
+\end{tikzcd}
+\]
+The elements of a tensor product are called \textit{tensors}.
+\end{definition}
+
+\begin{proposition}{Uniqueness of Tensor Products of Modules}\\
+A tensor product is unique up to unique isomorphism in the following sense:\\
+if $T_1$ and $T_2$ together with linear maps $\tau_1: M\times N \to T_1$ respectively $\tau_2: M\times N \to T_2$ are two tensor products for $M$ and $N$ over $R$, then there is a unique $R$-module isomorphism $\varphi: T_1 \to T_2$, s.t.: $\tau_2= \varphi \circ \tau_1$.
+\end{proposition}
+
+\begin{proof}
+    For $T=T_1,P=T_2$, we have the following commutative diagram:
+    \[
+    \begin{tikzcd}
+    M \times N \arrow[rr, "\tau_2"] \arrow[dd, "\tau_1"'] & & T_2 \\
+    & & \\
+    T_1 \arrow[uurr, dashed, "\exists !\varphi"'] & &
+    \end{tikzcd}
+    \]
+    where $\varphi$ is the unique $R$-module homomorphism from $T_1$ to $T_2$. And for $T=T_2,P=T_1$, we have the following commutative diagram:
+    \[
+    \begin{tikzcd}
+    M \times N \arrow[rr, "\tau_1"] \arrow[dd, "\tau_2"'] & & T_1 \\
+    & & \\
+    T_2 \arrow[uurr, dashed, "\exists !\psi"'] & &
+    \end{tikzcd}
+    \]
+    where $\psi$ is the unique $R$-module homomorphism from $T_2$ to $T_1$. Now for $T=P=T_1$, we have the following commutative diagram:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+    M \times N \arrow[r, "\tau_1"] \arrow[d, "\tau_1"'] & T_1 \\
+    T_1 \arrow[ur, dashed, bend left=15, "\mathrm{id}_{T_1}"] \arrow[ur, dashed, bend right=15, "\psi \circ \varphi"'] & 
+    \end{tikzcd}
+    \]
+    i.e.: $\tau_1= \psi \circ \varphi \circ \tau_1$ and $\tau_1= id_{T_1} \circ \tau_1$. Hence, by the uniqueness part of the universal property, we can conclude that $\psi \circ \varphi= id_{T_1}$. Similarly for $\varphi \circ \psi =id_{T_2}$. Therefore, $\varphi$ is an $R$-module isomorphism.
+\end{proof}
+
+\begin{proposition}{Existence pf Tensor Products of Modules}\\
+Any two $R$-modules have a tensor product of them.
+\end{proposition}
+
+\begin{proof}
+    Let $M,N$ be $R$-modules. Denote by $F$ the $R$-module of all finite linear combinations of elements of $M\times N$, i.e.:
+    $$F:= \{ a_1 (m_1,n_1) +\cdots+ a_k(m_k,n_k) \mid k \in \mathbb{N}_+,a_i\in R, (m_i,n_i) \in M \times N\}$$
+    More precisely, $F$ can be referred to as the set of maps from $M\times N$ to $R$ that have non-zero values at most at finitely may elements, which has the $R$-module structure with pointwise addition and scalar multiplication.\\
+    Note that $\forall m\in M,n\in N,a\in R$, $a(m,n),1(am,n)$ and $1(m,an)$ are different elements of $F$. Let $G$ be the submodule of $F$ generated by the elements of the forms:
+    \begin{align*}
+        &(m_1+m_2,n) - (m_1,n) -(m_2,n), (am,n)-a(m,n),\\
+        &(m,n_1+n_2) - (m,n_1) -(m,n_2), (m,an)-a(m,n)
+    \end{align*}
+    $\forall a\in R,m,m_1,m_2 \in M, n,n_1,n_2\in N$. Then set $T:= F/G$. Then the map $\tau:M\times N \to T$ given by
+    $$\tau(m,n) := \overline{(m,n)} := (m,n) +G $$
+    is $R$-bilinear obviously. Now we claim that $T$ together with $\tau$ is a tensor product of $M$ and $N$ over $R$. To check the universal property, let $\alpha: M\times N \to P$ be an $R$-bilinear map to any $R$-module $P$. 
+    \begin{itemize}
+        \item For the existence, define a homomorphism $\varphi: T\to P$ by
+        $\varphi (\overline{(m,n)}) := \alpha(m,n)$
+        and then extend this by linearity, i.e.:
+        $$\varphi (a_1\overline{(m_1,n_1)} + \cdots + a_k\overline{(m_k,n_k)}) := a_1\alpha(m_1,n_1) +\cdots+ a_k\alpha(m_k,n_k)$$
+        By the bilinearity of $\alpha$, we can easily see the well-defined-ness of $\varphi$. Then we find the existence part of the universal property of tensor products.
+
+        \item The unique part is easy to check so we omit it here.
+    \end{itemize}
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item We denote by $M \otimes_R N$ the tensor product of $M$ and $N$ over $R$ and write $\tau(m,n)$ as $m \otimes n$, called the \textit{tensor product} of $m$ and $n$.
+
+    \item Tensors in $M\otimes _RN$ that are of the form $m\otimes n$ for $m\in M,n\in N$ are called \textit{pure} or \textit{monomial}. Note that this def is \textbf{NOT} "meaningless" since the general element of $M\otimes _RN$ can be written as a finite linear combination
+    $$a_1 (m_1 \otimes n_1) +\cdots +a_k (m_k \otimes n_k)$$
+
+    \item By the proof of Existence of Tensor Products Proposition, we have the operations:
+    \begin{align*}
+        &(m_1+m_2) \otimes n =m_1 \otimes n +m_2 \otimes n, (am) \otimes n = a(m \otimes n),\\
+        &m \otimes (n_1+n_2) = m \otimes n_1 +m\otimes n_2, m\otimes (an)= a(m\otimes n)
+    \end{align*}
+    for all $a\in R,m,m_1,m_2\in M,n,n_1,n_2\in N$. In fact, we can get these operations also by the def saying that $\tau$ is bilinear.
+
+    \item Using multilinear maps instead of bilinear maps, we can also define tensor products $M_1 \otimes \cdots \otimes M_k$ of more than two modules in the same way as above.
+\end{itemize}
+
+\begin{proposition}{Tensor Product of Modules-Properties Proposition}\\
+For any $R$-modules $M,N,P$, there are some isomorphisms:
+\begin{enumerate}
+    \item $M \otimes_R N \cong N \otimes_R M$
+    \item $M \otimes_R R \cong M$
+    \item $(M \oplus N) \otimes_R P \cong (M \otimes _RP) \oplus (N \otimes _RP)$
+    \item $M \otimes_RN \otimes _R P \cong (M \otimes_RN) \otimes _R P \cong M \otimes_R(N \otimes _R P)$
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    1,3,4 hold immediately by the universal property of tensor product of modules. For 2, we also use universal property first and get the following commutative diagram:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+    M \times R \arrow[r, "{(m,r)} \mapsto rm"] \arrow[d, "{(m,r)} \mapsto m \otimes r"'] & M \\
+    M \otimes R \arrow[ur, dashed, "\exists! \varphi: (m\otimes r) \mapsto m"'] & 
+    \end{tikzcd}
+    \]
+    Consider the map $\psi: M \to M\otimes R$ given by $m \mapsto m\otimes 1$. Since $(\varphi \circ \psi) (m) := \varphi (m \otimes 1) := m$ and since $(\psi \circ \varphi) (m \otimes r) := (rm) \otimes 1 = r(m \otimes 1) = m \otimes r$, then $\psi \circ \varphi =id_{M \otimes R}$ and $\varphi\circ \psi=id_M$. Hence, $\varphi: M \otimes R \overset{\cong}{\to} M$ is an isomorphism.
+\end{proof}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Let $M$ and $N$ be \textit{free} $R$-modules of ranks $m$ respectively $n$. Then $M \cong R^m$ and $N \cong R^n$. Hence, by the Tensor Product-Properties Proposition.2,3, one has
+    $$M \otimes N \cong R^m \otimes R^n \cong R^m \otimes (\underbrace{R \oplus \cdots \oplus R}_{n\;times}) \overset{3}{\cong} (R^m \otimes R)^n \overset{2}{\cong} (R^m)^n =R^{mn}$$
+    So after a choice of bases of elements of $M$ and $N$, the elements of $M \otimes N$ can be described as $mn$-matrices over $R$.
+
+    \item Let $I,J \triangleleft R$ be coprime. Then $\exists a\in I,b\in J$, s.t.: $a+b=1$. Hence, in the tensor product $R/I \otimes_R R/J$, $\forall$ pure tensors $\overline{r} \otimes \overline{s}$ with $r,s \in R$, we have
+    \begin{align*}
+        &\overline{r} \otimes \overline{s} = 1(\overline{r} \otimes \overline{s}) = (a+b) (\overline{r} \otimes \overline{s}) = \overline{ar} \otimes \overline{s} + \overline{r} \otimes \overline{bs}
+    \end{align*}
+    Since $I$ and $J$ are ideals and $a\in I,b\in J$, then $ar\in I,bs\in J$ and hence $\overline{ar} =0\in R/I, \overline{bs} =0\in R/J$. Therefore, $\overline{r} \otimes \overline{s}=0$ and hence $R/I \otimes _RR/J =0$.\\
+    For example, $\forall$ primes $p\neq q$,
+    $$\mathbb{Z}_p \otimes_\mathbb{Z} \mathbb{Z}_q =0$$
+    This shows that (in contrast to the previous example) a tensor product space need \textbf{NOT} be "bigger" than its factors and might be $0$ even if none of its factors are.
+
+    \item Consider the tensor product $\mathbb{Z} \otimes _\mathbb{Z} \mathbb{Z}_2$, we have
+    $$2\otimes \overline{1} = 2(1\otimes \overline{1}) =1 \otimes \overline{2} =0$$
+    However, if we consider $2 \otimes \overline{1}$ as an element of $2 \mathbb{Z} \otimes _\mathbb{Z} \mathbb{Z}_2$, the above computation is invalid since $1\notin 2\mathbb{Z}$. So it induces a question: is it still true for $2 \otimes \overline{1} =0 \in 2\mathbb{Z} \otimes _\mathbb{Z} \mathbb{Z}_2$?\\
+    The answer is NO! Since $2 \mathbb{Z} \cong \mathbb{Z}$ as a $\mathbb{Z}$-module by isomorphism $2\mapsto 1$, then by the Tensor Product-Properties Proposition.2,3,
+    $$2 \mathbb{Z} \otimes_\mathbb{Z} \mathbb{Z}_2 \overset{2}{\cong} \mathbb{Z} \otimes _\mathbb{Z} \mathbb{Z}_2 \overset{3}{\cong} \mathbb{Z}_2$$
+    by the isomorphism $\varphi: 2\mathbb{Z} \otimes _\mathbb{Z} \mathbb{Z}_2 \overset{\cong}{\to} \mathbb{Z}_2$ sending $(2a) \otimes \overline{b}$ to $\overline{ab}$. Now we see that $\varphi (2\otimes \overline{1}) =\overline{1} \neq 0$ and hence $2 \otimes \overline{1} \neq 0 \in 2\mathbb{Z} \otimes _\mathbb{Z} \mathbb{Z}_2$.
+\end{itemize}
+
+
+
+\subsection{Tensor Products of Module Homomorphisms}
+
+\begin{definition}{Tensor Products of Module Homomorphisms}\\
+Let $\varphi: M\to N$ and $\varphi' :M'\to N'$ be two $R$-module homomorphisms. Then the map $\substack{M \times M' \;\to\; N\otimes N'\\
+(m,m') \;\mapsto\; \varphi(m) \otimes \varphi'(m')}$ is bilinear and hence the universal property of tensor product of modules gives rise to a unique homomorphism
+$$\varphi \otimes \varphi': \substack{M \otimes M' \;\to\; N\otimes N'\\
+m\otimes m' \;\mapsto\; \varphi(m) \otimes \varphi'(m')}$$
+$\forall m\in M,m'\in M'$. We refer to $\varphi \otimes \varphi'$ as the \textit{tensor product} of $\varphi$ and $\varphi'$.
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item We can make an interpretation on this def in the view of tensor product of modules: since $\substack{Hom_R(M,N) \times Hom_R(M',N') \;\to\; Hom_R(M \otimes M',N \otimes N')\\
+    (\varphi,\varphi') \;\mapsto\; \Phi_{\varphi,\varphi'}}$ where $\Phi_{\varphi,\varphi'} (m \otimes m') := \varphi(m) \otimes \varphi'(m')$ is bilinear, then the universal property gives rise to the following commutative diagram:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+    Hom_R(M,N) \times Hom_R(M',N') \arrow[r, "{(\varphi,\varphi')} \mapsto \Phi_{\varphi,\varphi'}"] \arrow[d, "{(\varphi,\varphi')} \mapsto {\varphi \otimes \varphi'}"'] & Hom_R(M \otimes M',N \otimes N') \\
+    Hom_R(M,N) \otimes Hom_R(M',N') \arrow[ur, dashed, "\exists! \Phi: \varphi \otimes \varphi' \mapsto \Phi_{\varphi, \varphi'}"'] & 
+    \end{tikzcd}
+    \]
+    Then we can identity $\Phi_{\varphi, \varphi'}$ directly as $\varphi \otimes \varphi'$.
+
+    \item One application of tensor products of modules and module homomorphisms is to extend the ring of scalars for a given module and we record it as the later subsection:
+\end{itemize}
+
+\subsection{Extension of Scalars}
+
+\noindent\textbf{Motivation:} Suppose that the ring $R$ is a subring of the ring $S$. Then any $S$-module is immediately an $R$-module. More generally, if $f:R\to S$ is a homomorphism, then the action of $R$ on $N$ can be defined as
+$$rn:= f(r)n ,\forall r\in R,n\in N$$
+In this situation, $S$ can be considered as an \textit{extension} of the ring $R$ and the resulting $R$-module is said to be obtained from $N$ by \textit{restriction of scalars} from $S$ to $R$.\\
+Now suppose that $R$ is a subring of $S$ and we try to reverse this, namely we start with an $R$-module $N$ and attempt to define an $S$-module structure on $N$ that extends the action of $R$ on $N$ to an action of $S$ on $N$ (hence "extending the scalars" from $R$ to $S$). In general, this is impossible, even in the simplest situation: the ring $R$ itself is an $R$-module but is usually NOT an $S$-module. For example, $\mathbb{Z}$ is a $\mathbb{Z}$-module but it can NOT be made into a $\mathbb{Q}$-module (otherwise, then $\frac{1}{2} \circ 1=z$ would be an element of $\mathbb{Z}$ with $z+z=1$ which is impossible in $\mathbb{Z}$). However, although $\mathbb{Z}$ itself can NOT be made into a $\mathbb{Q}$-module, it is \textit{contained} in a $\mathbb{Q}$-module, namely $\mathbb{Q}$ itself, i.e.: there's an injection (also called an embedding) of $\mathbb{Z}$-module $\mathbb{Z}$ into the $\mathbb{Q}$-module $\mathbb{Q}$. This raises the question of whether an arbitrary $R$-module $N$ can be embedded as an $S$-submodule of some $S$-module, or more generally, the question of what $R$-module homomorphisms exist from $N$ to $S$-modules.
+
+\noindent\textbf{Example:} We know this process for vector spaces very well: suppose that we're  given a real vector space $V$ with $\dim_\mathbb{R}V =n< \infty$ and want to study the eigenvalues and eigenvectors of a linear transformation $\varphi: V\to V$. We then usually set up the matrix $A\in M_{m\times n} (\mathbb{R})$ corresponding to $\varphi$ in some chosen basis and compute its characteristic polynomial. But often it happens that this polynomial does NOT split in $\mathbb{R}$ and we then therefore consider $A\in M_{n\times n} (\mathbb{C})$ as a complex matrix. We use complexification of real vector spaces to attain this goal, which will be discussed later.
+
+\begin{definition}{Extension of Scalars}\\
+Let $M$ be an $R$-module and let $R'$ be an $R$-algebra (so that $R'$ is a ring as well as an $R$-module). For any $a\in R$, consider the multiplication map $\mu_a:R' \to R$ given by
+$$\mu_a(s) := as$$
+which is obviously a homomorphism of $R$-modules. If we set $M_{R'} := M \otimes_R R'$, then we obtain a scalar multiplication with $R'$ on $M_{R'}$
+$$\substack{R' \times M_{R'} \;\to\; M_{R'}\\
+(a,m \otimes s) \;\mapsto\; a(m\otimes s) := (1 \otimes \mu_a) (m\otimes s) = m \otimes (as)}$$
+which turns $M_{R'}$ into an $R'$-module. We say that $M_{R'}$ is obtained from $M$ by an \textit{extension of scalars} from $R$ to $R'$.
+\end{definition}
+
+\noindent\textbf{Remark:} Any $R$-module homomorphism $\varphi: M\to N$ gives rise to an "extend" $R'$-module homomorphism
+$$\varphi_{R'} := \varphi \otimes id: M_{R'} \to N_{R'}$$
+
+\noindent\textbf{Example} (\textit{Complexification of a real vector space}): Let $V$ be a real vector space. Extending scalars from $\mathbb{R}$ to $\mathbb{C}$, we call $V_\mathbb{C}:= V \otimes _\mathbb{R} \mathbb{C}$ the \textit{complexification} of $V$. By def, this is now a complex vector space.\\
+Let us assume for simplicity that $V$ is finitely generated, with basis $\{b_1 ,\cdots, b_n\}$. Then $V \cong \mathbb{R}^n$ by an isomorphism mapping $b_i$ to $e_i$ for $i=1 ,\cdots, n$ and consequently, $V_{\mathbb{C}} := V \otimes _\mathbb{R} \mathbb{C} \cong \mathbb{R}^n \otimes_\mathbb{R} \mathbb{C} \cong \mathbb{R} ^n \otimes _\mathbb{R} \mathbb{C} \cong (\mathbb{R} \otimes _\mathbb{R} \mathbb{C})^n \cong \mathbb{C}$ as $R$-modules by the Tensor Product of Modules-Properties Proposition and by def, also as $\mathbb{C}$-modules. Moreover, $b_i \otimes 1$ maps to $e_i$ under this chain of isomorphisms for all $i$ and so as expected the vectors $b_1 \otimes 1 ,\cdots, b_n \otimes 1$ form a basis of $V_\mathbb{C}$.\\
+Finally, consider a linear transformation $\varphi:V \to V$ described by the matrix $A \in M_{n \times n} (\mathbb{R})$ with respect to $\{b_1 ,\cdots, b_n\}$, i.e.: $\varphi(b_i) = \sum_{j=1}^n a_{ji}b_j$, $\forall i$. Then $\varphi_\mathbb{C} :V _{\mathbb{C}} \to V_\mathbb{C}$ obtained in the def of Extension of Scalars is an endomorphism of the complexification vector space and since
+$$\varphi_\mathbb{C} (b_i \otimes 1) = \varphi(b_i) \otimes 1 = \sum_{j=1}^n a_{ji} (b_i \otimes 1)$$
+then we see that the matrix of $\varphi_\mathbb{C}$ with respect to the basis $\{b_1 \otimes 1,\cdots, b_n \otimes 1\}$ is precisely $A$ again, just now considered as a complex matrix.
+
+\begin{proposition}{Extension of Scalars Proposition}\\
+Let $M,N$ be $R$-modules and let $R'$ be an $R$-algebra. The extension of scalars commutes with tensor products in the sense that there exists an isomorphism of $R'$-modules
+$$(M \otimes_R N)_{R'} \cong_{R'} M_{R'} \otimes _{R'} N_{R'}$$
+\end{proposition}
+
+\begin{proof}
+    \begin{lemma}
+        For any $R'$-module $X$, we have
+        $$M_{R'} \otimes_{R'} X \cong_{R'} M \otimes_R X$$
+        where the $R'$-structure of $M \otimes _RX$ is given by $X$, i.e.: $r' (m \otimes x) := m \otimes (r'x)$.
+    \end{lemma}
+
+    \begin{proof}
+        \textit{of lemma:} By universal property, we have the following commutative diagrams:
+        \[
+        \begin{tikzcd}[row sep=large, column sep=large]
+        M_{R'} \times X \arrow[r, "{(m \otimes r',x)} \mapsto m \otimes (r'x)"] \arrow[d, "{(m \otimes r',x)} \mapsto (m\otimes r') \otimes x"'] & M \otimes_RX \\
+        M_{R'} \otimes_{R'}X \arrow[ur, dashed, "\exists! \varphi: (m\otimes r') \otimes x \mapsto m \otimes (r'x)"'] & 
+        \end{tikzcd}
+        \]
+
+        \[
+        \begin{tikzcd}[row sep=large, column sep=large]
+        M \times X \arrow[r, "{(m,x)} \mapsto (m \otimes 1) \otimes x"] \arrow[d, "{(m,x)} \mapsto m\otimes x"'] & M_{R'} \otimes_RX \\
+        M \otimes_{R}X \arrow[ur, dashed, "\exists! \psi: m\otimes x \mapsto (m \otimes 1) \otimes x"'] & 
+        \end{tikzcd}
+        \]
+        Since $(\varphi \circ \psi) (m \otimes x) := \varphi((m \otimes 1) \otimes x):= m \otimes x$ and $(\psi \circ \varphi) ((m \otimes r') \otimes x) := \psi (m \otimes (r'x)) := (m \otimes 1) \otimes (r'x) = (m \otimes r') \otimes x$, then $\varphi$ is an $R'$-module isomorphism between $M_{R'} \otimes _{R'}X \cong M \otimes _RX$ as $R'$-modules.
+    \end{proof}
+
+    Now we return back to the \textit{proof of the Extension of Scalars Proposition:} Let $X= N_{R'}$ and then we get:
+    \begin{align*}
+        M_{R'} \otimes_{R'} N_{R'} &:= (M \otimes_R R')_{R'} \otimes_{R'} N_{R'} \overset{lemma}{\cong} M \otimes_R N_{R'} := M \otimes _R(N \otimes_R R')\\
+        &\cong (M \otimes_RN) \otimes_R R' := (M \otimes_R N)_{R'}
+    \end{align*}
+\end{proof}
+
+\begin{proposition}{Extension of Scalars for Free Modules}\\
+The module obtained from the free $R$-module $N \cong R^n$ by extension of scalars from $R$ to an $R$-slgebra $R'$ (and hence a ring that contains $R$) is the free $R'$-module $S^n$, i.e.:
+$$R' \otimes_R R^n \cong (R')^n$$
+as $R'$-modules.
+\end{proposition}
+
+\begin{proof}
+    It immediately hold by the Tensor Product of Modules-Properties Proposition.
+\end{proof}
+
+\subsection{Tensor Product of Algebras}
+
+\begin{definition}{Tensor Product of Algebras}\\
+Let $R_1,R_2$ be $R$-algebras. The map $R_1 \times R_2 \times R_1 \times R_2 \to R_1 \otimes R_2$ given by $(s,t,s',t') \mapsto (ss') \otimes (tt')$ is multilinear and hence by using repeatedly the universal property of tensor product, it induces an $R$-module homomorphism
+$$\substack{(R_1 \otimes R_2) \otimes (R_1 \otimes R_2) \;\to\; R_1 \otimes R_2 \\
+(s \otimes t) \otimes (s' \otimes t') \;\mapsto\; (ss') \otimes (tt')} $$
+Again by the universal property of tensor product, this now corresponds to a bilinear map
+$$\substack{(R_1 \otimes R_2) \times (R_1 \otimes R_2) \;\to\; R_1 \otimes R_2 \\
+(s \otimes t,s' \otimes t') \;\mapsto\; (s \otimes t) \cdot (s' \otimes t') := (ss') \otimes (tt')}$$
+This multiplication makes $R_1 \otimes R_2$ into a ring and hence into an $R$-algebra.
+\end{definition}
+
+
+\begin{proposition}{Multivariate Polynomial Rings-Tensor Products Proposition}\\
+$$R[x,y] \cong R[x] \otimes_R R[y]$$
+are isomorphic as $R$-algebra.
+\end{proposition}
+
+\begin{proof}
+    There are $R$-module homomorphisms $\varphi: R[x] \otimes_R R[y] \to R[x,y]$ and $\psi: R[x,y] \to R[x] \otimes_R R[y]$ given by
+    $$\varphi (f \otimes g) := fg, \;\psi (\sum_{i,j} a_{ij} x^iy^j) := \sum_{ij} a_{ij} (x^i \otimes y^j)$$
+    Since for all $i,j \in \mathbb{N} \cup \{0\}$, $(\psi \circ \varphi )(x^i \otimes y^j) = x^i \otimes y^j$ and $(\varphi \circ \psi) (x^iy^j) =x^iy^j$ and since $x^i \otimes y^j$ and $x^iy^j$ generate $R[x] \otimes_R R[y]$ respectively $R[x,y]$ as an $R$-module, then we see that $\varphi$ and $\psi$ are inverse to each other. Since
+    $$\varphi ((f \otimes g) \cdot (f' \otimes g')) := \varphi ((ff') \otimes (gg')) := ff'gg' =fgf'g' = \varphi(f\otimes g) \cdot \varphi (f' \otimes g')$$
+    then $\varphi$ is also a ring homomorphism with the multiplication in $R[x] \otimes_R R[y]$. Therefore, $R[x,y] \cong R[x] \otimes_R R[y]$ as $R$-algebras.
+\end{proof}
+
+
+\subsection{Exact Sequences}
+
+\subsubsection{1.5.5.1 Exact Sequences}
+
+\noindent\textbf{Intuition:} One of the fundamental results for studying the structure of an algebraic object $B$ (e.g. a group, a ring, or a module) is the First Isomorphism Theorem, which relates to the sub-objects of $B$ (the normal groups, the ideals, or the submodules, respectively) with the possible homomorphic images of $B$. More precisely, consider whether, given two modules $A,C$, there exists a module $B$ containing (an isomorphic copy of) $A$ such that $B/A \cong C$, where $B$ is said to be an \textit{extension} of $C$ by $A$. So we introduce the following definition:
+
+\begin{definition}{Exact Sequences}
+\begin{itemize}
+    \item The pair of homomorphisms (of algebraic objects) $X \overset{\alpha}{\to} Y \overset{\beta}{\to} Z$ is said to be \textit{exact} (at $Y$) if $im\alpha= \ker \beta$.
+
+    \item A sequence $\cdots \to X_{k-1} \to X_k \to X_{k+1} \to \cdots$ of homomorphisms (of algebraic objects) is said to be an \textit{exact} sequence if it is exact ar each $X_k$ between a pair of homomorphisms (of algebraic objects).
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:} Note that if $\psi: A\to B$ is injective and if $\varphi: B\to C$, then the sequence
+$$0 \to A \overset{\psi}{\to} B \overset{\varphi}{\to} C \to 0$$
+is exact and that the converse also holds.
+
+\begin{definition}{Short Exact Sequence}\\
+We often call the exact sequence
+$$0 \to A \overset{\psi}{\to} B \overset{\varphi}{\to} C \to 0$$
+a \textit{short exact sequence}.
+\end{definition}
+
+\noindent\textbf{Remark:} Every exact sequence can be written as a short exact sequence:
+\[
+X \overset{\alpha}{\to} Y \overset{\beta}{\to} Z \text{ is exact} \Leftrightarrow 0 \to \alpha(X) \to Y \to Y/\ker \beta \to 0 \text{ is a short exact sequence}
+\]
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Given modules $A,C$, the sequence
+    $$0 \to A \overset{a \mapsto (a,0)}{\longrightarrow} A \oplus C \overset{(a,c) \mapsto c}{\longrightarrow} C \to 0$$
+    is a short exact sequence, which follows that there always exists at least one extension of $C$ by $A$. In particular, consider two $\mathbb{Z}$-modules $A=\mathbb{Z},C= \mathbb{Z}/n \mathbb{Z}$:
+    $$0 \to \mathbb{Z} \overset{z \mapsto (z,0)}{\longrightarrow} \mathbb{Z} \oplus \mathbb{Z}/n\mathbb{Z} \overset{(z_1,z_2 + n\mathbb{Z}) \mapsto z_2 +n\mathbb{Z}}{\longrightarrow} C \to 0$$
+    giving one extension of $\mathbb{Z}/n\mathbb{Z}$ by $\mathbb{Z}$.
+
+    \item If $\varphi: B\to C$ is any homomorphism of algebraic objects, then we have an exact sequence:
+    $$0 \to \ker \varphi \hookrightarrow B \overset{\varphi}{\to} im\varphi \to 0$$
+    In particular, if $\varphi$ is surjective, then the sequence may be extend to a short exact sequence.
+    
+    \item Let $a \in R$ be an element in $R$. Then we can get the following \textit{short exact sequence}:
+    $$0 \to R/(I:a) \overset{r+ (I;a) \,\mapsto\, ar+I}{\longrightarrow} R/I \twoheadrightarrow R/(I+(a)) \to 0$$
+
+    \item Let $S$ be a set of generators for $M$ and let $F(S)$ be the free $R$-module on $S$. Then we have a short exact sequence:
+    $$0 \to \ker \varphi \hookrightarrow F(S) \overset{\varphi}{\to} M \to 0$$
+    where $\varphi$ denotes the uniqueness $R$-module homomorphism which is the identity on $S$ (by the universal property of free module). More generally, when $M$ is any group (possibly non-abelian), the above short exact sequence describes a \textit{presentation} of $M$, where $\ker \varphi$ is the normal subgroup of $F(S)$ generated by the \textit{relations} defining $M$.
+
+    \item (\textit{Presentation of Modules}):\\
+    As in the presentation of groups, an $R$-module can be given by  "generators" and "relations", e.g.: if we say that $M$ has one generator $g$ and relations $r_1g=r_2g= \cdots= r_ng =0$ for some $r_i \in R$, then $M = R/ (r_1,\cdots,r_n)$. Here is an exact sequence view:
+
+    \noindent Note that each element $m$ of $M$ corresponds to a homomorphism from $R$ to $M$, sending $1$ to $m$. Hence, if $\{ m_i\}_{i \in I}$ generates $M$, then consider the corresponding homomorphism $\varphi: \oplus_{i \in I} R\to M$, sending the $i$th $1$ to $m_i$, which is easy to check that $\varphi$ is surjective.
+
+    \noindent Let $\{n_j \}_{j \in J}$ be such that it generates $\ker \varphi$, which give the "relations" on $m_j$'s. Similarly, $n_j$'s correspond a homomorphism $\psi: \oplus_{j \in J}R \to \oplus _{i \in I} R_i$, sending the $j$th $1$ to $n_j$.
+
+    \noindent Now we see that: $M$ is described as the module with generators $\{m_i \}_{i \in I}$ and relations $\{n_j\}_{j \in J}$ iff the sequence
+    $$\oplus_{j \in J} R \overset{\psi}{\to} \oplus_{i \in I} R \overset{\varphi}{\to} M \to 0$$
+    is exact. This example leads to a definition for presentation of modules but we will first introduce the main content and then introduce this concept at the end of this "subsubsection". For convenience, let's give this example a name, say "the presentation of modules".
+
+    \item In contrast to the first example, another extension of $\mathbb{Z}/n\mathbb{Z}$ by $\mathbb{Z}$ is given by the short exact sequence
+    $$0 \to \mathbb{Z} \overset{z \mapsto nz}{\longrightarrow} \mathbb{Z} \overset{z \mapsto z+n \mathbb{Z}}{\longrightarrow} \mathbb{Z}/n\mathbb{Z} \to 0$$
+    Note that the modules in the middle of the previous two exact sequences are \textbf{NOT} isomorphic even though the respective "$A$" and "$C$" terms are isomorphic. Hence, there are (at least) two "essentially different" or "inequivalent" ways of extending $\mathbb{Z}/n\mathbb{Z}$, which leads to the following definition:
+\end{itemize}
+
+\begin{definition}{Homomorphisms of Short Exact Sequences}\\
+Let $0 \to A\to B\to C\to 0$ and $0 \to A' \to B' \to C'\to 0$ be two short exact sequences of modules.
+\begin{itemize}
+    \item A \textit{homomorphism of short exact sequences} is a triple $(\alpha, \beta, \gamma)$ of module homomorphisms such that the following diagram commutes:
+    \[
+    \begin{tikzcd}
+    0 \arrow[r] & A \arrow[r] \arrow[d, "\alpha"] & B \arrow[r] \arrow[d, "\beta"] & C \arrow[r] \arrow[d, "\gamma"] & 0 \\
+    0 \arrow[r] & A' \arrow[r]                    & B' \arrow[r]                   & C' \arrow[r]                    & 0
+    \end{tikzcd}
+    \]
+    This homomorphism is an \textit{isomorphism of short exact sequences} if $\alpha,\beta,\gamma$ are all isomorphisms, in which case the extensions $B$ and $B'$ are said to be \textit{isomorphic extensions}.
+
+    \item The two short exact sequences are called \textit{equivalent} if $A=A',C=C'$ and there is an isomorphism between them as in the above that is the identity maps on $A$ and $C$ (i.e.: $\alpha=id_A,\gamma=id_C$). In this case the corresponding extensions $B$ and $B'$ are said to be \textit{equivalent extensions}.
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item Isomorphic extensions $\Rightarrow$ isomorphism of modules.
+    \item If $B$ and $B'$ are isomorphic extensions, then there is an $R$-module isomorphism between $B$ and $B'$ that restricts to an isomorphism from $A$ to $A'$ and induces an isomorphism on the quotients $C$ and $C'$.
+
+    \item If $B$ and $B'$ are equivalent extensions of $C$ by $A$, then there exists an $R$-module isomorphism between $B$ and $B'$ that restricts to the identity map on $A$ and induces the identity map on $C$.
+
+    \item The notion of isomorphic extensions measures how many different extensions of $C$ by $A$ there are, allowing for $C$ and $A$ to be changed by an isomorphism. The notion of equivalent extensions measures how many different extensions of $C$ by $A$ there are when $A$ and $C$ are rigidly fixed.
+
+    \item It's easy to see that homomorphisms and isomorphisms between short exact sequences with composition
+    $$(\alpha,\beta,\gamma) \circ (\alpha' ,\beta', \gamma') := (\alpha \circ \alpha' ,\beta \circ \beta', \gamma \circ \gamma')$$
+    gives a group structure.
+
+    \item Since: if the triple $(\alpha ,\beta ,\gamma)$ is an isomorphism (or equivalent) then $(\alpha^{-1} ,\beta^{-1} ,\gamma^{-1})$ is an isomorphism (or equivalent respectively) in the reverse direction,\\
+    then: "isomorphism" (or "equivalence") is an equivalence relation on any set of short exact sequence.
+\end{itemize}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Let $m,n \in \mathbb{N}_+ \setminus \{1\}$. Assume that $n \mid m$ and then let $k:= m/n$. Then the following diagram commutes:
+    \[
+    \begin{tikzcd}
+    0 \arrow[r] & \mathbb{Z} \arrow[r, "z \mapsto nz"] \arrow[d, "\alpha: z \mapsto z+k\mathbb{Z}"] & \mathbb{Z} \arrow[r, "z \mapsto z+n\mathbb{Z}"] \arrow[d, "\beta: z\mapsto z+m\mathbb{Z}"] & \mathbb{Z}/ n\mathbb{Z} \arrow[r] \arrow[d, "\gamma= id_{\mathbb{Z}/ n\mathbb{Z}}"] & 0 \\
+    0 \arrow[r] & \mathbb{Z}/k \mathbb{Z} \arrow[r, "z+k \mathbb{Z} \mapsto nz+ m\mathbb{Z}"]                    & \mathbb{Z}/ m\mathbb{Z} \arrow[r, "z+m\mathbb{Z} \mapsto z+ n\mathbb{Z}"]                   & \mathbb{Z} /n\mathbb{Z} \arrow[r]                    & 0
+    \end{tikzcd}
+    \]
+    i.e.: $(\alpha, \beta ,\gamma)$ is a homomorphism of short exact sequences.
+
+    \item The following commutative diagram gives an isomorphism of the exact sequence with oneself \textit{but NOT} an equivalence of sequences:
+    \[
+    \begin{tikzcd}
+    0 \arrow[r] & \mathbb{Z} \arrow[r, "z \mapsto nz"] \arrow[d, "\alpha"] & \mathbb{Z} \arrow[r, "z \mapsto z+n\mathbb{Z}"] \arrow[d, "\beta"] & \mathbb{Z}/ n\mathbb{Z} \arrow[r] \arrow[d, "\gamma"] & 0 \\
+    0 \arrow[r] & \mathbb{Z} \arrow[r, "z \mapsto nz"]                    & \mathbb{Z} \arrow[r, "z \mapsto z+ n\mathbb{Z}"]                   & \mathbb{Z} /n\mathbb{Z} \arrow[r]                    & 0
+    \end{tikzcd}
+    \]
+    where $\alpha,\beta,\gamma$ all map $x \mapsto -x$, since $\alpha$ and $\gamma$ are NOT identity maps.
+\end{itemize}
+
+\begin{theorem}{The short Five Lemma}\\
+Let $(\alpha ,\beta ,\gamma)$ be a homomorphism of short exact sequences:
+\[
+\begin{tikzcd}
+0 \arrow[r] & A \arrow[r] \arrow[d, "\alpha"] & B \arrow[r] \arrow[d, "\beta"] & C \arrow[r] \arrow[d, "\gamma"] & 0 \\
+0 \arrow[r] & A' \arrow[r]                    & B' \arrow[r]                   & C' \arrow[r]                    & 0
+\end{tikzcd}
+\]
+\begin{enumerate}
+    \item If $\alpha$ and $\gamma$ are injective, then so is $\beta$.
+    \item If $\alpha$ and $\gamma$ are surjective, then so is $\beta$.
+    \item If $\alpha$ and $\gamma$ are isomorphisms, then so is $\beta$ and hence the two sequences are isomorphic.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    We only prove 1 here. Let $\psi: A\to B$ and $\varphi: B\to C$ be the homomorphisms in the upper short exact sequence. For any $b\in B$ with $\beta(b) =0$, the image of $\beta (b)$ in $C'$ is also $0$. By the commutativity of the diagram, $\gamma (\varphi(b)) =0$. By the injectivity of $\gamma$, $\varphi(b) =0 \Rightarrow b\in \ker \varphi= im \psi$, i.e.: there exists $a \in A$, s.t.: $b=\psi (a)$. Then again by the commutativity of the diagram, the image of $\alpha (a)$ in $B'$ is the same as $\beta (\psi (a)) = \beta(b) =0$. Note that $\alpha$ and the map$:A' \to B'$ are injective by hypothesis. Hence, $a=0$. Therefore, $b= \psi(a)=0$.
+\end{proof}
+
+
+\begin{definition}{Free Presentation of Modules}\\
+Recall the fifth example under the definition of short exact sequence, namely, the presentation of modules, we often write $F= \oplus_{j \in J} R, G=\oplus_{i \in I} R$ to describe the relations of $M$ respectively the generators of $M$. Then we call the sequence $F \to G \to M \to 0$ a \textit{free presentation} of $M$. Furthermore:
+\begin{itemize}
+    \item In case $I$ and $J$ are finite, so that each of $F$ and $G$ is finitely generated free module over $R$, the sequence is called a \textit{finite free presentation}.
+
+    \item $M$ is \textit{finitely generated} if $|I| <\infty$.
+    \item $M$ is \textit{finitely presented} if $|J|< \infty$.
+\end{itemize}
+\end{definition}
+
+\subsubsection{1.5.5.2 Split Sequences}
+
+\noindent\textbf{Intuition:} We've already seen that there is always at least one extension of a module $C$ by $A$, namely the direct sum $B=A \oplus C$. In this case, the module $B$ contains a submodule $C'= 0 \oplus C \cong C$ as well as the submodule $A$ and this complement to $A$ "splits" $B$ into a direct sum.
+
+\begin{definition}{Split (Short Exact) Sequences}\\
+We say a short exact sequence
+$$0 \to A \overset{\alpha}{\to} B \overset{\beta}{\to} C \to 0$$
+is \textit{split} if there exists an $R$-module homomorphism $\mu: C \to B$, s.t.:
+$$\varphi \circ \mu= id_C$$
+In this case, the extension $B$ is called a \textit{split extension} of $C$ by $A$. Furthermore, any map $\nu:C \to B$, s.t.: $\varphi \circ \nu=id_C$ is called a \textit{section} of $\varphi$ and if $\nu=\mu$ is an $R$-module homomorphism as above, then it is called a \textit{splitting homomorphism} for the sequence.
+\end{definition}
+
+\noindent\textbf{Remark:} We want to know "split" more explicitly, namely as in intuition above but before that, we need some preparations and then we can prove the Split Sequence Proposition, which will be introduced in the following text, more easily.
+
+
+
+\begin{definition}{General def for Direct Sum and Direct Product}\\
+Let $\{M_i\}_{i \in I}$ be a family of $R$-modules.
+\begin{itemize}
+    \item \textit{Direct Product:}
+    $$\Pi_{i \in I} M_i := \{(m_i)_{i \in I} \mid m_i \in M_i\}$$
+    \item \textit{Direct Sum:}
+    $$\oplus _{i \in I} M_i := \{ (m_i)_{i \in I} \mid m_i \in M_i,all\;but\; finitely\; many\; m_i's\;are\;0\}$$
+\end{itemize}
+\end{definition}
+
+
+\begin{definition}{Direct Summand of Module}\\
+Let $M,P$ be $R$-modules. We say that $M$ is a \textit{direct summand} of $P$ if there are homomorphisms $\alpha:M \to P$ and $\sigma: P\to M$ such that the composition $\sigma \circ \alpha =id_M$.
+\end{definition}
+
+\begin{proposition}{Direct Summand-Direct Sum-Decomposition Proposition}\\
+If $M$ is a direct summand of $P$ with $\alpha:M \to P,\sigma:P \to M$, then
+$$P \cong M \oplus (\ker \sigma)$$
+\end{proposition}
+
+\begin{proof}
+    Consider the map $\varphi: M \oplus (\ker \varphi) \to P$ given by $(m,k) \mapsto \alpha(m)+k$.
+    \begin{itemize}
+        \item \textit{$\varphi$ is a module homomorphism:} For any $m,n \in M$, any $k,t \in \ker \sigma$, any $r\in R$,
+        \begin{itemize}
+            \item $\varphi ((m,k)+ (n,t)) = \varphi(m+n,k+t) := \alpha(m+n) + k+t = (\alpha(m)+k) + (\alpha(n)+ t) := \varphi(m,k) + \varphi(n,t)$
+            \item $\varphi (r(m,k)) = \varphi(rm,rk) := \alpha(rm) +rk = r(\alpha(m)+k) := r\varphi (m,k)$
+        \end{itemize}
+
+        \item \textit{$\varphi$ is injective:} For any $(m,k)$ with $\varphi (m,k) =0$, we have
+        $$\alpha(m)+k=0 \Leftrightarrow \varphi (m) =-k \Rightarrow m = (\sigma \alpha)(m) = -\sigma(k) =0 \Rightarrow \alpha(m)=0 \Rightarrow k=0 \Rightarrow (m,k)=0$$
+
+        \item \textit{$\varphi$ is surjective:} For any $p \in P$, set $m:= \sigma (p),k := p-\alpha(\sigma(p))$.
+        \begin{itemize}
+            \item \textbf{Check} that $k \in \ker \sigma$:
+            $$\sigma (k) := \sigma(p) - (\sigma\alpha) (\sigma(p)) = \sigma(p) - \sigma(p)=0$$
+            \item $\varphi(m,k) := \alpha(m)+k = \alpha(\sigma(p)) +p -\alpha (\sigma(p))=p$.
+        \end{itemize}
+    \end{itemize}
+\end{proof}
+
+
+
+\begin{proposition}{Split Sequence Proposition}
+\begin{enumerate}
+    \item $0 \to A \overset{\alpha}{\to} B \overset{\beta}{\to} C \to 0$ is split $\Leftrightarrow$ $B \cong A \oplus C$.
+    \item $0 \to A \overset{\alpha}{\to} B \overset{\beta}{\to} C \to 0$ is split $\Leftrightarrow$ there exists a homomorphism $\sigma :B \to A$ such that $\sigma \alpha =id_A$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item \begin{itemize}
+            \item ($\Rightarrow$): Note that $C$ is a direct summand of $B$. Hence, by the Direct Summand-Direct Sum-Decomposition Proposition,
+            $$B \cong C \oplus (\ker \beta) \overset{\ker \beta =im \alpha}{=} C \oplus ( im\alpha) \overset{\alpha\;inj.}{\cong} C \oplus A \cong A \oplus C$$
+            
+            \item ($\Leftarrow$): Consider $C' \subseteq B$ with $\varphi (C') \cong C$. Then define $\mu:= \varphi ^{-1} :C \overset{\cong}{\to} C' \subseteq B$
+        \end{itemize}
+        \item \begin{itemize}
+            \item $(\Rightarrow)$: Set $\sigma' := id_B -\tau \beta :B \to B$. Since
+            $$\beta \sigma' := \beta- \beta \tau \beta = \beta -id_C\beta =0$$
+            then $im\sigma' \subseteq \ker \beta =im\alpha$. Now we define $\sigma$ by the following:
+
+            \noindent For any $b \in B$, $\sigma' (b) \in im \alpha \Rightarrow \exists a \in A$, s.t.: $\alpha(a) =\sigma' (b)$. Since $\alpha$ is injective, then such $a$ is unique. Hence we can define a well-defined $\sigma (b) :=$ the unique $a \in A$ such that $\alpha (a) =\sigma' (b)$ and hence $\alpha (\sigma(b)) = \sigma '(b) \Leftrightarrow \alpha \sigma =\sigma'$.
+
+            \noindent For any $a \in A$, since
+            $$\alpha (\sigma \alpha(a)) = \alpha\sigma (\alpha(a)) =\sigma' (\alpha(a)) := \alpha (a) - \tau\beta \alpha(a) \overset{im\alpha =\ker \beta}{=} \alpha(a) -0 =\alpha(a)$$
+            then by the injectivity of $\alpha$, one has
+            $$\sigma\alpha(a) =a \Rightarrow \sigma \alpha=id_A$$
+
+            \item $(\Leftarrow)$: Similarly.
+        \end{itemize}
+    \end{enumerate}
+\end{proof}
+
+
+\section{Projective, Injective and Flat Modules}
+
+\noindent\textbf{Intuition:} Consider a short exact sequence of $R$-modules
+$$0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$$
+with $M$ an extension of $N$ by $L$. It's natural to ask whether properties for $L$ and $N$ imply related properties for the extension $M$.
+
+\subsection{Projective Mordules ($\text{Hom}_\text{R}(D, \cdot)$)}
+
+\noindent\textbf{Intuition:} The first situation we shall consider is whether an $R$-module homomorphism from some fixed $R$-module $D$ to either $L$ or $N$ implies that there is an $R$-module homomorphism from $D$ to $M$.
+
+\begin{proposition}{$L$-$\psi$-Inducing-Map Proposition}\\
+Let $D,L,M$ be $R$-modules and let $\psi: L \to M$ be an $R$-module homomorphism. Then the map $\psi': Hom_R(D,L) \to Hom_R(D,M)$ given by 
+$$\psi' (f) := \psi \circ f$$
+is a homomorphism of abelian group. Furthermore, if $\psi$ is injective, then $\psi'$ is also injective, i.e.:
+\[
+\text{if } 0 \overset{ }{\to} L \overset{\psi}{\to} M \text{ is exact,}\\
+\text{then } 0\to Hom_R(D,L) \overset{\psi'}{\to} Hom_R(D,M) \text{ is also exact.}
+\]
+\end{proposition}
+
+\begin{proof}
+    It's clear that $\psi'$ is a homomorphism. Now suppose that $\psi$ is injective. If $g \neq f \in Hom_R(D,L)$, then $\exists d\in D$, s.t.: $f(d) \neq g(d)$. Hence, by the injectivity of $\psi$, we have
+    $$(\psi \circ f) (d) \neq (\psi \circ g) (d)$$
+    Therefore, $\psi' (f) := \psi \circ f \neq \psi \circ g :=\psi' (g)$.
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item The $L$-$\psi$-Inducing-Map Prop. can be indicated by the commutative diagram:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+    & D \arrow[d, "f"'] \arrow[rd, dashed, "\psi' (f)"] \\
+    (0 \arrow[r]) & L \arrow[r, "\psi"] & M
+    \end{tikzcd}
+    \]
+
+    \item As for the situation for $N$, the question is whether there exists an $R$-module homomorphism $F: D \to M$ that \textit{extends} or \textit{lifts} $f$ to $M$, i.e.: that makes the following diagram commutes:
+
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+    & D \arrow[dl, dashed, "F"'] \arrow[d, "f"] \\
+    M \arrow[r, "\varphi"] & N 
+    \end{tikzcd}
+    \]
+    However, unlike the $L$-$\psi$-Inducing-Map Prop, this may not neccesarily hold in general, i.e.: in general it may not be possible to lift a homomorphism $f$ from $D$ to $N$ to a homomorphism from $D$ to $M$. For example, consider the nonsplit exact sequence
+    $$0 \to \mathbb{Z} \overset{z \mapsto 2z}{\longrightarrow} \mathbb{Z} \overset{z \mapsto z+2\mathbb{Z}}{\longrightarrow} \mathbb{Z} /2 \mathbb{Z} \to 0$$
+    Let $D=\mathbb{Z} /2\mathbb{Z}$ and let $f= id_{\mathbb{Z}/ 2\mathbb{Z}}$ be the identity map from $D$ to $N$. Then any homomorphism $F$ of $D$ into $M =\mathbb{Z}$ must map $D$ to $0$ (since $\mathbb{Z}$ hsa no elements of order $2$). Hence, $(z \mapsto z+2\mathbb{Z}) \circ F$ maps $D$ to $0$ in $N$. Therefore, $(z \mapsto z +2\mathbb{Z} ) \circ F \neq f$, which shows that
+    \[
+    \text{if } M \overset{\varphi}{\to} N\to 0 \text{ is exact,}\\
+    \text{then } Hom_R(D,M) \overset{\varphi'}{\to} Hom_R(D,N) \to 0 \text{ is } not necessarily \text{ exact.}
+    \]
+    where $\varphi': f \mapsto \varphi \circ f$.
+\end{itemize}
+
+\begin{theorem}{Associated $Hom_R (D, \cdot)$ Sequence Theorem}\\
+Let $D,L,M,N$ be $R$-modules. Given a short exact sequence
+$$0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$$
+the associated sequence
+\begin{equation*}
+    0 \to Hom_R (D,L) \overset{\psi'}{\to} Hom_R(D,M) \overset{\varphi'}{\to} Hom_R(D,N)  \tag{*}
+\end{equation*}
+is exact. A homomorphism $f:D \to N$ \textit{lifts} to a homomorphism $F: D\to M \Leftrightarrow f\in \text{im} \varphi' \subseteq Hom_R(D,M)$. In general, $\varphi': Hom_R(D,M) \to Hom_R(D,N)$ need NOT be surjective. Furthermore, $\varphi'$ is surjective $\Leftrightarrow$ every homomorphism from $D$ to $N$ lifts to a homomorphism from $D$ to $M$, in which case the exact sequence $(*)$ can be extended to a short exact sequence.\\
+Moreover, $(*)$ is exact for all $R$-modules $D$ $\Leftrightarrow$ the sequence
+\[ 0\to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \text{ is exact.}\]
+\end{theorem}
+
+\begin{proof}
+    \begin{itemize}
+        \item The only thing in the first statement that has not already been proved is the exactness of $(*)$ at $Hom_R(D,M)$, i.e.: $\ker \varphi' = \text{im} \psi'$.
+        \begin{itemize}
+            \item $\ker \varphi' \subseteq \text{im} \psi'$: $\forall F \in \ker \varphi' \subseteq Hom_R(D,M)$, we have $\varphi \circ F=0$ as homomorphisms from $D$ to $N$, i.e.: $\forall d\in D$, $\varphi (F(d))=0$ and hence $F(d) \in \ker \varphi$. By the exactness of $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$, $F(d) = \varphi(l_d)$ for some $l_d\in L$. By the injectivity of $\psi$, the element $l_d$ is unique and hence this gives a well-defined map $F': D \to L$ given by $F'(d) :=l_d$, which can be checked that $F'$ is a homomorphism, i.e.: $F' \in Hom_R(D,L)$. Then we have
+            $$F= \psi \circ F':= \psi'(F') \Rightarrow F\in \text{im} \psi'$$
+            Therefore, $\ker \varphi' \subseteq \text{im} \psi'$.
+
+            \item $\text{im} \psi' \subseteq \ker \varphi'$: $\forall F\in \text{im} \psi'$, $\exists F' \in Hom_R(D,L)$, s.t.: $F= \psi' (F')$. Hence, $\forall d\in D$, we have
+            $$\varphi (F(d)) = \varphi (\psi (F'(d))) = (\varphi \circ \psi) (F'(d)) \overset{\ker \varphi =\text{im} \psi}{=} 0$$
+            $\Rightarrow (\varphi \circ F) (d) =0, \forall d\in D$, i.e.: $\varphi' (F) = \varphi \circ F=0 \Rightarrow F\in \ker \varphi' \Rightarrow \text{im} \psi' \subseteq \ker \varphi'$.
+        \end{itemize}
+
+        \item For the last statement in the theorem, note that the surjectivity of $\varphi$ is not required for the proof that $(*)$ is exact and hence the $(\Leftarrow)$ direction has already been proven. For the converse, note that in general, $Hom_R(R,X) \cong X$ are isomorphic as $R$-modules for any $R$-module $X$, with the isomorphism $f \mapsto f(1)$. Taking $D=R$ in $(*)$, the exactness of the sequence $0 \to L \overset{\psi}{\to}M \overset{\varphi}{\to} N$ follows easily.
+    \end{itemize}
+\end{proof}
+
+\noindent\textbf{Remark:} More precisely, the sequence $0 \to Hom_R(D,L) \overset{\psi'}{\to} Hom_R(D,M) \overset{\varphi'}{\to} Hom_R(D,N) \to 0$ is exact $\Leftrightarrow$ there is a bijection
+\[
+\{ F:D \to M \text{ homomorphisms} \} \leftrightarrow \{ (g: D \to L, f:D \to N) \text{ pairs of homomorphisms} \}
+\]
+given by $F|_{\psi(L)} =\psi'(g)$ and $f= \varphi' (F)$.
+
+\begin{proposition}{Split-$Hom_R(D,\cdot)$ Proposition}\\
+Let $D,L,N$ be $R$-modules. Then
+\begin{enumerate}
+    \item $Hom_R(D, L \oplus N) \cong Hom_R(D,L) \cong Hom_R(D,N)$, and,
+    \item $Hom_R (L \oplus N ,D) \cong Hom_R(L,D) \cong Hom_R(N,D)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    We only prove $1$ and the proof of $2$ is similar.
+    \begin{itemize}
+        \item Let $\pi_1: L \oplus N \to L, \pi_2 :L \oplus N \to N$ be the natural projections. If $f\in Hom_R(D,L \oplus N)$, then $\pi_1 \circ f \in Hom_R(D,L) $ and $ \pi_2 \circ f\in Hom_R(D,N)$. Hence, $\varphi: Hom_R(D, L\oplus N) \to Hom_R(D,N)$ with $f \mapsto (\pi _1 \circ f, \pi_2 \circ f)$ is a homomorphism.
+
+        \item Conversely, let $\psi: Hom_R(D,L) \oplus Hom_R(D,N) \to Homr_R(D ,L\oplus N)$ be given by $(f_1,f_2) \mapsto f$ where $f(d) := (f_1(d) ,f_2(d)), \forall d\in D$. Then it's easy to show that $\psi \circ \varphi =id_{Hom_R(D ,L\oplus N)}$ and $\varphi \circ \psi =id_{Hom_R(D,L) \oplus Hom_R(D,N)}$ and hence $\varphi$ is an isomorphism between $Hom_R(D, L\oplus N) \cong Hom_R(D,L) \oplus Hom_R(D,N)$.
+    \end{itemize}
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item These results can extend immediately by induction to any finite direct sum of $R$-modules.
+
+    \item These results are referred to by saying that Hom \textit{commutes with finite direct sums in either variable}. For infinite direct sums, the situation is more complicated: Part 1 still holds if $L \oplus N$ is replaced by an arbitrary direct sum and the right hand side is replaced by a direct product; part 2 still holds if the direct sums on both sides are replaced by direct products.
+\end{itemize}
+
+\begin{corollary}{of the Split-$Hom_R(D,\cdot)$ Proposition}\\
+If the sequence $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$ is a split short exact sequence of $R$-modules, then
+$$0 \to \text{Hom}_\text{R} (D,L) \overset{\psi'}{\to} \text{Hom}_\text{R} (D,M) \overset{\varphi'}{\to} \text{Hom}_\text{R} (D,N) \to 0$$
+is also a split short exact sequence of abelian groups for every $R$-module $D$.
+\end{corollary}
+
+\noindent\textbf{Remark:} Converse also holds.
+
+\begin{definition}{Projective Modules}\\
+An $R$-module $P$ is called \textit{projective} if it satisfies one of the following (equivalent) conditions (we will prove the equivalence of those conditions later):
+\begin{enumerate}
+    \item $\forall$ $R$-modules $L,M,N,$ if $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$ is a short exact sequence, then so is
+    $$0 \to \text{Hom}_\text{R} (P,L) \overset{\psi'}{\to} \text{Hom}_\text{R} (P,M) \overset{\varphi'}{\to} \text{Hom}_\text{R} (P,N) \to 0$$
+
+    \item $\forall$ $R$-modules $M,N$, if $M \overset{\varphi}{\to} N\to 0$ is exact, then every $R$-module homomorphism from $P$ to $N$ lifts to an $R$-module homomorphism to $M$, i.e.: given $f\in \text{Hom}_\text{R} (P,N)$, there is a lift $F \in \text{Hom}_\text{R} (P,M)$, s.t.: the following diagram commutes:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+        & P \arrow[dl, dashed, "F"'] \arrow[d, "f"] & \\
+        M \arrow[r, "\varphi"] & N \arrow[r] &0
+    \end{tikzcd}
+    \]
+
+    \item If $P$ is a quotient of the $R$-module $M$, then $P$ is isomorphic to a direct summand of $M$, i.e.: every short exact sequence $0 \to L \to M \to P \to 0$ splits.
+    \item $P$ is a direct summand of a free $R$-module.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}{Projective Modules-Conditions-Equivalent Proposition}\\
+The conditions in the definition of projective modules are equivalent.
+\end{proposition}
+
+
+\begin{proof}
+    \begin{itemize}
+        \item ($1 \Leftrightarrow 2$): is a restatement of a result in the Associated $Hom_R (D,\cdot)$ Sequence Theorem.
+
+        \item ($2 \Rightarrow3$): Let $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} P \to 0$ be exact. By 2, the identity map from $P$ to $P$ lifts to a homomorphism $\mu$ making the following diagram commute:
+        \[
+        \begin{tikzcd}[row sep=large, column sep=large]
+            & P \arrow[dl, dashed, "\mu"'] \arrow[d, "id_P"] & \\
+            M \arrow[r, "\varphi"] & P \arrow[r] &0
+        \end{tikzcd}
+        \]
+        Then we find that $\mu$ is a splitting homomorphism for the sequence.
+
+        \item ($3 \Rightarrow 4$): We refer to $P$ as a set and then we have: the sequence
+        \[
+        0 \to \ker \varphi \hookrightarrow F(P) \overset{\varphi}{\to} P \to 0
+        \]
+        is exact where $F(P)$ denotes the free module on the set $P$. Hence, if 3 holds, then this sequence is split, so $F(P) \cong \ker \varphi \oplus P$.
+
+        \item ($4 \Rightarrow 2$): Let $S$ be a set and $K$ be an $R$-module, s.t.:
+        $$F(S) \cong P\oplus K$$
+        $\forall f\in \text{Hom}_\text{R} (P,N)$, consider the natural projection map $\pi: F(S) \to P$ and hence $f \circ \pi \in \text{Hom}_\text{R} (F(S),N)$. $\forall s\in S$, define $n_s:=(f \circ \pi) (s) \in N$. By the surjectivity of $\varphi$, $\varphi (m_s) =n_s$ for some $m_s \in M$. By the universal property of free modules, $\exists!$ $R$-module homomorphism $F': F(S) \to M$, s.t.: $F'(s) =m_s$, i.e. the following diagram commutes:
+        \[
+        \begin{tikzcd}[row sep=large, column sep=large]
+            & F(S) \arrow[ddl, dashed, "\exists {!F'}"'] \arrow[d, "\pi"] \cong P \oplus K & \\
+            & P \arrow[d, "f"] & \\
+            M \arrow[r, "\varphi"] & N \arrow[r] &0
+        \end{tikzcd}
+        \]
+        namely, $\varphi \circ F' =f\circ \pi :F(S) \to N$. Now define a map $F:P \to M$ by
+        $$F(d) := F'((d,0))$$
+        Since $F= (P \hookrightarrow F(S)) \circ F'$, then $F$ is a homomorphism. Then $\forall d\in P$, we have
+        $$(\varphi \circ F) (d) = (\varphi \circ F') ((d,0)) = (f\circ \pi) ((d,0)) =f(d)$$
+        and hence $\varphi \circ F=f$. Therefore, the diagram
+        \[
+        \begin{tikzcd}[row sep=large, column sep=large]
+            & P \arrow[dl, dashed, "F"'] \arrow[d, "f"] & \\
+            M \arrow[r, "\varphi"] & N \arrow[r] &0
+        \end{tikzcd}
+        \]
+        commutes.
+    \end{itemize}
+\end{proof}
+
+\begin{corollary}{of the Projective Modules-Conditions-Equivalent Proposition}\\
+\begin{enumerate}
+    \item Free modules are projective.
+    \item A finitely generated module is projective $\Leftrightarrow$ it is a direct summand of a finitely generated free module.
+    \item Every module is a quotient of a projective module.
+\end{enumerate}
+\end{corollary}
+
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item If $R=F$ is a field, then every $F$-module is projective.
+    \item $\mathbb{Z}$ is a projective $\mathbb{Z}$-module.
+    \item Free $\mathbb{Z}$-modules have no nonzero elements of finite order, so no nonzero finite abelian groups can be isomorphic to a submodule of free $\mathbb{Z}$-module. Hence, no nonzero finite abelian group is a projective $\mathbb{Z}$-module. In particular, for $n \geq 2$, the $\mathbb{Z}$-module $\mathbb{Z} /n\mathbb{Z}$ is \textit{not} projective.
+
+    \item Since $\mathbb{Q} /\mathbb{Z}$ is a torsion $\mathbb{Z}$-module, then it is \textit{not} a submodule of a free $\mathbb{Z}$-module and hence it is \textit{not} projective. Note also that the exact sequence $0 \to \mathbb{Z} \to \mathbb{Q} \overset{\pi}{\to} \mathbb{Q} /\mathbb{Z} \to 0$ does not split since $\mathbb{Q}$ contains no submodule isomorphic to $\mathbb{Q} /\mathbb{Z}$.
+
+    \item The $\mathbb{Z}$-module $\mathbb{Q}$ is \textit{not} projective.
+    \item The direct sum of two projective modules is again projective.
+    \item Let $R= \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2 \mathbb{Z}$ and let $P_1,P_2$ be the principal ideals generated by $(1,0)$ respectively $(0,1)$. Then $R =P_1 \oplus P_2$ and hence $P_1$ and $P_2$ are projective $R$-modules.
+\end{itemize}
+
+\subsection{Injective Modules ($\text{Hom}_\text{R} (\cdot ,D)$)}
+
+\noindent\textbf{Intuition:} In the contrast, naturally, we consider the "dual" quesrion of maps from $L$ or $N$ to $D$.
+
+\begin{theorem}{Associated $\text{Hom}_\text{R} (\cdot,D)$ Sequence Theorem}\\
+Let $D,L,M,N$ be $R$-modules. Given a short exact sequence
+$$0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$$
+the associated sequence
+\begin{equation*}
+    0 \to Hom_R (N,D) \overset{\varphi'}{\to} Hom_R(M,D) \overset{\psi'}{\to} Hom_R(L,D)  \tag{**}
+\end{equation*}
+where $\varphi' (f) := f\circ \varphi, \psi' (f) := f\circ \psi$. A homomorphism $f: L\to D$ \textit{lifts} to a homomorphism $F: M\to D \Leftrightarrow f\in \text{im} \psi' \subseteq \text{Hom}_\text{R} (L,D)$. In general $\psi': \text{Hom}_{R} (M,D) \to \text{Hom}_{R} (L,D)$ need \textit{not} be surjective. Furthermore, $\psi'$ is surjective $\Leftrightarrow$ every homomorphism from $M$ to $D$, in which case the exact sequence $(**)$ can be extended to a short exact sequence.\\
+Moreover, $(**)$ is exact for all $R$-modules $D$ $\Leftrightarrow$ the sequence
+\[
+L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0 \text{ is exact.}
+\]
+\end{theorem}
+
+\begin{proof}
+    Similarly as the proof of the Associated $\text{Hom}_\text{R} (D,\cdot)$ Sequence Theorem hence we omit this proof here.
+\end{proof}
+
+\begin{definition}{Injective Modules}\\
+An $R$-module $Q$ is called \textit{injective} if it satisfies one of the following (equivalent) conditions (we will \textit{not} prove the equivalence of these conditions here):
+\begin{enumerate}
+    \item $\forall$ $R$-modules $L,M,N$, if $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$ is a short exact sequence, then so is
+    $$0 \to \text{Hom}_\text{R} (N,Q) \overset{\varphi'}{\to} \text{Hom}_\text{R}(M,Q) \overset{\psi'}{\to} \text{Hom}_\text{R} (L,Q) \to 0$$
+
+    \item $\forall$ $R$-modules $L,M$, if $0 \to L \overset{\psi}{\to} M$ is exact, then every $R$-module homomorphism from $L$ to $Q$ lifts to an $R$-module homomorphism of $M$ to $Q$, i.e.: given $f \in \text{Hom}_\text{R} (L,Q)$, $\exists$ a lift $F\in \text{Hom}_\text{R} (M,Q)$, s.t.: the following diagram commutes:
+    \[
+    \begin{tikzcd}
+        0 \arrow[r] & L \arrow[r, "\psi"] \arrow[d, "f"'] &M \arrow[dl, dashed, "F"] \\
+        & Q
+    \end{tikzcd}
+    \]
+
+    \item If $Q$ is a submodule of the $R$-module $M$, then $Q$ is a direct summand of $M$, i.e.: every short exact sequence $0 \to Q\to M\to N \to0$ splits.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}{Baer's Criterion}\\
+The $R$-module $Q$ is injective $\Leftrightarrow$ $\forall$ ideal $I \triangleleft R$ of $R$, any $R$-module homomorphism $g :I \to Q$ can be extended to an $R$-module homomorphism $G: R \to Q$.
+\end{theorem}
+
+\begin{proof}
+    \begin{itemize}
+        \item The $(\Rightarrow)$ direction holds immediately by the second condition in the definition of injective module.
+
+        \item Conversely, we want to prove the second condition. Suppose that $0 \to L \overset{\psi}{\to}  M$ is exact and that $f: L\to Q$ is an $R$-module homomorphism. Consider the collection $\mathcal{S}$ of all pairs $(f',L')$ where $f': L'\to Q$ are the lifts of $f$ and $L'$ is a submodule of $M$ containing $L$. Then we define the partial order on $\mathcal{S}$ by
+        \[
+        (f',L') \leq (f'',L'') \text{ if } L' \subseteq L'' \text{ and } f''|_{L'} =f'
+        \]
+        Since $\mathcal{S} \neq \emptyset$, then by the Zorn's Lemma, there is a maximal element $(F,M')$ in $\mathcal{S}$. It suffices to complete this proof by proving the following claim:
+        \begin{itemize}
+            \item \noindent\textbf{Claim:} $M =M'$.
+            \item \begin{proof}
+                \textit{of claim:} Suppose on the contrary that $M' \subsetneq M$, i.e.: there is an element $m \in M \setminus M'$, and then let $I = \{ r\in R \mid rm\in M' \}$, which can be easily verified that $I$ is an ideal of $R$. For applying the hypothesis, consider the map $g: I \to Q$ given by $g(x) := F(xm)$, an $R$-module homomorphism from $I$ to $Q$. Then by hypothesis, $\exists$ a lift $G: R\to Q$ of $g$. Note that $M' +Rm$ is a submodule of $M$. Define a map $F': M'+Rm \to Q$ by
+                $$F'(m'+rm) := F(m') +G(r)$$
+                \textit{Check:} if $m_1'+r_1m = m_2'+r_2m$, then $(r_1-r_2) m= m_2'-m_1'$ which follows that 
+                \begin{align*}
+                    F' (m_1'+r_1m) - F'(m_2'+r_2m) &:= F(m_1' -m_2') +G(r_1-r_2) = F(m_1'-m_2') +g(r_1-r_2)\\
+                    &:= F(m_1' -m_2') +F((r_1-r_2)m) =0
+                \end{align*}
+                and hence $F'$ is well-defined and it is then immediately an $R$-module homomorphism, extending $f$ to $M'+Rm$. This contradicts the maximality of $M'$.
+            \end{proof}
+        \end{itemize}
+    \end{itemize}
+\end{proof}
+
+\begin{proposition}{Injective PID-Modules Proposition}\\
+Let $R$ be a PID and let $Q$ be an $R$-module.
+\begin{enumerate}
+    \item $Q$ is injective $\Leftrightarrow$ $rQ =Q$ $\forall 0\neq r \in R$. In particular, a $\mathbb{Z}$-module is injective $\Leftrightarrow$ it is divisible.
+
+    \item Quotient modules of injective $R$-modules are again injective.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{enumerate}
+        \item $\forall$ nonzero ideal $I \triangleleft R$, PID, $I= (r)$ for some $0 \neq r \in R$. Then an $R$-module homomorphism $f:I \to Q$ is completely determined by $f(r) \in Q$. Since $f$ can be extended to an $R$-module homomorphism $F: R\to Q$ $\Leftrightarrow$ there is an element $q'$ in $Q$ with $F(1)=q'$ satisfying $q:= f(r) =F(r) =rq'$, then the Baer's Criterion holds for $Q \Leftrightarrow rQ=Q$.
+        \item Since a quotient of $Q$ with $rQ=Q$ $\forall 0\neq r\in R$ has the same property, then we're done.
+    \end{enumerate}
+\end{proof}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Since $\mathbb{Z}$ is \textit{NOT} divisible, then $\mathbb{Z}$ is \textit{NOT} an injective $\mathbb{Z}$-module, which also follows from the fact that the exact sequence $0 \to \mathbb{Z} \overset{z \mapsto 2z}{\longrightarrow} \mathbb{Z} \overset{z \mapsto z+2\mathbb{Z}}{\longrightarrow} \mathbb{Z}/ 2\mathbb{Z} \to0$ does \textit{NOT} split.
+
+    \item $\mathbb{Q}$ is an injective $\mathbb{Z}$-module.
+    \item $\mathbb{Q}/\mathbb{Z}$ is an injective $\mathbb{Z}$-module.
+    \item A direct sum of divisible $\mathbb{Z}$-modules is again divisible and hence a direct sum of injective $\mathbb{Z}$-modules is a gain injective. e.g.: $\mathbb{Q} \oplus \mathbb{Q} /\mathbb{Z}$ is injective.
+\end{itemize}
+
+\begin{corollary}{of Injective PID-Moudules Proposition}\\
+Every $\mathbb{Z}$-module is a submodule of an injective $\mathbb{Z}$-module.
+\end{corollary}
+
+\begin{proof}
+    Let $M$ be a $\mathbb{Z}$-module, let $A$ be any set of $\mathbb{Z}$-module generators of $M$ and let $F(A)$ be the free $\mathbb{Z}$-module on the set $A$. Then by the universal property of free modules, $\exists$ a \textit{surjective} $\mathbb{Z}$-module homomorphism $\varphi :F(A) \to M$ and then we can identify $M= F(A) /\ker \varphi$. Let $\mathcal{Q}$ be a free $\mathbb{Q}$-module on $A$. Then $\mathcal{Q} \cong$ a direct sum of a number of copies of $\mathbb{Q}$, so it is divisible and hence by the Injective PID-Modules Proposition, an injecitve $\mathbb{Z}$-module containing $F(A)$. Since $\ker \varphi$ is a $\mathbb{Z}$-module of $\mathcal{Q}$, then $\mathcal{Q}/ \ker\varphi$ is injective, again by the Injective PID-Modules Proposition. Since $M=F(A) /\ker\varphi \subseteq \mathcal{Q} /\ker\varphi$, then we're done.
+\end{proof}
+
+\noindent\textbf{Remark:} This corollary can be used to prove the following more general version valid for arbitrary $R$-modules:
+
+\begin{theorem}
+    Any $R$-module is contained in an injective $R$-module.
+\end{theorem}
+
+\subsection{Flat Modules ($D \otimes _R \cdot$)}
+
+\begin{theorem}{Tensor-Exact Sequences Proposition}\\
+Let $D,M,N,L$ be $R$-modules. Given a short exact sequence $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N\to 0$, the associated sequence of $R$-modules
+\begin{equation*}
+    D \otimes_R L \overset{id_D \otimes \psi}{\longrightarrow} D \otimes_R M \overset{id_D \otimes \varphi}{\longrightarrow} D\otimes_R N \to 0 \tag{***}
+\end{equation*}
+is exact. In general, the map $id_D \otimes \psi$ need \textit{NOT} be surjective.\\
+Moreover, $(***)$ is exact for all $R$-modules $D \Leftrightarrow$ the sequence
+\[
+L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0 \text{ is exact.}
+\]
+\end{theorem}
+
+\begin{proof}
+    For the first statement, it remains to prove the exactness of $(***)$ at $D \otimes_R M$. By the exactness of $L \overset{\psi}{\to} M \overset{\varphi}{\to} N$, $\varphi \circ \psi=0$ and hence we have
+    $$(id_D \otimes \varphi) (\sum_{i} (d_i \otimes (\psi(l_i)))) := \sum_i(d_i \otimes ((\varphi \circ \psi) (l_i))) =0$$
+    which follows that $\text{im} (id_D \otimes \psi) \subseteq \ker (id_D \otimes \varphi)$. In particular, there is a natural projection $\pi :(D \otimes _R M)/ \text{im} (id_D \otimes \psi) \to (D \otimes_R M)/ \ker (id_D \otimes \varphi) \cong D \otimes _RN$. It suffices to show that $\pi$ is an isomorphism. To show this, we shall define an inverse of $\pi$. Consider $\pi' :D \times N \to (D \otimes_R M)/ \text{im} (id_D \otimes \psi)$ given by $(d,n) \mapsto d \otimes m + \text{im} (id_D \otimes \psi)$ where $m\in M$ is such that $\varphi (m) =n$, which is well-defined by $\ker \varphi =\text{im} \psi$. It's easy to verify that $\pi'$ is bilinear and hence it induces an $R$-module homomorphism $\tilde{\pi} :D \otimes_R N\to (D\otimes _RM)/ \text{im} (id_D \otimes \psi)$ with
+    $$\tilde{\pi} (d \otimes n) := d \otimes m+ \text{im} (id_D \otimes \psi)$$
+    Then we find an inverse of $\pi$.
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item If $0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$ is split, then $(***)$ can be extended to a split short exact sequence $0 \to D\otimes_R L \overset{id_D \otimes \psi}{\longrightarrow} D\otimes_R M \overset{id_D \otimes \varphi}{\longrightarrow} D\otimes_R N \to0$.
+    \item This theorem gives rise to the following definition, where the conditions are equivalent, which can be directly obtained from this theorem:
+\end{itemize}
+
+
+
+\begin{definition}{Flat Modules}\\
+An $R$-module $A$ is called \textit{flat} if it satisfies the following (equivalent) conditions:
+\begin{enumerate}
+    \item $\forall$ $R$-modules $L,M,N$, if
+    $$0 \to L \overset{\psi}{\to} M \overset{\varphi}{\to} N \to 0$$
+    is a short exact sequence, then
+    $$0 \overset{ }{\to} A\otimes_R L \overset{id_A \otimes \psi}{\longrightarrow} A\otimes_R M \overset{id_A \otimes \varphi}{\longrightarrow} A \otimes _RN \to0$$
+    is also a short exact sequence.
+
+    \item $\forall$ $R$-modules $L,M$, if $0 \to L \overset{\psi}{\to} M$ is an exact sequence of $R$-modules, then $0 \to A \otimes_R L\overset{id_A \otimes \psi}{\longrightarrow} A\otimes_R M$ is an exact sequence of abelian groups.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}{Important Example of Flat Modules}
+Free modules are flat. More generally, projective modules are flat.
+\end{proposition}
+
+\begin{proof}
+    \begin{itemize}
+        \item To show that a free module $F$ is flat, it suffices to show that $\forall$ injective map $\psi: L\to M$ of $R$-modules, the induced map $id_F \otimes \psi: F\otimes_R L \to F\otimes_R M$ is also injective, i.e.: condition 2 holds for $F$.\\
+        Suppose first that $F\cong R^n$ is a finitely generated free $R$-module. Then $F\otimes _RL \cong R^n \otimes_R L \cong L^n$ and similarly $F \otimes_R M \cong M^n$. Hence, $\psi$ induces a natural injective map $: L ^n \to M^n$.\\
+        Suppose now that $F$ is an arbitrary free module and that the element $\sum (f_i \otimes l_i) \in \ker (id_F \otimes \psi) \subseteq F \otimes_RL$. This means that $\sum(f_i ,\psi(l_i))$ can be written as a sum of generators in the free group on $F \times M$, namely as in the proof of existence of tensor product. Since this sum of elements is finite, then $f_i$'s all lie in some finitely generated submodule $F'$ of $F$, which reduces to the finitely generated case.
+
+        \item Let $P$ be a projective module. Then by the fourth condition in the definition of projective module, $P$ is a direct summand of a free module $F$, asy $F= P\oplus P'$. As in the above, we'll prove the second condition in the definition of flat modules, so we pich $\psi: L\to M$ to be injective. We've shown that $id_F \otimes \psi: F\otimes_R L \to F \otimes_R M$ is also injective. Since $F= P\oplus P'$, then by the Tensor Product of Modules-Properties Proposition, $$id_{P \oplus P'} \otimes \psi: (P \otimes_R L) \oplus (P' \otimes_R L) \cong (P \oplus P') \otimes_R L \to (P \oplus P') \otimes _RM \cong (P \otimes_R M) \oplus (P' \otimes_R M)$$
+        is injective. Hence, $id_P \otimes \psi: P \otimes_RL \to P\otimes_R M$ is injective.
+    \end{itemize}
+\end{proof}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item $\mathbb{Z}$ is projective $\mathbb{Z}$-module $\Rightarrow$ it is a flat $\mathbb{Z}$-module.
+    \item Note that the injection $\mathbb{Z} \hookrightarrow \mathbb{Q}$ of $\mathbb{Z}$-modules induces the zero map from $\mathbb{Z}/ 2\mathbb{Z} \otimes_\mathbb{Z} \mathbb{Z} \cong \mathbb{Z}/ 2\mathbb{Z}$ to $\mathbb{Z}/ 2\mathbb{Z} \otimes_\mathbb{Z} \mathbb{Q} =0$. Hence, $\mathbb{Z}/ 2\mathbb{Z}$ is \textit{NOT} a flat $\mathbb{Z}$-module.
+
+    \item $\mathbb{Q}$ is a flat $\mathbb{Z}$-module: Let $\psi: L\to M$ be an injective map of $\mathbb{Z}$-modules. Then every element in $\mathbb{Q} \otimes_\mathbb{Z} L$ can be written in the form
+    \[
+    (\frac{1}{d}) \otimes l \text{ for some } d\in \mathbb{Z} \setminus \{0\}, l\in L
+    \]
+    If $(\frac{1}{d}) \otimes l \in \ker(id_\mathbb{Q} \otimes \psi)$, then $(\frac{1}{d}) \otimes \psi(l) =0 \in \mathbb{Q} \otimes_\mathbb{Z} M$. Hence, $\psi (c\cdot l) =c \psi (l) =0\in M$ for some $c\in \mathbb{Z} \setminus \{0\}$. Then by the injectivity of $\psi$, $c\cdot l=0 \in L$. Therefore, $(\frac{1}{d}) \otimes l = (\frac{1}{cd}) \otimes (cl) =0 \in \mathbb{Q} \otimes_\mathbb{Z} L$, i.e.: $id_\mathbb{Q} \otimes \psi$ is injective.
+
+    \item The $\mathbb{Z}$-module $\mathbb{Q}/ \mathbb{Z}$ is injective but \textit{NOT} flat: Consider the injective map $\psi: \mathbb{Z} \to \mathbb{Z}$ given by $z \mapsto 2z$. Since
+    $$(id_{\mathbb{Q} /\mathbb{Z}} \otimes \psi) ((\frac{1}{2} +\mathbb{Z}) \otimes 1) = (\frac{1}{2} +\mathbb{Z}) \otimes 2 =(1+\mathbb{Z} ) \otimes 1 =0_{\mathbb{Q}/ \mathbb{Z} \otimes_\mathbb{Z} \mathbb{Z}}$$
+    and since $(\frac{1}{2} +\mathbb{Z}) \otimes 1 \neq 0 _{\mathbb{Q}/ \mathbb{Z} \otimes_\mathbb{Z} \mathbb{Z}}$, then $id_{\mathbb{Q}/ \mathbb{Z}} \otimes\psi$ is \textit{NOT} injective.
+
+    \item The direct sum of flat modules are flat.
+\end{itemize}
+
+\begin{definition}{Torsion-Free Modules}\\
+An $R$-module $M$ is \textit{torsion-free} if $rm\neq0$ whenever $r$ is not a zerodivisor in $R$ and $m\neq0$.
+\end{definition}
+
+\begin{proposition}{Flat Modules-are-Torsion Free Proposition}\\
+Every flat $R$-module $F$ is torsion-free.
+\end{proposition}
+
+\begin{proof}
+    Suppose on the contrary that $\exists{r_0} \in R$ not a zerodivisor an $\exists m_0 \neq 0$, s.t.: $r_0m_0 =0$. Consider $f: R\to R$ given by $f(r) := r_0r$. Since $r_0$ is not a zerodivisor, then $\ker f=\{0\}$ and hence $f$ is injective. The following diagram commutes:
+    \[
+    \begin{tikzcd}[row sep=large, column sep=large]
+        F \otimes_R R \arrow[r, "id_F \otimes f"] \arrow[d, "\pi"]& F\otimes_R R \arrow[d, "\pi"]\\
+        F \arrow[r, "m \mapsto r_0 m"] &F
+    \end{tikzcd}
+    \]
+    By the flat-ness of $F$, $id_F \otimes f$ is injective and hence so is the map $m \mapsto r_0m$, contradicting to $0 \neq m_0 \in \ker (m \mapsto r_0m)$.
+\end{proof}
+
+\begin{theorem}{Adjoint Associativity}\\
+Let $R,S$ be rings, let $A,C$ be $R$-modules and let $B$ be a module over both $R$ and $S$. Then $\exists$ an isomorphism between
+\[
+\text{Hom}_S (A \otimes_R B,C) \cong \text{Hom}_R (A, \text{Hom}_S (B,C))
+\]
+\end{theorem}
+
+\begin{proof}
+    Let $\varphi \in \text{Hom}_S (A \otimes_R B,C)$. For any $a \in A$, we define a homomorphism $\Phi (a): B \to C$ by $\Phi(a) (b) := \varphi (a \otimes b)$. So the map $f: \varphi \to \Phi$ gives a homomorphism from $\text{Hom}_S (A \otimes_R B,C)$ to $\text{Hom}_R (A, \text{Hom}_S (B,C))$. Conversely, let $\Phi \in \text{Hom}_R (A, \text{Hom}_S (B,C))$. Since the map from $A\times B$ to $C$ given by $(a,b) \mapsto \Phi(a) (c)$ is bilinear, then by the universal property of tensor products, it induces a homomorphism $\varphi: A \otimes_R B\to C$. So the map $g: \Phi \mapsto \varphi$ gives a homomorphism from $\text{Hom}_R(A, \text{Hom}_S (B,C))$ to $\text{Hom}_S(A \otimes _RB, C)$, which can easily be verified to be an inverse of $f$.
+\end{proof}
