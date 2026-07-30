@@ -1,0 +1,1851 @@
+\chapter{Homological Algebra}
+
+\setcounter{section}{-1}
+\section{Introduction and Motivation}
+
+\noindent\textbf{Intuition:} As we saw in the Module Theory chapter, short exact sequences are fundamental tools for understanding the structure of modules. However, applying functors (like the $\operatorname{Hom}$ functor or the tensor product) to a short exact sequence often "breaks" the exactness at one end. Homological algebra provides the machinery to "repair" this loss of exactness by extending the sequence infinitely.
+
+Let $R$ be a ring with $1$. In previous chapters, we saw that a short exact sequence of $R$-modules
+\begin{equation}
+    0 \longrightarrow L \stackrel{\psi}{\longrightarrow} M \stackrel{\varphi}{\longrightarrow} N \longrightarrow 0 \label{eq:ses_intro}
+\end{equation}
+gives rise to an exact sequence of abelian groups when applying the contravariant functor $\operatorname{Hom}_R(-, D)$ for any $R$-module $D$:
+\begin{equation}
+    0 \longrightarrow \operatorname{Hom}_R(N, D) \stackrel{\varphi'}{\longrightarrow} \operatorname{Hom}_R(M, D) \stackrel{\psi'}{\longrightarrow} \operatorname{Hom}_R(L, D) \label{eq:hom_intro}
+\end{equation}
+
+\noindent\textbf{Remark} \textit{(The Extension Problem):}
+The crucial observation in sequence (\ref{eq:hom_intro}) is that the homomorphism $\psi'$ is \textit{in general not surjective}. This means we cannot simply append "$\longrightarrow 0$" to the right side of the sequence to make it a short exact sequence.
+
+Equivalently, what does it mean for $\psi'$ to not be surjective? It means that a homomorphism from $L$ to $D$ cannot always be "lifted" or "extended" to a homomorphism from $M$ into $D$. We can visualize this geometric obstruction using a commutative diagram:
+\[\begin{tikzcd}
+    0 \arrow[r] & L \arrow[r, "\psi"] \arrow[d, "f"'] & M \arrow[r, "\varphi"] \arrow[dl, "F", dashed] & N \arrow[r] & 0 \\
+                & D & & &
+\end{tikzcd}\]
+Given a homomorphism $f \in \operatorname{Hom}_R(L, D)$, does there always exist an extension $F \in \operatorname{Hom}_R(M, D)$ such that $f = F \circ \psi$? The lack of surjectivity of $\psi'$ tells us the answer is \textit{no} in general. 
+
+
+\noindent\textbf{Solution provided by Homological Algebra:} 
+In this chapter, we introduce techniques of "homological algebra" which provide a natural method for extending these broken exact sequences. For the situation above, one obtains an infinite long exact sequence involving the \textit{cohomology groups} $\operatorname{Ext}^n_R(-, D)$:
+\begin{equation}
+    0 \to \operatorname{Hom}_R(N, D) \to \operatorname{Hom}_R(M, D) \to \operatorname{Hom}_R(L, D) \xrightarrow{\delta} \operatorname{Ext}^1_R(N, D) \to \dots
+\end{equation}
+These $\operatorname{Ext}$ groups provide a precise mathematical measure of the set of homomorphisms from $L$ into $D$ that \textit{cannot} be extended to $M$. 
+
+We will also consider analogous questions for the other two functors discussed previously: 
+\begin{itemize}
+    \item Taking homomorphisms \textit{from} $D$ into the terms of sequence (\ref{eq:ses_intro}) (covariant $\operatorname{Hom}$ functor).
+    \item Tensoring the sequence (\ref{eq:ses_intro}) with $D$ (which will introduce the $\operatorname{Tor}$ functors).
+\end{itemize}
+
+
+\noindent\textbf{Roadmap for this Chapter:} 
+In the subsequent sections, we will concentrate on an important special case of this general homological construction: the \textit{cohomology of finite groups}. We will make explicit computations in this case and indicate some applications to establish new results in group theory, serving as an explicit "example" illustrating the general abstract theory.
+
+
+\section{Basic Notions}
+
+\begin{definition}{Cohomology Modules}\\
+Let $\mathcal{C}$ be a sequence of module homomorphisms:
+\[
+0 \to C^0 \overset{d_1}{\longrightarrow} C^1 \overset{d_2}{\longrightarrow} \cdots \overset{d_{n-1}}{\longrightarrow} C^{n-1} \overset{d_n}{\longrightarrow} C^n \overset{d_{n+1}}{\longrightarrow} \cdots
+\]
+\begin{itemize}
+    \item The sequence $\mathcal   C$ is called a \textit{cochain complex} if the composition of any two successive maps is zero: $d_{n+1} \circ d_n=0, \forall n\in \mathbb{N} \cup \{0\}$, i.e.: $\text{im }d_n \subseteq \text{ker }d_{n+1}, \forall n\in \mathbb{N} \cup \{0\}$.
+
+    \item If $\mathcal{C}$ is a cochain complex, then its \textit{$n$-th cohomology module}, denoted as $H^n(\mathcal{C})$, is the quotient module
+    \[
+    H^n (\mathcal{C}) := \ker d_{n+1} / \text{im }d_n
+    \]
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:} There is a completely analogous "dual" version in which the homomorphisms are between groups in decreasing order:
+
+\begin{definition}{Homology Modules}\\
+Let $\mathcal{C}$ be a sequence of module homomorphisms:
+\[
+\cdots \overset{d_{n+1}}{\longrightarrow} C_n \overset{d_n}{\longrightarrow} \cdots \overset{d_1}{\longrightarrow} C_0 \to 0
+\]
+\begin{itemize}
+    \item The sequence $\mathcal{C}$ is called a \textit{chain complex} if the composition of any two successive homomorphisms is zero, i.e.: $d_n \circ d_{n+1}=0 ,\forall n\in \mathbb{N} \cup \{0\}$.
+
+    \item If $\mathcal{C}$ is a chain complex, then its \textit{$n$-th homology module}, denoted as $H_n(\mathcal{C})$, is the quotient module
+    \[
+    \text{ker } d_n /\text{im }d_{n+1}
+    \]
+\end{itemize}
+\end{definition}
+
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item \textit{Convention:} For chain complexes, the notation is often chosen so that the indices appear as subscripts and are decreasing, while for cochain complexes, the indices are superscripts and increasing.
+
+    \item $d_n, \text{ker }d_n$ and $\text{im }d_n$ are often called \textit{differentials}, $n$-\textit{cycles} and $n$-\textit{boundaries} of $\mathcal{C}$: Consider
+    \[
+    \cdots P(\Delta^{n+1}) \xrightarrow{\partial_{n+1}} P(\Delta_n) \xrightarrow{\partial_n} \cdots \xrightarrow{\partial_1} P(\Delta^0) \to 0
+    \]
+    Then $\partial_n$ is the behavior of choosing $(n-1)$-skeleton. As in differential form, we have $\partial^2=0$. In particular, $\mathbb{S}^1 \in \ker \partial_1$, which is why $\ker d_n$ are called $n$-cycles, and $\{ \{1\}, \{2\}, \{3\}, \{1,2\} ,\{1,3\}, \{2,3\} \}= \partial_2 \Delta^2 \in \text{im }\partial_2$, which is that why $\text{im }d_n$ are call $n$-boundaries.
+\end{itemize}
+
+\begin{proposition}{Complex-Exact Proposition}\\
+Let $\mathcal{C}$ be a cochain complex. Then $\mathcal{C}$ is an exact sequence iff all its cohomology modules are zero. Same for chain complex.
+\end{proposition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item This prop. gives a perspective that the $n$-th cohomology (or homology) module measures the failure of the exactness of a cochain (respectively chain) complex at the $n$-th stage.
+
+    \item From now on, we shall mainly discuss on the situation regarding cochain complex.
+\end{itemize}
+
+\begin{definition}{Homomorphism of (Co)Chain Complexes}\\
+Let $\mathcal{A}=\{ A^n\}$ and $\mathcal{B}= \{B^n\}$ be two cochain complexes. A \textit{homomorphism of complexes} $\alpha: \mathcal{A} \to \mathcal{B}$ is a set of homomorphisms $\alpha_n: A^n \to B^n$ such that for every $n$, the following diagram commutes:
+\[
+\begin{tikzcd}
+\cdots \arrow[r] & A^n \arrow[r, "d^{n+1}_{\mathcal{A}}"] \arrow[d, "\alpha_n"] & A^{n+1} \arrow[r] \arrow[d, "\alpha_{n+1}"] & \cdots \\
+\cdots \arrow[r] & B^n \arrow[r, "d^{n+1}_{\mathcal{B}}"]                    & B^{n+1} \arrow[r]                   & \cdots
+\end{tikzcd}
+\]
+\end{definition}
+
+\noindent\textbf{Remark:} There is a category $\mathcal{C}h_R$ of chain complexes of $R$-modules with $\text{Ob} (\mathcal{C}h_R)$ consisting of all chain complexes of $R$-modules and $\text{Mor}_{\mathcal{C}h_R} (\mathcal{A},\mathcal{B})$ consisting of all homomorphism of chain complexes $\alpha: \mathcal{A} \to \mathcal{B}$.
+
+
+\begin{proposition}{Homomorphism of Complexes-Inducing-Homomorphisms of Cohomology Modules Proposition}\\
+A homomorphism $\alpha: \mathcal{A} \to \mathcal{B}$ of cochain complexes induces module homomorphisms $H^n(\alpha): H^n(\mathcal{A}) \to H^n(\mathcal{B})$ for $n \in \mathbb{N} \cup \{0\}$ on their respective cohomology modules. 
+\end{proposition}
+
+
+\begin{proof}
+    We only provide the explicit construction and the remaining checks will be omitted:
+    \[
+    H^n(\alpha) (\overline{z}) := \overline{\alpha^n (z)} ,\forall z\in A^n \text{ with } d^n_{\mathcal{A}} (z)=0.
+    \]
+\end{proof}
+
+\noindent\textbf{Remark:} Note that $0=f: (\cdots \to \mathbb{Z} \xrightarrow{\text{id}_\mathbb{Z}} \mathbb{Z} \to 0\to \cdots) \to 0$ is not an isomorphism but it induces an isomorphism $H_n(f) :H_n(B) \to H_n(C)$ between zeros, so we need a concept called quasi-isomorphism:
+
+\begin{definition}{Quasi-Isomorphism of Chain Complexes}\\
+A homomorphism $\alpha :\mathcal{A} \to \mathcal{B}$ of chain complexes is called a \textit{quasi-isomorphism} of \textit{homologism} if every $H^n (\alpha) :H^n (\mathcal{A}) \to H^n (\mathcal{B})$ is an isomorphism.
+\end{definition}
+
+\begin{definition}{Short Exact Sequence of Complexes}\\
+Let $\mathcal{A}= \{A^n\} , \mathcal{B} =\{B^n\}$ and $\mathcal{C}= \{C^n\}$ be cochain complexes. A \textit{short exact sequence of complexes} $0 \to \mathcal{A} \overset{\alpha}{\to} \mathcal{B} \overset{\beta}{\to} \mathcal{C} \to 0$ is a sequence of homomorphisms of complexes such that for every $n$, the sequence of cohomology modules $0\to A^n \overset{\alpha_n}{\longrightarrow} B^n \overset{\beta_n}{\longrightarrow} C^n \to 0$ is short exact.
+\end{definition}
+
+\begin{theorem}{Long Exact Sequence-in-Cohomology Theorem}\\
+Let $0\to \mathcal{A} \overset{\alpha}{\longrightarrow} \mathcal{B} \overset{\beta}{\longrightarrow} \mathcal{C} \to 0$ be a short exact sequence of cochain complexes. Then there is a long exact sequence of cohomology modules:
+\begin{align*}
+    0 \to H^0 (\mathcal{A}) \xrightarrow{H^0(\alpha)} H^0(\mathcal{B}) \xrightarrow{H^0 (\beta)} H^0(\mathcal{C}) \xrightarrow{\delta_0} H^1(\mathcal{A}) \xrightarrow{H^1 (\alpha)} H^1 (\mathcal{B}) \xrightarrow{H^1(\beta)} H^1 (\mathcal{C}) \xrightarrow{\delta_1} \cdots
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+    For each $n$, the sequence $H^n (\mathcal{A}) \xrightarrow{H^n(\alpha)} H^n(\mathcal{B}) \xrightarrow{H^n(\beta)} H^n (\mathcal{C})$ is clearly exact. Now we define a module homomorphism $\delta_n: H^n (\mathcal{C}) \to H^{n+1} (\mathcal{A})$:
+    \begin{itemize}
+        \item \textbf{Claim 1:} If $c\in C^n$ represents the class $x\in H^n(\mathcal{C})$, then there is some $b\in B^n$ with $\beta_n (b)=c$.
+
+        \item \begin{proof}
+            \textit{of claim 1:} Since the short sequence $0 \to \mathcal{A} \xrightarrow{\alpha} \mathcal{B} \xrightarrow{\beta} \mathcal{C} \to 0$ is exact, then by the Complex-Exact Prop, $\beta$ is surjective.
+        \end{proof}
+
+        \item \textbf{Claim 2:} $d^{n+1}_\mathcal{B} (b) \in \ker \beta_{n+1}$ where this $b$ is the $b$ mentioned in claim 1.
+        \item \begin{proof}
+            \textit{of claim 2:} By the commutativity of the following diagram:
+            \[
+            \begin{tikzcd}
+            \cdots \arrow[r] & B^n \arrow[r, "d^{n+1}_{\mathcal{B}}"] \arrow[d, "\beta_n"] & B^{n+1} \arrow[r] \arrow[d, "\beta_{n+1}"] & \cdots \\
+            \cdots \arrow[r] & C^n \arrow[r, "d^{n+1}_{\mathcal{C}}"]                    & C^{n+1} \arrow[r]                   & \cdots
+            \end{tikzcd}
+            \]
+            we have $\beta_{n+1} (d^{n+1}_\mathcal{B} (b))= d_\mathcal{C}^{n+1} (\beta_n(b)) \overset{\text{claim 1}}{=} d_\mathcal{C}^{n+1} (c)$. Since $c$ represents the class $x\in H^n(\mathcal{C})$, then $c\in \ker d_\mathcal{C}^{n+1}$, so $\beta_{n+1}(d_\mathcal{B}^{n+1} (b))=0$.
+        \end{proof}
+    \end{itemize}
+    By the exactness of the sequence $0 \to A^{n+1} \xrightarrow{\alpha_{n+1}} B^{n+1} \xrightarrow{\beta_{n+1}} C^{n+1} \to 0$, we have $\ker \beta_{n+1} =\text{im } \alpha_{n+1}$ and $\alpha_{n+1}$ is injective, so there exists a unique $a \in \in A^{n+1}$, s.t.: 
+    \begin{equation*}
+        \alpha_{n+1} (a)= d_\mathcal{B}^{n+1} (b) \tag{*}
+    \end{equation*}
+
+    \begin{itemize}
+        \item \textbf{Claim 3:} $d_\mathcal{A}^{n+2} (a)=0$, i.e.: $a\in \ker d_\mathcal{A} ^{n+1}$.
+        \item \begin{proof}
+            \textit{of claim 3:} By the injectivity of $\alpha_{n+2}$, it suffices to show that $\alpha_{n+2} (d_\mathcal{A}^{n+2} (a))=0$. Then by the commutativity of the following diagram:
+            \[
+            \begin{tikzcd}
+            \cdots \arrow[r] & A^{n+1} \arrow[r, "d^{n+2}_{\mathcal{A}}"] \arrow[d, "\alpha_{n+1}"] & A^{n+2} \arrow[r] \arrow[d, "\alpha_{n+2}"] & \cdots \\
+            \cdots \arrow[r] & B^{n+1} \arrow[r, "d^{n+2}_{\mathcal{B}}"]                    & B^{n+2} \arrow[r]                   & \cdots
+            \end{tikzcd}
+            \]
+            we have $\alpha_{n+2} (d_\mathcal{A}^{n+2} (a))= d^{n+2} (\alpha_{n+1} (a)) \overset{(*)}{=} d_\mathcal{B}^{n+2} (d_\mathcal{B}^{n+1} (b))=0$, where the last equation is because $\mathcal{B}$ is a cochain complex.
+        \end{proof}
+    \end{itemize}
+    Hence, $a$ can define a class $\overline{a} \in H^{n+1} (\mathcal{A})$.
+
+    \begin{itemize}
+        \item \textbf{Claim 4:} $\overline{a}$ is independent of the choice of $b$, i.e.: if $b'\neq b$ with $\beta_n(b')=c$ and if $a'$ is the unique preimage in $A^{n+1}$ of $b'$, then $\overline{a} = \overline{a'}$.
+        \begin{proof}
+            \textit{of claim 4:} Since $\beta_n (b-b') =c-c=0$, then $b-b' \in \ker \beta_n =\text{im } \alpha_{n}$, so $\alpha_n (a_0)= b-b'$ for some $a_0 \in A^n$. Then we have
+            \[
+            \alpha_{n+1} (a-a') \overset{(*)}{=} d^{n+1}_\mathcal{B} (b)- d^{n+1}_\mathcal{B} (b') =d^{n+1}_\mathcal{B} (b-b') =d^{n+1}_\mathcal{B} (\alpha_n(a_0)) \overset{\text{commutativity}}{=} \alpha_{n+1} (d^{n+1}_\mathcal{B} (a_0))
+            \]
+            By the injectivity of $\alpha_{n+1}$, $a-a'= d^{n+1}_\mathcal{B} (a_0) \in \text{im }d^{n+1}_\mathcal{B}$ and hence by the def of cohomology modules $\overline{a} = \overline{a'} \in H^{n+1} (\mathcal{A})$.
+        \end{proof}
+
+        \item \textbf{Claim 5:} $\overline{a}$ is independent of the choice of $c$ representing the class $x$.
+        \item \begin{proof}
+            \textit{of claim 5:} Suppose that $\overline{c'} = \overline{c} =x$, which follows that $c-c'\in \text{im }d_\mathcal{C}^n$, i.e.: $e \in C^{n-1}$, s.t.: $d^n_\mathcal{C} (e)=c-c'$. By the surjectivity of $\beta_{n-1}$, there is $f \in B^{n-1}$, s.t.: $\beta_{n-1} (f)=e$. Then by commutativity,
+            \[
+            c-c'= d^n_\mathcal{C} (\beta_{n-1}(f)) = \beta_n (d^{n}_\mathcal{B} (f))
+            \]
+            Consider $b':= b- d^n_\mathcal{B} (f)$. Then
+            \[
+            \beta_n (b') = \beta_n (b)- \beta_n (d^n_\mathcal{B} (f)) =c- \beta_n (d^n_\mathcal{B} (f)) =c'
+            \]
+            so $b'$ is a preimage of $c'$. By the def of cohomology modules, we then have
+            \begin{equation*}
+                d^{n+1}_\mathcal{B} (b'):= d^{n+1}_\mathcal{B}(b) - d^{n+1}_\mathcal{B} (d^{n}_\mathcal{B} (f)) = d^{n+1}_\mathcal{B}(b) \tag{**}
+            \end{equation*}
+            Hence, by claim 2 and $(*)$, there exists a unique $a' \in A^{n+1}$, s.t.:
+            \[
+            \alpha_{n+1} (a) \overset{(*)}{=} d^{n+1}_\mathcal{B} (b) \overset{(**)}{=} d^{n+1}_\mathcal{B} (b') = \alpha_{n+1} (a')
+            \]
+            so by the injectivity of $\alpha_{n+1}$, $a=a'$. Therefore, $\overline{a} = \overline{a'}$.
+        \end{proof}
+    \end{itemize}
+    Now we define $\delta_n (x) := \overline{a}$. To prove that $\delta_n$ is a module homomorphism, we need to show that for any $x_1 ,x_2 \in H^n(\mathcal{C})$, $\delta_n(x_1+x_n)= \delta_n(x_1) +\delta_n (x_2)$:
+
+    Let $c_1,c_2 \in C^n$ represent $x_1$ respectively $x_2$. Then $c_1+c_2$ represents $x_1 + x_2$. By claim 1, there exist $b_1,b_2 \in B^n$, s.t.: $\beta_n (b_1)= c_1, \beta_n (b_2)=c_2$. Then $\beta_n (b_1+b_2)= \beta_n (b_1)+ \beta_n(b_2)= c_1+c_2$. By claim 2, there exist unique $a_1,a_2\in A^n$, s.t.:
+    \[
+    \alpha_{n+1} (a_1)= d^{n+1}_\mathcal{B} (b_1) ,\alpha_{n+1} (a_2)= d^{n+1}_\mathcal{B}(b_2)
+    \]
+    Then $\alpha_{n+1} (a_1+a_2)= \alpha_{n+1} (a_1) +\alpha_{n+1} (a_2)= d^{n+1}_\mathcal{B}(b_1) +d^{n+1}_\mathcal{B}(b_2) = d^{n+1}_\mathcal{B}(b_1+b_2)$. Since by claim 4,5, $a_1,a_2$ are independent of the choice of $b_1,c_1$ respectively $b_2,c_2$, then by the def of $\delta_n$, we're done.
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item We call $\delta_n$ here the \textit{connected homomorphisms}.
+    \item The Long Exact Sequence-in-Cohomology Theorem gives a consequence that: if any two of the cochain complexes $\mathcal{A}, \mathcal{B}, \mathcal{C}$ are exact, then so is the third.
+\end{itemize}
+
+\begin{definition}{Subcomplex}\\
+A (co)chain complex $\mathcal{D}$ is called a \textit{subcomplex} of $\mathcal{C}$ if $B_n$ are submodules of $C_n$ and $d_n^\mathcal{B}=d_n^\mathcal{C} |_{B_n}$.
+\end{definition}
+
+\noindent\textbf{Remark:} In this case, we have a cochain complex (similar for chain complex)
+\[
+0\to C^0/B^0 \xrightarrow{d_1} \cdots \xrightarrow{d_{n-1}} C^{n-1}/B^{n-1} \xrightarrow{d_n} C^n/B^n \to \cdots
+\]
+denoted as $C/B$ and called the \textit{quotient complex}.
+
+
+
+\section{Homomorphisms and Ext}
+
+\noindent\textbf{Intuition:} To apply the Long Exact Sequence-in-Cohomology Thm to analyze the sequence (\ref{eq:hom_intro}), we try to produce a cochain complex whose first few cohomology groups in the long exact sequence in the Long Exact Sequence-in-Cohomology Thm agree with the terms in (\ref{eq:hom_intro}). To do this, we introduce the notion of a "resolution" of an $R$-module:
+
+\begin{definition}{Projective Resolution}\\
+Let $A$ be an $R$-module. A \textit{projective resolution} of $A$ is an exact sequence
+\[
+\cdots \xrightarrow{d_{n+1}} P_n \xrightarrow{d_n} P_{n-1} \xrightarrow{d_{n-1}} \cdots \xrightarrow{d_1} P_0 \xrightarrow{\epsilon} A\to 0
+\]
+such that each $P_i$ is a projective $R$-module.
+\end{definition}
+
+\begin{proposition}{Existence-of-Projective Resolution Proposition}\\
+Every $R$-module has a projective resolution.
+\end{proposition}
+
+\begin{proof}
+    Let $A$ be any $R$-module and then let $P_0$ be any free module (hence projective) $R$-module on a set of generators of $A$. Define an $R$-module homomorphism $\epsilon$ from $P_0$ onto $A$ by the Universal Property of Free Modules. This begins the resolution $\epsilon: P_0\to A\to 0$. The surjectivity of $\epsilon$ ensures that this sequence is exact. Next, let $P_1$ be any free module mapping onto the submodule $\ker \epsilon$ of $P_0$. This gives the second stage $P_1\to P_0\to A$ which, by construction, is exact. Continue this way, taking at the $n$-th stage a free $R$-mofule $P_{n+1}$ that maps surjectively onto the submodule $\ker d_n$ of $P_n$, obtaining a free resolution of $A$.
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item In general, a projective resolution is infinite in length, but if $A$ is itself projective, then it has a very simple projective resolution of finite length, namely $0\to A \xrightarrow{\text{id}_A} A\to 0$ given by the identity map on $A$.
+
+    \item Given a projective resolution on $R$-module $A$ $\cdots \xrightarrow{d_{n+1}} P_n \xrightarrow{d_n} P_{n-1} \xrightarrow{d_{n-1}} \cdots \xrightarrow{d_1} P_0 \xrightarrow{\epsilon} A\to 0$, we may form a related sequence by taking homomorphisms of each of the terms into $D$. This yields the sequence
+    \begin{align*}
+        0\to \text{Hom}_R(A,D) \xrightarrow{\epsilon} \text{Hom}_R&(P_0,D) \xrightarrow{d_1} \text{Hom}_R (P_1,D) \xrightarrow{d_2} \cdots\\
+        &\xrightarrow{d_{n-1}} \text{Hom}_R (P_{n-1},D) \xrightarrow{d_n} \text{Hom}_R (P_n,D) \xrightarrow{d_{n+1}} \cdots
+    \end{align*}
+    where to simplify notation, we've denoted again by $d_n$ the induced maps from $\text{Hom}_R(P_{n-1},D)$ to $\text{Hom}_R(P_n,D)$ for $n\in \mathbb{N}_+$ and similarly for the map induced by $\epsilon$. By the Associated $\text{Hom} (\cdot, D)$ Sequence Thm, this sequence is not necessarily exact, but it is a cochain complex.
+\end{itemize}
+
+\begin{definition}{$\text{Ext}$}\\
+Let $A$ and $D$ be $R$-modules. For any projective resolution of $A$
+\[
+\cdots \to P_n \xrightarrow{d_n} P_{n-1} \xrightarrow{d_{n-1}} \cdots \xrightarrow{d_1} P_0 \xrightarrow{\epsilon} A\to0
+\]
+let $d_n: \text{Hom}_R (P_{n-1},D) \to \text{Hom}_R (P_n,D)$ denote the induced map for $n \in \mathbb{N}_+$. Define
+\[
+\text{Ext}_R^n (A,D) := \text{ker }d_{n+1}/ \text{im }d_n
+\]
+where in particular $\text{Ext}_R^0 (A,D)= \text{ker }d_1$. The module $\text{Ext}_R^n (A,D)$ is called the \textit{$n$-th cohomology module derived from the functor $\text{Hom}_R (\cdot,D)$}. In particular, when $R=\mathbb{Z}$, the module $\text{Ext}_\mathbb{Z}^n (A,D)$ is also denoted by simply $\text{Ext}^n (A,D)$.
+\end{definition}
+
+\noindent\textbf{Remark:} The groups $\text{Ext}_R^n (A,D)$ are also the cohomology modules of the cochain complex obtained from the projective resolution of $A$ by replacing the term $\text{Hom}_R (A,D)$ with zero (which does not effect the cochain property), i.e.: they are the cohomology modules of the cochain complex $0\to \text{Hom}_R (P_0,D) \to \cdots$.
+
+\begin{proposition}{Identification-of-$\text{Ext}_R^0$ Proposition}\\
+For any $R$-module $A$, we have
+\[
+\text{Ext}_R^0 (A,D) \cong \text{Hom}_R (A,D)
+\]
+\end{proposition}
+
+\begin{proof}
+    By the exactness of the sequence $P_1 \xrightarrow{d_1} P_0 \xrightarrow{\epsilon} A\to 0$, the corresponding sequence $0 \to \text{Hom}_R (A,D) \xrightarrow{\epsilon} \text{Hom}_R (P_0,D) \xrightarrow{d_1} \text{Hom}_R (P_1,D)$ is also exact by the Associated $\text{Hom}_R (\cdot, D)$ Sequence Thm. Hence,
+    \[
+    \text{Ext}_R^0 (A,D) := \text{ker } d_1= \text{im }\epsilon \cong \text{Hom}_R (A,D)/ \ker \epsilon \cong \text{Hom}_R (A,D)
+    \]
+\end{proof}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Let $R= \mathbb{Z}$ and let $A= \mathbb{Z}/ n\mathbb{Z}$ with $m\geq 2$. By the Identification-of-$\text{Ext}_R^0$ Prop, we have
+    \[
+    \text{Ext}^0 (\mathbb{Z}/m\mathbb{Z} ,D) \cong \text{Hom}_\mathbb{Z} (\mathbb{Z}/ m\mathbb{Z} ,D) \cong D_m
+    \]
+    where $D_m:= \{d \in D\mid md=0 \in D\}$ are the set of elements of $D$ that have order dividing $m$. For the higher cohomology modules, we use the simple projective resolution
+    \[
+    0\to \mathbb{Z} \xrightarrow{z \mapsto mz} \mathbb{Z} \xrightarrow{z \mapsto \overline{z}} \mathbb{Z}/ m\mathbb{Z} \to 0
+    \]
+    for $A$. Taking homomorphisms into a field $\mathbb{Z}$-module $D$ gives the cochain complex
+    \[
+    0\to \text{Hom}_\mathbb{Z} (\mathbb{Z} /m \mathbb{Z},D) \to \text{Hom}_\mathbb{Z} (\mathbb{Z} ,D) \cong D
+    \]
+    Under the isomorphism $\text{Hom}_\mathbb{Z} (\mathbb{Z} ,D) \cong D$, we have:
+    \[
+    \text{Ext}^1 (\mathbb{Z}/ m\mathbb{Z}, D) \cong D/mD
+    \]
+    for any abelian group $D$. Then by def and by the cochain complex above, for any $n\geq 2$, any abelian group $D$, we have
+    \[
+    \text{Ext}^n (\mathbb{Z}/ m\mathbb{Z}, D)=0
+    \]
+    We summarize as:
+    \begin{align*}
+        & \text{Ext}^0 (\mathbb{Z}/m\mathbb{Z} ,D) \cong D_m\\
+        &\text{Ext}^1 (\mathbb{Z}/m\mathbb{Z} ,D) \cong D/mD\\
+        &\text{Ext}^n (\mathbb{Z}/m\mathbb{Z} ,D) \cong=0 ,\forall n\geq 2
+    \end{align*}
+
+    \item The same abelian groups may be modules over several different rings $R$ and the $\text{Ext}$ cohomology modules depend on $R$. For example, let $R= \mathbb{Z}/ m\mathbb{Z}$ for some $m\in \mathbb{N}_+$. An $R$-module $D$ is the same as an abelian group $D$ with exponent dividing $m$, i.e.: $D_m=0$. In particular, for any divisor $d \in \mathbb{Z}$ of $m$, the group $\mathbb{Z}/d \mathbb{Z}$ is an $R$-module and 
+    \begin{align*}
+        \cdots \xrightarrow{z \mapsto (m/d)z} \mathbb{Z}/ m\mathbb{Z} \xrightarrow{z \mapsto dz} \mathbb{Z} /m\mathbb{Z} \xrightarrow{z\mapsto (m/d)z} \mathbb{Z}/ m\mathbb{Z} \xrightarrow{z \mapsto dz} \mathbb{Z}/ m\mathbb{Z} \xrightarrow{[x]_m \mapsto [x]_d} \mathbb{Z}/ d\mathbb{Z} \to 0
+    \end{align*}
+    is a projective resolution of $\mathbb{Z}/ d\mathbb{Z}$ as a $\mathbb{Z}$-module, which in fact is a free sequence. Taking homomorphisms into the $\mathbb{Z}/ m\mathbb{Z}$-module $D$, using the isomorphism $\text{Hom}_{\mathbb{Z}/ m\mathbb{Z}} (\mathbb{Z} /m\mathbb{Z} ,D) \cong D$ and removing the first term gives the cochain complex
+    \[
+    0 \to D \xrightarrow{z \mapsto dz} D \xrightarrow{z \mapsto (m/d)z} D \xrightarrow{z \mapsto dz} D \xrightarrow{z \mapsto (m/d)z} D \to \cdots
+    \]
+    Hence, we can summarize as:
+    \begin{align*}
+        &\text{Ext}^0_{\mathbb{Z}/ m\mathbb{Z}} (\mathbb{Z}/ d\mathbb{Z} ,D) \cong D_d\\
+        &\text{Ext}^n_{\mathbb{Z}/ m\mathbb{Z}} (\mathbb{Z}/ d\mathbb{Z} ,D) \cong (D/ dD) _{(m/d)} \text{ for odd } n\geq 1\\
+        &\text{Ext}^n_{\mathbb{Z}/ m\mathbb{Z}} (\mathbb{Z}/ d\mathbb{Z} ,D) \cong (D_d/ (m/d)D) \text{ for even } n\geq 2
+    \end{align*}
+    where $M_k := \{ r\in M \mid kr=0\in M\}$ denotes the set of elements of module $M$ killed by integer $k$. In particular,
+    \[
+    \text{Ext}_{\mathbb{Z} /p^2\mathbb{Z}}^n (\mathbb{Z}/ p\mathbb{Z}, \mathbb{Z}/p\mathbb{Z}) \cong \mathbb{Z} /p\mathbb{Z}
+    \]
+    for all $n\geq 0$.
+\end{itemize}
+
+\begin{lemma}{Lifting Lemma for Projective Resolutions}\\
+Let $f:A\to A'$ be an $R$-module homomorphism. Taking projective resolutions of $A$ respectively $A'$. Then for each $n\geq 0$, there is a lift $f_n$ of $f$ such that the following diagram commutes:
+\[
+\begin{tikzcd}
+    \cdots \arrow[r, "d_2"] &P_1 \arrow[r, "d_1"] \arrow[d, "f_1"] &P_0 \arrow[r, "\epsilon"] \arrow[d, "f_0"] &A \arrow[r] \arrow[d, "f"] &0\\
+    \cdots \arrow[r, "d_2'"] &P_1' \arrow[r, "d_1'"] &P_0 \arrow[r, "\epsilon'"] &A' \arrow[r] &0
+\end{tikzcd}
+\]
+where the rows are the projective resolutions of $A$ respectively $A'$.
+\end{lemma}
+
+\begin{proof}
+    Given the two rows and the map $f$ with the following commutative diagram
+    \[
+    \begin{tikzcd}
+        \cdots \arrow[r, "d_2"] &P_1 \arrow[r, "d_1"] &P_0 \arrow[r, "\epsilon"] &A \arrow[r] \arrow[d, "f"] &0\\
+        \cdots \arrow[r, "d_2'"] &P_1' \arrow[r, "d_1'"] &P_0 \arrow[r, "\epsilon'"] &A' \arrow[r] &0
+    \end{tikzcd}
+    \]
+    since $P_0$ is projective, then we can lift the map $f \circ \epsilon: P_0 \to A'$ to a map $f_0: P_0 \to P_0'$ in such a way that $\epsilon' \circ f_0=f \circ \epsilon$, by the second def of projective modules, which gives the first lift of $f$. Proceeding inductively in this way, assume $f_n$ has been defined to make the diagram commutative to that point. Hence, $\text{im } (f_n \circ d_{n+1}) \subseteq \text{ker }d_n'$. The projectivity of $P_{n+1}$ implies that we can lift the map $f_n \circ d_{n+1}: P_{n+1} \to P_n'$ to a map $f_{n+1} :P_{n+1} \to P_{n+1}'$ to make the diagram commute at the next stage.
+\end{proof}
+
+
+\noindent\textbf{Remark:} The commutative diagram in the Lifting Lemma for Projective Resolutions implies the induced diagram
+\[
+\begin{tikzcd}
+    0 \arrow[r] & \text{Hom}_R(A,D) \arrow[r] & \text{Hom}_R(P_0,D) \arrow[r] &\text{Hom}_R (P_1,D) \arrow[r] &\cdots\\
+    0 \arrow[r] &\text{Hom}_R(A',D) \arrow[r] \arrow[u, "f"] &\text{Hom}_R(P_0',D) \arrow[r] \arrow[u, "f_0"]& \text{Hom}_R(P_1,D) \arrow[r] \arrow[u, "f_1"] &\cdots
+\end{tikzcd}
+\]
+is also commutative. The two rows of these cochain complexes and this commutative diagram depicts a homomorphism of Cohomology Modules Prop, we have an induced map on their cohomology modules:
+
+\begin{lemma}{Induced Maps on $\text{Ext}$-and-Homotopy Independence Lemma}\\
+Let $f:A\to A'$ be an $R$-module homomorphism. Take projective resolution of $A$ respectively $A'$ as in the Lifting Lemma for Projective Resolutions. Then for every $n$, there is an induced group homomorphism $\varphi_n: \text{Ext}_R^n (A',D) \to \text{Ext}_R^n (A,D)$ on the cohomology modules obtained via these resolutions and the maps $\varphi_n$ depend only on $f$, not on the choice of lifts $f_n$ in the Lifting Lemma for Projective Resolutions.
+\end{lemma}
+
+\begin{proof}
+    The existence of the map on the cohomology modules $\text{Ext}$ follows from the Homomorphisms of Cohomology Modules Prop applied to the homomorphism of cochain complexes in the above remark.
+
+    Then it remains to show the independence of lifts $f_n$. It remains to show the independence of lifts $f_n$. It suffices to show that for two different lift $f_n^1 ,f_n^2$ inducing the same $\varphi_n$, their difference $f_n^1-f_n^2$ induces zero map. Hence, it suffices to show that: if $f$ is the zero map, then the induced maps on cohomology modules are all zeros, so assume then that $f=0$.
+
+    Since $\epsilon' \circ f_0=f\circ \epsilon=0$, then $\text{im }f_0 \subseteq \text{ker }\epsilon'$. By the exactness of the lower row, we have $\text{ker }\epsilon' =\text{im }d_1'$. Then by the projectivity of $P_0$, there is a lift $s_0: P_0\to P_1'$, s.t.: the following diagram commutes:
+    \[
+    \begin{tikzcd}
+        &P_0 \arrow[dl, dashed, "s_0"] \arrow[d, "f_0"]\\
+        P_1' \arrow[r, "d_1'"] &\text{im }d_1' \arrow[r] &0
+    \end{tikzcd}
+    \]
+    i.e.: $f_0= d_1' \circ s_0$. Inductively, suppose that we've constructed $s_0,s_1 ,\cdots ,s_{n-1}$ with $f_k= d_{k+1}' \circ s_k+ s_{k-1} \circ d_k$. Note that
+    \begin{align*}
+        d_n' \circ (f_n-s_{n-1} \circ d_n)&= d_n'\circ f_n- d_n' \circ s_{n-1} \circ d_n \\
+        &\xlongequal{\text{commutative diagram of cochain complexes}} f_{n-1} \circ d_n- d_n' \circ s_{n-1} \circ d_n\\
+        &=(f_{n-1} -d_n'\circ s_{n-1}) \circ d_n \xlongequal{\text{inductive hypothesis}} s_{n-2} \circ d_{n-1} \circ d_n=0
+    \end{align*}
+    Hence, $\text{im }(f_n- s_{n-1} \circ d_n) \subseteq \text{ker }d_n'= \text{im }d_{n+1}'$. Again, by the projectivity of $P_n$, we can get a lift $s_n:P_n \to P_{n+1}'$, s.t.: $f_n= d_{n+1}' \circ s_n + s_{n-1} \circ d_n$. So now we construct $R$-module homomorphisms $s_n: P_n\to P_{n+1}$ with the property that for all $n$,
+    \begin{equation*}
+        f_n=d_{n+1}' \circ s_n +s_{n-1} \circ d_n \tag{*}
+    \end{equation*}
+    Then for any $\alpha \in \text{Hom}_R (P_n',D)$, we can get:
+    \begin{equation*}
+        \alpha \circ f_n \overset{(*)}{=} \alpha \circ (d_{n+1}' \circ s_n +s_{n-1} \circ d_n)= (\alpha \circ d_{n+1}') \circ s_n+ (\alpha \circ s_{n-1}) \circ d_n  \tag{**}
+    \end{equation*}
+    Now if $\alpha\in \text{Hom}_R (P_n',D)$ represents the class $\overline{\alpha} \in \text{Ext}_R^n (A,D)$, then $\alpha \circ d_{n+1}'=0$, so
+    \[
+    \alpha \circ f_n \overset{(**)}{=} 0 \circ s_n +(\alpha \circ s_{n-1}) \circ d_n= (\alpha \circ s_{n-1}) \circ d_n
+    \]
+    Since $\alpha \circ s_{n-1}$ is a map from $P_{n-1}$ to $D$, then $(\alpha \circ s_{n-1}) \circ d_n \in \text{im }d_n$ and hence $\overline{\alpha \circ f_n}=0 \in \text{Ext}_R^n (A,D)$. Therefore, $\varphi_n:\text{Ext}_R^n (A',D) \to \text{Ext}_R^n (A,D)$ is zero map.
+\end{proof}
+
+\noindent\textbf{Remark:} The name of this lemma and the intuition for $s_n$ in the proof comes from the notion of \textit{chain homotopy} between chain homomorphism given by $f_n$ and $f=0$, namely, the collection of maps $\{s_n\}$. Furthermore, $f$ is chain homotopic to $g$, denoted as $f\simeq g$, if $f-g= ds+sd$ for some chain homotopy $s$, understanding from the following commutative diagram:
+\[
+\begin{tikzcd}[row sep=large, column sep=large]
+\cdots \arrow[r] & P_n \arrow[r, "d_n^P"] \arrow[d, "f_n", shift left=1.5pt] \arrow[d, "g_n"', shift right=1.5pt] & P_{n-1} \arrow[r] \arrow[d, "f_{n-1}", shift left=1.5pt] \arrow[d, "g_{n-1}"', shift right=1.5pt] & \cdots \\
+\cdots \arrow[r] & Q_n \arrow[r, "d_n^Q"'] \arrow[ur, "h_{n-1}"] & Q_{n-1} \arrow[r] & \cdots
+\end{tikzcd}
+\]
+
+\begin{theorem}{$\text{Ext}$-Independence-of-Projective Resolutions Theorem}\\
+The groups $\text{Ext}_R^n (A,D)$ only depend on $A$ and $D$, i.e.: they are independent of the choice of projective resolution of $A$.
+\end{theorem}
+
+\begin{proof}
+    In the notation of the Lifting Lemma for Projective Resolutions, let $A'=A$, let $f=\text{id}_A :A\to A'$ be the identity map on $A$ and let the zero rows be two projective resolutions of $A$. Then by the Lifting Lemma for Projective Resolutions, we can get a lift $f_n:P_n \to P_n'$ of $f=\text{id}_A$ and by the Induced Maps on $\text{Ext}$-and-Homotopy Independence Lemma, we can also get an induced map $\varphi_n: \text{Ext}_R^n (A',D) \to \text{Ext}_R^n(A,D)$.
+
+    Now add a third row to the diagram, in the Lifting Lemma for Projective Resolutions, by copying the projective resolution in the top row below the second row. Then let $g=\text{id}_A: A'\to A$ be the identity map on $A$, lift $g$ to maps $g_n: P_n'\to P_n$ and let $\psi_n: \text{Ext}_R^n (A,D) \to \text{Ext}_R^n (A',D)$ be the induced map corresponding to $g_n$.
+
+    Note that the maps $g_n\circ f_n:P_n\to P_n$ are now a lift of the identity map $g \circ f$ and that they induce the homomorphisms $\varphi_n \circ \psi_n$ on the cohomology modules.
+
+    Since the first and third rows are identical, then the maps $\text{id}_{P_n}$ form a obvious lift of $g\circ f$ and this choice clearly induces the identity homomorphisms $\text{id}_{\text{Ext}_R^n (A,D)}$ on cohomology modules.
+
+    Now, for $g \circ f=\text{id}_A$, we have two lifts $g_n\circ f_n$ and $\text{id}_{P_n}$. By the Induced Maps on $\text{Ext}$-and-Homotopy Independence Lemma, the two lifts must induce the same homomorphisms of the cohomology modules, i.e.:
+    \[
+    \varphi_n \circ \psi_n= \text{id}_{\text{Ext}_R^n (A,D)}
+    \]
+    Similarly, we can also get $\psi_n \circ \varphi_n= \text{id}_{\text{Ext}_R^n (A',D)}$. Therefore, $\varphi_n$ and $\psi_n$ are isomorphisms between
+    \[
+    \text{Ext}_R^n (A,D) \cong \text{Ext}_R^n (A',D)
+    \]
+\end{proof}
+
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item The $\text{Ext}$-Independence-of-Projective Resolutions Thm intimates the well-defined-ness of $\text{Ext}$.
+    \item For a fixed $R$-module $D$ and fixed $n \in \mathbb{N} \cup \{0\}$, the Induced Maps on $\text{Ext}$-and-Homotopy Independence Lemma and the $\text{Ext}$-Independence-of-Projective Resolutions Thm show that $\text{Ext}_R^n (\cdot, D)$ defines a (contravariant) functor from the category of $R$-modules to the category of abelian groups.
+\end{itemize}
+
+\begin{lemma}{Horseshow Lemma}\\
+Let $0 \to L \to M \to N \to 0$ be a short exact sequence of $R$-modules, let $L=A$ have a projective resolution denoted by $P_n$ and let $N$ have a similar projective resolution where the projective modules are denoted by $\overline{P}_n$. Then there is a resolution of $M$ by the projective modules $P_n \oplus \overline{P}_n$ such that the following diagram commutes:
+\[
+\begin{tikzcd}
+    &\vdots \arrow[d] &\vdots \arrow[d] &\vdots \arrow[d]\\
+    0 \arrow[r] &P_1 \arrow[r] \arrow[d]& P_1 \oplus \overline{P}_1 \arrow[r] \arrow[d] &\overline{P}_1 \arrow[r] \arrow[d]& 0\\
+    0 \arrow[r] &P_0 \arrow[r] \arrow[d]& P_0 \oplus \overline{P}_0 \arrow[r] \arrow[d]& \overline{P}_0 \arrow[r] \arrow[d] & 0\\
+    0 \arrow[r] &L \arrow[r] \arrow[d]&M \arrow[r] \arrow[d]&N \arrow[r] \arrow[d]& 0\\
+    &0&0&0
+\end{tikzcd}
+\]
+Moreover, the rows and columns of this diagram are exact and rows are split.
+\end{lemma}
+
+\begin{proof}
+    Recall the examples of projective modules that $P_n \oplus \overline{P}_n$ are projective module. We define the horizontal maps by:
+    \[
+    0\to P_n \xrightarrow{x \mapsto (x,0)} P_n\oplus \overline{P}_n \xrightarrow{(x,y) \mapsto y} \overline{P}_n \to0
+    \]
+    for all rows exact except for the bottom row, which can be verified that these sequences are split exact. Then it remains to define the vertical maps in the middle column to make the diagram commute:
+
+    Let $\mu:\overline{P}_0 \to M$ be a lift of th map $\overline{P}_0 \to N$ (which exists since $\overline{P}_0$ is projective), and let $\lambda$ be the composition $P_0\to L \to M$ in the diagram. Define $\pi: P_0\oplus \overline{P}_0 \to M$ by
+    \[
+    \pi(x,y) := \lambda(x) +\mu(y)
+    \]
+    Now we verify the commutativity of the two diagrams:
+    \[
+    \begin{tikzcd}
+        P_0 \arrow[r, "x \mapsto (x\text{,}0)"] \arrow[d] &P_0 \oplus \overline{P}_0 \arrow[d, "\pi"]\\
+        L \arrow[r] &M
+    \end{tikzcd}
+    \text{  and  }
+    \begin{tikzcd}
+        P_0 \oplus \overline{P}_0 \arrow[r, "(x\text{,}y) \mapsto y"] \arrow[d, "\pi"] &\overline{P}_0 \arrow[d, "\overline{\epsilon}"]\\
+        M \arrow[r]& N
+    \end{tikzcd}
+    \]
+    \begin{itemize}
+        \item For the left diagram above, it suffices to show that $\lambda= \pi \circ (x\mapsto (x,0))$ since the commutativity of downleft part of the left diagram above after adding the diagonal $P_0 \xrightarrow{\lambda} M$, which is clearly directly by the def of $\mu$.
+
+        \item Denote the unnamed map in the right diagram above by $p:M\to N$. For any $(x,y) \in P_0 \oplus \overline{P}_0$, note that $p(\lambda(x))=0$ by the exactness of the sequence $0 \to L\to M\xrightarrow{p}N \to0$. Hence,
+        \begin{align*}
+            (p\circ \pi) (x,y) &= p(\lambda(x)) +p(\mu(y))=0+\overline{\epsilon} (y)= (\overline{\epsilon} \circ ((x,y) \mapsto y)) (x,y)
+        \end{align*}
+    \end{itemize}
+    Now we've constructed a vertical map $d_0=\pi: P_0 \oplus \overline{P}_0 \to M$. Then inductively, we can similarly construct $d_n$ by replacing the bottom row $0\to L\to M \to N \to 0$ with $0\to P_{n-1} \to P_{n-1} \oplus \overline{P}_{n-1} \to \overline{P}_{n-1} \to0$ when constructing $d_n$ and then applying the same argument.
+\end{proof}
+
+\noindent\textbf{Remark:} Now by the Long Exact Sequence in Cohomology Thm and the Horseshoe Lemma, the exact sequence (\ref{eq:hom_intro}) can be extended to the long exact sequence for $\text{Ext}$:
+
+\begin{theorem}{Long Exact Sequence-for-Ext Theorem}\\
+Let $0\to L\to M\to N\to 0$ be a short exact sequence of $R$-modules. Then there is a long exact sequence of abelian groups
+\begin{align*}
+    0 \to \text{Hom}_R(N,D) \to \text{Hom}_R(M,&D) \to \text{Hom}_R(L,D) \xrightarrow{\delta_0}\\
+    &\text{Ext}_R^1(N,D) \to \text{Ext}_R^1 (M,D) \to \text{Ext}_R^1(L,D) \xrightarrow{\delta_1} \text{Ext}_R^2 (N,D) \to \cdots
+\end{align*}
+where the maps between groups at the same level $n$ are as in the Induced Maps on $\text{Ext}$-and-Homotopy Independence Lemma and the connecting homomotphism $\delta_n$ are given by the Long Exact Sequence in Cohomology Thm.
+\end{theorem}
+
+\begin{proof}
+    By the Horseshoe Lemma, we have a huge two-dimensional diagram with projective resolution in the columns and with split short exact sequence in the row as in the Horseshoe Lemma. We act $\text{Hom}$ on this diagram and then we get a new diagram:
+    \[
+    \begin{tikzcd}
+        &\vdots&\vdots&\vdots\\
+        0\arrow[r]& \text{Hom}_R(\overline{P}_1,D) \arrow[u] \arrow[r] &\text{Hom}_R (P_1 \oplus \overline{P}_1,D) \arrow[u] \arrow[r] &\text{Hom}_R (P_1,D) \arrow[r] \arrow[u] &0\\
+        0\arrow[r]& \text{Hom}_R(\overline{P}_0,D) \arrow[u] \arrow[r] &\text{Hom}_R (P_0 \oplus \overline{P}_0,D) \arrow[u] \arrow[r] &\text{Hom}_R (P_0,D) \arrow[r] \arrow[u] &0\\
+        &0\arrow[u] &0\arrow[u]& 0\arrow[u]
+    \end{tikzcd}
+    \]
+    where the right "$\rightarrow0$" of every row is guarenteed by the stability of split short exact sequence. Hence, we get a short exact sequence of cochain complexes with $\mathcal{A}=\{ \text{Hom}_R (\overline{P}_n,D) \}, \mathcal{B} =\{\text{Hom}_R(P_n \oplus \overline{P}_n,D) \}$ and $\mathcal{C}=\{ \text{Hom}_R(P_n,D) \}$. Apply then the Long Exact Sequence in Cohomology Thm and we're done.
+\end{proof}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item The Long Exact Sequence-for-Ext Thm show that module $\text{Ext}_R^1 (N,D)$ is the first measure of the failure of (\ref{eq:hom_intro}) to be exact on the right. In fact, (\ref{eq:hom_intro}) can be extended to be a short exact sequence on the right $\Leftrightarrow$ the connecting homomorphism $\delta_0$ in the Long Exact Sequence-for-Ext Thm is the zero homomorphism. In particular, if $\text{Ext}_R^1 (N,D)=0, \forall R$-module $N$, then (\ref{eq:hom_intro}) will be exact on the right for \textit{every} exact sequence (\ref{eq:ses_intro}), which implies that the $R$-module $D$ is injective. Part of the next prop shows that the converse is also true.
+
+    \item For a fixed $R$-module $D$, the result in the Long Exact Sequence-for-Ext Thm can be viewed as explaining what happens to the short exact sequence $0\to L \to M \to N\to 0$ on the right after applying the left exact functor $\text{Hom}_R(\cdot, D)$. This is why the (contravariant) functors $\text{Ext}_R^n(\cdot, D)$ are called the \textit{right derived functors} for the functor $\text{Hom}_R(\cdot, D)$. In the contrast, one can also consider the effect of applying the left exact functor Hom$_R(D, \cdot)$, i.e.: by taking homomorphisms from D rather than into D. We'll look into this later in the next-next theorem which shows that in fact the same Ext$_R$ groups define the (covariant) right derived functors for Hom$_R(D,\cdot)$ as well and we now first take a look at the previous remark:
+\end{itemize}
+
+\begin{proposition}{$\text{Ext}$-Criterion-for-Injective Modules Proposition}\\
+Let $Q$ be an $R$-module. The following are equivalent:
+\begin{enumerate}
+    \item $Q$ is injective.
+    \item $\text{Ext}_R^1 (A,Q)=0$ for all $R$-modules $A$.
+    \item $\text{Ext}_R^n (A,Q)=0$ for all $R$-modules $A$, and all $n\in \mathbb{N}_+$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    We've proved ($2\Rightarrow1$) in the above remark and ($3\Rightarrow2$) is direct, so it remains to prove ($1\Rightarrow3$). Take a projective resolution
+    \[
+    \cdots \to P_n \to P_{n-1} \to \cdots \to P_0 \to A\to 0
+    \]
+    for $A$. By the injectivity of $Q$, the sequence 
+    \begin{align*}
+        0\to \text{Hom}_R (A,Q) \to \text{Hom}_R (P_0,Q) \to \cdots \to \text{Hom}_R (P_{n-1},Q) \to \text{Hom}_R (P_n,Q) \to \cdots
+    \end{align*}
+    is still exact, so all of the cohomology modules for this cochain complex are 0.
+\end{proof}
+
+
+\noindent\textbf{Remark:} We've chosen to define the cohomology group $\text{Ext}_R^n (A,B)$ using a projective resolution of $A$. There is a parallel development using an \textit{injective resolution} of $B$:
+\[
+0\to B\to Q_0\to Q_1 \to \cdots
+\]
+where each $Q_i$ is injective. In this situation, one defines $\text{Ext}_R^n (A,B)$ as the $n$-th cohomology module of the cochain sequence obtained by applying $\text{Hom}_R (A,\cdot)$ to the resolution for $B$.
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item $R=\mathbb{Z}$. By the Injectivity PID-Modules Prop.1, we know that $\mathbb{Z}$-module is injective $\Leftrightarrow$ it is divisible. by the coro of Injective PID-Modules Prop, $\mathbb{Z}$-module $B$ can be embedded in an injective $\mathbb{Z}$-module $Q_0$ and the quotient, $Q_1$, of $Q_0$ by the image of $B$ is again injective. Hence, we have an injective resolution
+    \[
+    0\to B \to Q_0 \to Q_1 \to 0
+    \]
+    of $B$. Applying $\text{Hom}_\mathbb{Z} (A,\cdot)$ to this sequence gives the cochain complex
+    \[
+    0\to \text{Hom}_\mathbb{Z} (A,B) \to \text{Hom}_\mathbb{Z}(A,Q_0) \to \text{Hom}_\mathbb{Z} (A,Q_1) \to 0\to \cdots
+    \]
+    which follows that $\text{Ext}^n (A,B)=0$ for all abelian groups $A,B$ and all $n\geq 2$.
+
+    \item Suppose $A$ is a torsion abelian group, i.e.: a group whose elements $a$ with $ka=0$ for some $k\in \mathbb{Z}$. Then we have $\text{Ext}^0 (A,\mathbb{Z}) \cong \text{Hom}_\mathbb{Z} (A,\mathbb{Z})=0$, since $\mathbb{Z}$ is torsion-free. The sequence $0\to \mathbb{Z} \to \mathbb{Q} \to \mathbb{Q}/\mathbb{Z} \to0$ gives an injective resolution of $\mathbb{Z}$. Applying $\text{Hom}_\mathbb{Z}(A,\cdot)$ gives the cochain complex
+    \[
+    0\to \text{Hom}_\mathbb{Z}(A,\mathbb{Z}) \to \text{Hom}_\mathbb{Z} (A,\mathbb{Q}) \to \text{Hom}_\mathbb{Z}(A, \mathbb{Q}/\mathbb{Z}) \to 0\to \cdots
+    \]
+    Since $\mathbb{Q}$ is also torsion-free, thn $\text{Ext}^1 (A,\mathbb{Z}) \cong \text{Hom}_\mathbb{Z} (A,\mathbb{Q}/ \mathbb{Z})$. This group, $\text{Hom}_\mathbb{Z} (A,\mathbb{Q}/\mathbb{Z} )$ is called the \textit{Portriagin dual group} to $A$.
+\end{itemize}
+
+
+\begin{theorem}{Exact-Left Exact Function-Long Exact Sequence Theorem}\\
+Let $0\to L\to M\to N\to0$ be a short exact sequence of $R$-modules. Then there is a long exact sequence of abelian groups
+\begin{align*}
+    0 \to \text{Hom}_R (&D,L) \to \text{Hom}_R  (D,M) \to \text{Hom}_R (D,N) \xrightarrow{\gamma_0}\\
+    &\text{Ext}_R^1 (D,L) \to \text{Ext}_R^1 (D,M)\to \text{Ext}_R^1 (D,N) \xrightarrow{\gamma_1} \text{Ext}_R^2 (D,L) \to \cdots
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+    Take a projective resolution of $D$ and then apply $\text{Hom}_R(\cdot, L),\text{Hom}_R(\cdot, M)$ and $\text{Hom}_R(\cdot, N)$ to this resolution. Then we can obtains the columns in a commutative diagram similar to the diagram in the proof of Long Exact Sequence-for-Ext Thm, but with $L,M,N$ in the second positions rather than the first. Appying the Long Exact Sequence in Cohomology Thm to this array gives the desired sequence.
+\end{proof}
+
+
+\noindent\textbf{Remark:} The Exact-Left Exact Functor-Long Exact Sequence Thm shows that module $\text{Ext}_R^1 (D,L)$ measures whether the exact sequence
+\[
+0\to \text{Hom}_R(D,L) \to \text{Hom}_R(D,M) \to \text{Hom}_R(D,N)
+\]
+can be extended to a short exact sequence. In fact, it can be extended iff $\gamma_0$ is the zero homomorphism. In particular, this will always be the case if the module $D$ has the property that $\text{Ext}_R^1 (D,B)=0$ for all modules $B$, say $D$ is a projective $R$-module.
+
+\begin{proposition}{Ext-Criterion-for-Projective Modules Proposition}\\
+Let $P$ be an $R$-module. The followings are equivalent:
+\begin{enumerate}
+    \item $P$ is projective.
+    \item $\text{Ext}_R^1 (P,B)=0$ for all $R$-modules $B$.
+    \item $\text{Ext}_R^n (P,B)=0$ for all $R$-modules $B$, and all $n\geq 1$.
+\end{enumerate}
+\end{proposition}
+
+
+\begin{proof}
+    We've proved ($2\Rightarrow1$) in the above remark and ($3\Rightarrow2$) is trivial. For ($1\Rightarrow3$), consider the simple exact sequence
+    \[
+    0\to P\xrightarrow{\text{id}_P} P\to 0
+    \]
+    which is clearly a projective resolution of $P$ with respect to $\epsilon= \text{id}_P$. Then taking homomorphisms into $B$ gives the simple cochain complex
+    \[
+    0\to \text{Hom}_R (P,B) \xrightarrow{\text{id}} \text{Hom}_R(P,B) \to 0\to \cdots
+    \]
+    which gives 3.
+\end{proof}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Since $\mathbb{Z}^m$ is a free, hence projective, $\mathbb{Z}$-module, then by the Ext-Criterion-for-Projective Modules Prop, $\text{Ext}_\mathbb{Z}^n (\mathbb{Z}^m ,B)=0$ for all abelian groups $B$, all $m\geq 1$ and all $n\geq 1$.
+
+    \item It's easy to show that $\text{Ext}_R^1 (A_1 \oplus A_2,B) \cong \text{Ext}_R^n (A_1,B) \oplus \text{Ext}_R^n (A_2, B)$ for all $n\geq 1$, (in fact, the general case
+    \[
+    \text{Ext}_R^n (\bigoplus_{i\in I} A_i,B) \cong \Pi_{i\in I} \text{Ext}_R^n (A_i,B)
+    \]
+    also holds,) so the previous example together with the example following the Identification-of-Ext$^0_R$ Prop determines Ext$^n (A,B)$ for all finitely generated abelian groups $A$. In particular, Ext$^n(A,B)=0$ for all finitely generated groups $A$, all abelian groups $B$ and all $n \geq 2$.
+\end{itemize}
+
+\begin{theorem}{Classification Theorem for Extensions via Ext$_R^1$}\\
+For any $R$-modules $N,L$, there is a bijection between Ext$_R^1 (N,L)$ and the set of equivalence classes of extensions of $N$ by $L$.
+\end{theorem}
+
+\section{Tensor Products and Tor}
+
+\noindent\textbf{Intuition:} Ext determines what happens to short exact sequences on the right after applying the left exact functors $\text{Hom}_R (D,\cdot)$ and $\text{Hom}_R (\cdot, D)$. Similarly, we ask for the behavior of short exact sequences on the left after applying the right exact functor $D\otimes_R \cdot$ or $\cdot \otimes_R D$.
+
+\noindent\textbf{Motivation:} We concentrate on the situation for $D\otimes_R \cdot$: For the sequence (\ref{eq:hom_intro}), applying $D \otimes_R \cdot$ gives an exact sequence of abelian groups
+\[
+D\otimes_RL \to D\otimes_RM \to D\otimes_RN \to 0
+\]
+which may be extended at the left end to a long exact sequence as follows.
+
+Let $\cdots\to P_n \xrightarrow{d_n} P_{n-1} \xrightarrow{d_{n-1}} \cdots \xrightarrow{d_1} P_0 \xrightarrow{\epsilon} B\to0$ be a projective resolution of $B$ and take tensor products with $D$ to obtain
+\begin{align*}
+    \cdots \to D\otimes_R P_n \xrightarrow{\text{id}_D \otimes d_n} D\otimes_R P_{n-1} \to \cdots \xrightarrow{\text{id}_D\otimes d_1} D\otimes_RP_0 \xrightarrow{\text{id}_D \otimes \epsilon} D\otimes_RB \to 0
+\end{align*}
+It follows from the Tensor-Exact Sequences Thm that the above sequence is a chain complex, so we may form its homology modules:
+
+\begin{definition}{Tor}\\
+Let $B,D$ be $R$-modules. For any projective resolution of $B$, let $\text{id}_D \otimes d_n: D\otimes_R P_n \to D\otimes _RP_{n-1}$ for $n\in \mathbb{N}_+$. Then we define
+\[
+\text{Tor}_n^R (D,B):= \text{ker }(\text{id}_D \otimes d_n)/ \text{im } (\text{id}_D \otimes d_{n+1})
+\]
+where $\text{Tor}_0^R (D,B):= (D \otimes _RP_0)/ \text{im }(\text{id}_D \otimes d_1)$. The module $\text{Tor}_n^R (D,B)$ is called the \textit{$n$-th homology module desired from the functor $D \otimes_R \cdot$}. In particular, when $R=\mathbb{Z}$, the module $\text{Tor}_n^R (D,B)$ is also clearly the $n$-th homology module obtained from the chain complex in motivation above by removing the term $D\otimes _RB$.
+\end{definition}
+
+
+\begin{proposition}{Identification-of-$\text{Tor}_0^R$ Proposition}\\
+For any $R$-module $B$, we have
+\[
+\text{Tor}_0^R (D,B) \cong D\otimes_RB
+\]
+\end{proposition}
+
+\begin{proof}
+    Similar as the Identification-of-Ext$^R_0$ Prop.
+\end{proof}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Let $R=\mathbb{Z}$ and let $B=\mathbb{Z}/ m\mathbb{Z}$ for some $m\geq 2$. By the Identification-of-Tor$^R_0$ Prop, we have
+    \[
+    \text{Tor}_0 (D,\mathbb{Z}/m\mathbb{Z}) \cong D\otimes_\mathbb{Z} \mathbb{Z}/m\mathbb{Z} \cong D/mD
+    \]
+    For the higher groups, we apply $D\otimes_\mathbb{Z} \cdot$ to the projective resolution $0\to \mathbb{Z} \xrightarrow{z \mapsto mz} \mathbb{Z} \twoheadrightarrow \mathbb{Z}/ m\mathbb{Z} \to 0$ of $B$ to get the chain complex
+    \[
+    \cdots\to 0\to D\otimes_\mathbb{Z} \mathbb{Z} (\cong D) \to D\otimes_\mathbb{Z} \mathbb{Z} (\cong D) \to D\otimes_\mathbb{Z} \mathbb{Z}/m\mathbb{Z} (\cong D/mD) \to0
+    \]
+    which follows that Tor$_1 (D,\mathbb{Z}/ m\mathbb{Z}) \cong D_m$ and that Tor$_n (D,\mathbb{Z}/ m\mathbb{Z})=0$ for all $n\geq 2$. In summary,
+    \begin{align*}
+        &\text{Tor}_0 (D,\mathbb{Z}/ m\mathbb{Z}) \cong D/mD\\
+        &\text{Tor}_1 (D,\mathbb{Z}/ m\mathbb{Z}) \cong D_m\\
+        &\text{Tor}_n (D,\mathbb{Z}/ m\mathbb{Z})=0 \text{ for all }n\geq 2
+    \end{align*}
+
+    \item As for Ext, the Tor groups also depend on the ring $R$.
+\end{itemize}
+
+
+
+\begin{theorem}{Tor-Independence-of-Projective Resolutions Theorem}\\
+The homology modules Tor$_n^R (D,B)$ are independent of the choice projective resolution of $B$.
+\end{theorem}
+
+\begin{proposition}{Induced Maps on Tor-and-Independence Proposition}\\
+For every $R$-module homomorphism $f:B\to B'$, there are induced maps $\psi_n: \text{Tor}_n^R (D,B) \to \text{Tor}_n^R (D,B')$ on homology modules (depending only on $f$).
+\end{proposition}
+
+\noindent\textbf{Remark:} The Tor-Independence-of-Projective Resolutions Thm and the Induced Maps on Tor-and-Independence Prop give the well-defined-ness of Tor and the following Thm:
+
+\begin{theorem}{Long Exact Sequence-for-Tor Theorem}\\
+Let $0\to L\to M\to N\to0$ be a short exact sequence of $R$-modules. Then there is a long exact sequence of abelian groups
+\begin{align*}
+    \cdots \to \text{Tor}_2^R (D,N) \xrightarrow{\delta_1} \text{Tor}_1^R (D,L) \to \text{Tor}_1^R (&D,M)
+    \to \text{Tor}_1^R (D,N)\\
+    &\xrightarrow{\delta_0} D\otimes_RL \to D\otimes_RM\to D\otimes_RN\to 0
+\end{align*}
+where the maps between groups at the same level $n$ are as in the Induced Maps on Tor-and-Independence Prop and the maps $\delta_n$ are called \textit{connecting homomorphisms}.
+\end{theorem}
+
+
+\begin{proposition}{Tor-Criterion-for-Flat Modules Prop}\\
+Let $D$ be an $R$-module. The followings are equivalent:
+\begin{enumerate}
+    \item $D$ is a flat $R$-module.
+    \item $\text{Tor}_1^R (D,B)=0$ for all $R$-modules $B$.
+    \item $\text{Tor}_n^R (D,B)=0$ for all $R$-modules $B$ and all $n\geq 1$.
+\end{enumerate}
+\end{proposition}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item If $R=\mathbb{Z}$, then Tor$_n(A,\mathbb{Z}^m)=0$ for all $n\geq 1$ and all abelian groups $A$ since $\mathbb{Z}^m$ is free hence flat.
+    \item It's easy to show that Tor$_n^R (A,B_1 \oplus B_2) \cong \text{Tor}_n^R (A,B_1) \oplus \text{Tor}_n^R (A,B_2)$ for all $n\geq 1$ (in fact, the general case
+    \[
+    \text{Tor}_n^R (A, \bigoplus_{j\in J} B_j) \cong \bigoplus_{j\in J} \text{Tor}_n^R  (A,B_j)
+    \]
+    also holds). Then the previous two examples determine Tor$_n^R(A,B)$ for all abelian groups $A$ and all finitely generated abelian groups $B$.
+    
+    In particular, Tor$_1 (A,B)$ is a torsion group and Tor$_n(A,B)=0$ for every abelian group $A$, every finitely generated abelian group $B$ and all $n\geq 2$. In fact, these results hold without the condition that $B$ is finitely generated.
+
+    \item The exact sequence $0\to \mathbb{Z}\to \mathbb{Q} \to \mathbb{Q}/\mathbb{Z} \to0$ gives the long exact sequence
+    \[
+    \cdots\to \text{Tor}_1(D,\mathbb{Q}) \to \text{Tor}_1 (D,\mathbb{Q}/\mathbb{Z}) \to D\otimes \mathbb{Z} \to D\otimes \mathbb{Q} \to D\otimes \mathbb{Q}/\mathbb{Z} \to 0
+    \]
+    Since $\mathbb{Q}$ is a flat $\mathbb{Z}$-module, then by the Tor-Criterion-for-Flat Modules Prop, we have an exact sequence
+    \[
+    0\to \text{Tor}_1 (D,\mathbb{Q}/\mathbb{Z} )\to D\to D\otimes \mathbb{Q}
+    \]
+    so Tor$_1 (D,\mathbb{Q}/ \mathbb{
+    Z
+    }) \cong \ker (D\to D\otimes \mathbb{Q})$, which is the torsion subgroup of $D$.
+\end{itemize}
+
+\begin{proposition}{Tor$_1^\mathbb{Z}$-Torsion Proposition}\\
+Let $A,B$ be $\mathbb{Z}$-modules and let $t(A),t(B)$ denote their respective torsion submodules. Then
+\[
+\text{Tor}_1 (A,B) \cong \text{Tor}_1 (t(A),t(B))
+\]
+\end{proposition}
+
+\begin{proof}
+    \begin{itemize}
+        \item \textbf{Claim:} $\text{Tor}_1 (A,t(B)) \cong \text{Tor}_1 (t(A),t(B))$.
+
+        \item \begin{proof}
+            \textit{of claim:} Consider a short exact sequence $0\to t(B) \to B\to B/t(B) \to 0$. Apply the left functor $A\otimes_\mathbb{Z} \cdot$ to get a long exact sequence
+            \begin{align*}
+                \cdots \to \text{Tor}_2 (A,B/t(B)) \to \text{Tor}_1 (A,t(B)) \to \text{Tor}_1 (A,B) \to \text{Tor}_1 (A,B/t(B)) \to \cdots
+            \end{align*}
+            Since $\mathbb{Z}$ is a PID, then $B/t(B)$ is torsion-free hence flat. Then by the Tor-Criterion-for-Flat Modules Prop, we have Tor$_n (A,B/t(B))=0$ for all $n\geq 1$. Hence, we can get a long exact
+            \[
+            0\to \text{Tor}_1 (A,t(B)) \to \text{Tor}_1 (A,B) \to 0
+            \]
+            Therefore, we're done.
+        \end{proof}
+    \end{itemize}
+    Similarly, by the symmetry of Tor, we can prove that $\text{Tor}_1 (t(A),t(B)) \cong \text{Tor}_1 (A,t(B))$.
+\end{proof}
+
+\begin{corollary}{of Tor$_1^\mathbb{Z}$-Torsion Proposition}\\
+If $A$ is an abelian group, then $A$ is torsion-free iff $\text{Tor}_1 (A,B)=0$ for every abelian group $B$ (in which case $A$ is flat as $\mathbb{Z}$-module).
+\end{corollary}
+
+\begin{proof}
+    \begin{itemize}
+        \item ($\Rightarrow$): $A$ is torsion-free $\Rightarrow$ $\text{Tor}_1(A,B) \cong \text{Tor}_1 (t(A),B)=0$.
+        \item ($\Leftarrow$): Let $B=\mathbb{Q}/\mathbb{Z}$. Then by assumption, $\text{Tor}_1 (A,\mathbb{Q}/\mathbb{Z})=0$. By the previous example, we have $t(A) \cong \text{Tor}_1 (A,\mathbb{Q} /\mathbb{Z})$ and then we're done.
+    \end{itemize}
+\end{proof}
+
+\noindent\textbf{Remark:} We can see in proof of the Tor$_1^\mathbb{Z}$-Torsion Prop and its coro that they hold for any PID $R$ in place of $\mathbb{Z}$.
+
+
+\section{Abelian Category}
+
+\subsection{Definitions}
+
+\noindent\textbf{Intuition:} For (co)chain complexes, we need to do some operations on them, so we introduce the notion of abelian category to strip away the specific forms of elements while retaining all the "good" properties of the module category $\mathcal{M}od_R$.
+
+\noindent\textbf{Motivation:} We construct the abelian category through the following steps:
+\[
+\begin{tikzcd}
+    \text{Category} \arrow[d, "\text{Hom(} \cdot {,} \cdot \text{) with abelian group structure}"]\\
+    \text{Preadditive Category/Ab-Category} \arrow[d, "\text{Zero Objects } \& \text{ Product}"]\\
+    \text{Additive Category} \arrow[d, "\text{kernel } \& \text{ cokernel and monic }\& \text{ epi}"]\\
+    \text{Abelian Category}
+\end{tikzcd}
+\]
+
+\begin{definition}{Preadditive Categories/Ab-Categories}\\
+A category $\mathcal{A}$ is called a \textit{preadditive category} or an \textit{Ab-category} if the followings are satisfied:
+\begin{enumerate}
+    \item $\forall A,B\in \text{Ob}(\mathcal{A})$, Hom$_\mathcal{A} (A,B)$ is an abelian group.
+    \item The composition of morphisms are additively bilinear, i.e.: for any $ f,f': A\to B$, any $g,g':B\to C$ where $A,B,C\in \text{Ob}(\mathcal{A})$, we have
+    \[
+    (g+g') \circ (f+f')= g\circ f+ g\circ f' +g'\circ f+g'\circ f'
+    \]
+\end{enumerate}
+\end{definition}
+
+
+\noindent\textbf{Example:} $\mathcal{A}b \mathcal{G}roup, \mathcal{M}od_R ,_R \mathcal{M}od , \mathcal{C}h_R, \mathcal{S}h(X)$.
+
+\begin{definition}{Additive Functors}\\
+An additive functor $F: \mathcal{B} \to \mathcal  A$ of Ab-categories is a functor such that each Hom$_\mathcal{B} (B,'B) \to \text{Hom}_\mathcal{A} (F(B),F(B'))$ is a group homomorphism.
+\end{definition}
+
+\begin{definition}{Additive Categories}\\
+An \textit{additive category} is an Ab-category $\mathcal{A}$ with 
+\begin{itemize}
+    \item an object in $\mathcal{A}$ is both initial and terminal, called a \textit{zero object} of $\mathcal{A}$;
+    \item a product $A \times B \in \text{Ob} (\mathcal{A})$ for every $A,B \in \text{Ob} (\mathcal{A})$.
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Example:} In $\mathcal{C}h_R$, we define the zero object and product as follows:
+\begin{itemize}
+    \item $0_{\mathcal{C}h_R} := (\cdots \to 0 \xrightarrow{0} 0\xrightarrow{0} 0 \to \cdots)$
+    \item Given a family $\{ A_\alpha \}$ of complexes of $R$-modules, we define the product $\Pi_\alpha A_\alpha$ and coproduct (direct sum) $\bigoplus_\alpha A_\alpha$ degreewise:
+    \begin{itemize}
+        \item $(\Pi_\alpha A_\alpha)_n := \Pi_\alpha A_{\alpha, n}$, $(\Pi_\alpha d_\alpha)_n := \Pi_\alpha d_{\alpha, n} : (\Pi_\alpha A_\alpha)_n \to (\Pi_\alpha A_\alpha)_{n-1}$
+        \item $(\bigoplus_{\alpha} A_\alpha)_n := \bigoplus_\alpha A_{\alpha,n}$, $(\bigoplus_\alpha d_\alpha)_n:= \bigoplus_\alpha d_{\alpha,n} : (\bigoplus_{\alpha} A_\alpha)_n \to (\bigoplus_{\alpha} A_\alpha)_{n-1}$
+    \end{itemize}
+\end{itemize}
+Then we make $\mathcal{C}h_R$ into an additive category $(\mathcal{C}h_R, 0_{\mathcal{C}h_R}, \Pi)$.
+
+\begin{definition}{Abelian Categories}\\
+Before defining abelian category, we first define some prerequisite concepts: In an additive category $\mathcal{A}$, 
+\begin{itemize}
+    \item A \textit{kernel} of a morphism $f:B\to C$ is defined to be a map $i:A\to B$ such that $f\circ i=0$ and that is universal with respect to this property, i.e.: if there is any morphism $i': A'\to B$ with $f\circ i'=0$, then $\exists! g:A'\to A$, s.t.: $i'= i\circ g$.
+
+    \item A \textit{cokernel} of a morphism $f:B\to C$ is defined to be a map $e:C\to D$ which is universal with respect to having the property $e\circ f=0$.
+
+    \item A map $i:A \to B$ is \textit{monic} if $i \circ g=0$ implies $g=0$ for every $g:A'\to A$.
+
+    \item A map $e:C \to D$ is an \textit{epi} if $h\circ e=0$ implies $h=0$ for every map $h:D\to D'$.
+\end{itemize}
+Now we can define abelian category: An \textit{abelian category} is an additive category $\mathcal{A}$ such that the following three conditions are satisfied:
+\begin{enumerate}
+    \item Every maps in $\mathcal{A}$ has a kernel and a cokernel.
+    \item Every monic map in $\mathcal{A}$ is the kernel of its cokernel.
+    \item Every epi in $\mathcal{A}$ is the cokernel of its kernel.
+\end{enumerate}
+\end{definition}
+
+
+\begin{definition}{Abelian Subcategories}\\
+A \textit{subcategory} $\mathcal{B}$ of $\mathcal{A}$ is called an \textit{abelian subcategory} if it is abelian and any exact sequence in $\mathcal{B}$ is also exact in $\mathcal{A}$.
+\end{definition}
+
+\subsection{Chain Complexes in Abelian Categories}
+
+\noindent\textbf{Motivation:} If $\mathcal{A}$ is any abelian category, then we can define chain complexes in $\mathcal{A}$ by repeating the discussion of the def of chain complexes of modules, just replacing $\mathcal{M}od_R$ by $\mathcal{A}$.
+
+\begin{theorem}{Abelianness of Chain Complex Categories Theorem}\\
+the category $\mathcal{C}h_\mathcal{A}$ is an abelian category.
+\end{theorem}
+
+\begin{proof}
+    \begin{itemize}
+        \item Given any chain map(, i.e.: homomorphism of chain complexes) $f:B\to C$ in $\mathcal{C} h_\mathcal{A}$, since $\mathcal{A}$ is an abelian category, then every $f_n:B_n \to C_n$ in $\mathcal{A}$ has a kernel $i_n: \ker f_n \to B_n$. Note that the following diagram commutes:
+        \[
+        \begin{tikzcd}
+            B_n \arrow[r, "d_n^B"] \arrow[d, "f_n"] &B_{n-1} \arrow[d, "f_{n-1}"]\\
+            C_n \arrow[r, "d_n^C"] & C_{n-1}
+        \end{tikzcd}
+        \]
+        Hence, $f_{n-1} \circ d_n^B \circ i_n= d_n^C \circ f_n \circ i_n= d_n^C \circ 0=0$. By the universal property of $i_{n-1}$, $\exists! d_n^K: \ker f_n\to \ker f_{n-1}$, s.t.: $i_{n-1} \circ d_n^K= d_n^B \circ i_n$. Since by the universal property of $i_{n-2}$, we immediately have $i_{n-2}$ is monic, then
+        \[
+        i_{n-2} \circ d_{n-1}^K \circ d_n^K= d_{n-1}^B \circ i_{n-1} \circ d_n^K = d_{n-1}^B \circ d_{n}^B \circ i_n=0
+        \]
+        can imply that $d_{n-1}^K\circ d_n^K=0$, so $K:=\{ \ker f_n, d_n^K \}$ is a chain complex and hence $i:= \{i_n:\ker f_n\to B_n\}$ is a chain map, which is a kernel of $f$. Dually, we can similarly get a cokernel $e$ of $f$.
+
+        \item \begin{lemma}
+            $f:B\to C$ in $\mathcal{C}h_\mathcal{A}$ is monic $\Leftrightarrow$ $f_n: B_n\to C_n$ in $\mathcal{A}$ is monic.
+        \end{lemma}
+        \begin{proof}
+            \begin{itemize}
+                \item ($\Leftarrow$) is obvious.
+                \item ($\Rightarrow$): Note that $f$ is monic $\Leftrightarrow$ $i=($ the kernel of $f)=0$. By the degreewise construction, $i=0$ implies that $i_n=0 \Leftrightarrow f_n$ are monic.
+            \end{itemize}
+        \end{proof}
+        If $f$ is monic, then by lemma, $f_n$ are monic. Since $\mathcal{A}$ is an abelian category, then in $\mathcal{A}$ $f_n=$ the cokernel of $i_n$. Then degreewisely in $\mathcal{C}h_\mathcal{A}$, $f=$ the cokernel of $i$.
+
+        \item Dually to the second step.
+    \end{itemize}
+\end{proof}
+
+\subsection{Chain Complexes in the Category of Chain Complexes}
+
+\noindent\textbf{Motivation} (\textit{Def of double complexes}): Consider a lattice
+\[
+\begin{tikzcd}
+    &\vdots \arrow[d] &\vdots \arrow[d] &\vdots \arrow[d]\\
+    \cdots & C_{m-1,n+1} \arrow[l] \arrow[d, "d^v_{m-1,n+1}"'] &C_{m,n+1} \arrow[l, "d^h_{m,n+1}"'] \arrow[d, "d_{d^v_{m,n+1}}"']& C_{m+1,n+1} \arrow[l, "d^h_{m+1,n+1}"'] \arrow[d, "d^v_{m+1,n+1}"'] &\cdots \arrow[l]\\
+    \cdots & C_{m-1,n} \arrow[l] \arrow[d, "d^v_{m-1,n}"'] &C_{m,n} \arrow[l, "d^h_{m,n}"'] \arrow[d, "d_{d^v_{m,n}}"']& C_{m+1,n} \arrow[l, "d^h_{m+1,n}"'] \arrow[d, "d^v_{m+1,n}"'] &\cdots \arrow[l]\\
+    \cdots & C_{m-1,n-1} \arrow[l] \arrow[d] &C_{m,n+1} \arrow[l, "d^h_{m,n-1}"'] \arrow[d]& C_{m+1,n-1} \arrow[l, "d^h_{m+1,n-1}"'] \arrow[d] &\cdots \arrow[l]\\
+    &\vdots &\vdots &\vdots
+\end{tikzcd}
+\]
+where $C_{p,q} \in \text{Ob} (\mathcal{A})$ and the maps
+\[
+d^h_{p,q} :C_{p,q} \to C_{m-1,n} \text{ and } d^v_{p,q}: C_{p,q} \to C_{p,q-1}
+\]
+are such that $d^h \circ d^h= 0, d^v \circ d^v=0$ and $d^v\circ d^h +d^h \circ d^v=0$, i.e.: each square anticommutes. (This lattice $\{C_{p,q}, d^h,d^v\}$ is called a \textit{double complex} or \textit{bicomplex} in $\mathcal{A}$.) But by the anticommutativity, $d^v$ are not maps in $\mathcal{C}h_\mathcal{A}$:
+
+\begin{definition}{Sign-Adjusted Vertical Differentials in Double Complexes}\\
+Let $\mathcal{A}$ be any abelian category and let $\{C_{p,q} ,d^h,d^v\}$ be a double complex in $\mathcal{A}$. Define
+\[
+f_{p,q} := (-1)^p d_{p,q}^v: C_{p,q} \to C_{p,q-1}
+\]
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item Now we get a chain map $\{f_{p,q}\}_q: C_{p,q} \to C_{p,q-1}$ for any fixed $p$.
+    \item By this trick, we get an equivalence of two categories:
+    \[
+    \mathcal{D}ouble\mathcal{C}h_\mathcal{A} =_\text{i} \mathcal{C}h_{\mathcal   Ch_{\mathcal{A}}}
+    \]
+\end{itemize}
+
+\begin{definition}{Total Complexes}\\
+Given a double complex $C= \{C_{p,q} ,d^h,d^v\}$ in some abelian category $\mathcal{A}$, define the \textit{total complexes} (two types $\text{Tot}^\Pi (C)$ and $\text{Tot}^\oplus (C)$) by
+\[
+\text{Tot}^\Pi (C)_n:= \prod_{p+q=n} C_{p,q} \text{ and } \text{Tot}^\oplus (C)_n:= \bigoplus_{p+q=n} C_{p,q}
+\]
+together with the \textit{total differential} $d:= d^h+d^v$.
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item \textit{Check:} Total differential is a differential, i.e.: $d\circ d=0$:
+    \begin{align*}
+        d \circ d:= (d^h+d^v) \circ (d^h+d^v) \xlongequal{\text{additive category}} d^h \circ d^h +d^h \circ d^v +d^v \circ d^h +d^v \circ d^h \xlongequal{\text{def of double cplx}}0
+    \end{align*}
+
+    \item When $C$ is bounded, i.e.: $C$ has only finitely many nonzero terms along each diagonal line $p+q=n$, we have:
+    \[
+    \text{Tot}^\Pi(C)_n \cong \text{Tot}^\oplus (C)_n
+    \]
+
+    \item $\text{Tot}^\Pi (C)$ and $\text{Tot}^\oplus (C)$ do \textit{not} exist in all abelian categories, for example, they don't exist when $\mathcal{A}= \mathcal{A}b\mathcal{G}roup_{\text{fin}}$ is the category of all finite abelian groups since $\bigoplus_{i=1}^\infty \mathbb{Z}/ 2\mathbb{Z} \notin \mathcal{A}= \mathcal{A}b\mathcal{G}roup_{\text{fin}}$.\\
+    To ensure the well-defined-ness of total complex, we hence need to impose higher completeness requirements on the abelian category $\mathcal{A}$:
+    \begin{itemize}
+        \item $\mathcal{A}$ is \textit{complete} if all infinite direct products exist.
+        \item $\mathcal{A}$ is \textit{cocomplete} if all infinite direct sums exist.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Operations on Chain Complexes: Trunctions and Translations}
+
+\subsubsection{Truncations}
+
+\noindent\textbf{Motivation:} When studying a complicated chain complex, we sometimes are only interested in the information that is above or below a certain degree $n$, so we need a way to "sut off" the chain complex while trying not to destroy its homology groups.
+
+\begin{definition}{Good Truncations / Canonical Truncations of Chain Complexes}\\
+Let $C$ be a chain complex and let $n$ be an integer. Then we define
+\begin{itemize}
+    \item the \textit{good truncation of $C$ below $n$} by the subcomplex of $C$
+    \[
+    (\tau_{\geq n}C)_i := \begin{cases}
+        0 &\text{, if } i<n\\
+        \ker (d_n: C_n \to C_{n-1}) &\text{, if } i=n\\
+        C_i &\text{, if } i>n
+    \end{cases}
+    \]
+    i.e.: $\tau_{\geq n}C := (\cdots \to C_{n+2} \xrightarrow{d_{n+2}} C_{n+1} \xrightarrow{d_{n+1}} \ker d_n \xrightarrow{d_n}0 \to \cdots)$;
+    \item the \textit{good truncation of $C$ above $n$} by the quotient complex $\tau_{<n}C:= C/ (\tau_{\geq n}C)$.
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:} This truncation is "good" since it perfectly retains all the homology groups on one side of the "incision", clears all the homology on the other side of the "incision" and precisely retains the homology at the "incision", while we have an extremely brutal and straightforward approach: simply cut the "incision" and one side of it into zero:
+
+\begin{definition}{Brutal Truncations of Chain Complexes}
+\[
+(\sigma_{<n} C)_i:= \begin{cases}
+    C_i &\text{, if }i<n\\
+    0 &\text{, if }i\geq n
+\end{cases}
+\text{ and } \sigma_{\geq n}C:= C/(\sigma_{<n}C)
+\]
+\end{definition}
+
+\noindent\textbf{Remark:} This truncation "destroys" the homology at the "incision" but it's form is simple.
+
+\subsubsection{Translation}
+
+\begin{definition}{Translation of Chain Complexes}\\
+Let $C$ be a chain complex in an abelian category $\mathcal{A}$ and let $p \in \mathbb{Z}$. The \textit{$p$-th translate} (or \textit{shift}) of $C$, denoted as $C[p]$, is defined by the chain complex:
+\[
+(C[p])_n:= C_{n+p} ,\forall n\in \mathbb{Z} \text{ together with } d_n^{C[p]} := (-1)^p d_{n+p}^C: (C[p])_n \to (C[p])_{n-1}
+\]
+Similarly for cochain complex.
+\end{definition}
+
+\noindent\textbf{Remark:} Why is the sign factor $(-1)^p$? Similarly as the first rank of the definition of total complexes.
+
+\begin{definition}{Translation of Chain Maps}\\
+Let $f:B\to C$ be a homomorphism of chain complexes and let $p\in \mathbb{Z}$. The \textit{$p$-th translate of $f$}, denoted as $f[p]: B[p] \to C[p]$, is defined degreewise by:
+\[
+(f[p])_n:= f_{n+p}: B_{n+p} \to C_{n+p}
+\]
+\end{definition}
+
+\begin{proposition}{Translation-Properties Proposition}\\
+Let $\mathcal{C}h_\mathcal{A}$ be the category of chain complexes and let $p\in \mathbb{Z}$.
+\begin{enumerate}
+    \item \textit{Functoriality:} We have an endofunctor $[p]: \mathcal{C}h_\mathcal{A} \to \mathcal{C}h_\mathcal{A}$ defined by $C\mapsto C[p]$ and $f\mapsto f[p]$.
+    \item \textit{Category Automorphism:} The functor $[p]$ is an isomorphism of categories, with inverse $[-p]$:
+    \[
+    [p] \circ [-p] =\text{id}_{\mathcal{C}h_\mathcal{A}} =[-p]\circ [p]
+    \]
+
+    \item \textit{Homology Shift:} $H_n (C[p]) \cong H_{n+p} (C), \forall n\in \mathbb{Z}$.
+\end{enumerate}
+\end{proposition}
+
+
+
+
+
+
+\section{Derived Functors}
+
+\subsection{$\delta$-Functors}
+
+\begin{definition}{$\delta$-Functors}\\
+A (cocariant) \textit{homological} or \textit{cohomological} \textit{$\delta$-functor} between $\mathcal{A}$ and $\mathcal{B}$ is a collection of additive functors $T_n: \text{Ob} (\mathcal{A}) \to \text{Ob} (\mathcal{B})$ respectively $T^n :\text{Ob} (\mathcal{A}) \to \text{Ob} (\mathcal{B})$ for $n \in \mathbb{N} \cup \{0\}$, together with morphisms
+\[
+\delta_n: T_n (C) \to T_{n-1}(A) \text{ respectively } \delta^n: T^n(C) \to T^{n+1} (A)
+\]
+defined for each short exact sequence $0\to A\to B\to C\to 0$ in $\mathcal{A}$, where we make the convention that $T_n=0,T^n=0$ for $n<0$, satisfies the following conditions:
+\begin{itemize}
+    \item For any short exact sequence $0\to A\to B\to C\to 0$ in $\mathcal{A}$, there is a long exact sequence
+    \[
+    \cdots \to T_{n+1} (C) \xrightarrow{\delta_{n+1}} T_n (A) \to T_n(B) \to T_n(C) \xrightarrow{\delta_n} T_{n-1} (A) \to \cdots 
+    \]
+    respectively
+    \[
+    \cdots \to T^{n-1} (C) \xrightarrow{\delta^{n-1}} T^n (A) \to T^n(B) \to T^n(C) \xrightarrow{\delta^n} T^{n+1} (A) \to \cdots
+    \]
+    In particular, $T_0$ is right exact and $T^0$ is left exact.
+
+    \item For each morphism of short exact sequences from $0 \to A'\to B' \to C' \to0$ to $0\to A\to B\to C\to0$, the following diagram commutes:
+    \[
+    \begin{tikzcd}
+        T_n(C') \arrow[r, "\delta_n"] \arrow[d] &T_{n-1} (A') \arrow[d]\\
+        T_n(C) \arrow[r, "\delta_n"] &T_{n-1}(A)
+    \end{tikzcd}
+    \text{ respectively }
+    \begin{tikzcd}
+        T^n(C') \arrow[r, "\delta^n"] \arrow[d] &T^{n+1} (A') \arrow[d] \\
+        T^n(C) \arrow[r, "\delta^n"] &T^{n+1} (A)
+    \end{tikzcd}
+    \]
+\end{itemize}
+\end{definition}
+
+\begin{definition}{Morphisms of $\delta$-Functors}\\
+A \textit{morphism} $f:S\to T$ of $\delta$-functors is a system of natural transformations $f_n: S_n\to T_n$ (respectively $f^n:S^n\to T^n$) that commute with $\delta$, i.e.: for any short exact sequence $0\to A\to B\to C \to0$ in $\mathcal{A}$, the following diagram commutes:
+\[
+\begin{tikzcd}
+    S_n (C) \arrow[r, "\delta_n^S"] \arrow[d, "f_n(C)"] &S_{n-1} (A) \arrow[d, "f_{n-1} (A)"]\\
+    T_n(C) \arrow[r, "\delta_n^T"] &T_{n-1} (A)
+\end{tikzcd}
+\text{ respectively }
+\begin{tikzcd}
+    S^n (C) \arrow[r, "\delta_S^n"] \arrow[d, "f^n (C)"] &S^{n+1} (A) \arrow[d, "f^{n+1} (A)"] \\
+    T^n(C) \arrow[r, "\delta_T^n"] &T^{n+1} (A)
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{definition}{Universal $\delta$-Functors}
+\begin{itemize}
+    \item A homological $\delta$-functor $T$ is \textit{universal} if given any $\delta$-functor $S$ and a natural transformation $f_0 :S_0\to T_0$, there is a unique morphism $\{f_n:S_n \to T_n\}$ of $\delta$-functors that extend $f_0$.
+
+    \item A cohomological $\delta$-functor $T$ is \textit{universal} if given any $S$ and $f^0:T^0\to S^0$, there is a unique morphism $\{f^n:T^n \to S^n\}$ of $\delta$-functors that extend $f^0$.
+\end{itemize}
+\end{definition}
+
+\subsection{Left Derived Functors}
+
+\noindent\textbf{Intuition:} Let $F: \mathcal{A} \to \mathcal{B}$ be a \textit{right exact functor} between two abelian categories, i.e.: $F$ is an additive functor between $\mathcal{A}$ and $\mathcal{B}$ satisfying that for any short exact sequence $0 \to A \xrightarrow{f} B \xrightarrow{g} C\to 0$ in $\mathcal{A}$, applying $F$ on it we can get an exact sequence
+\[
+F(A) \xrightarrow{F(f)} F(B) \xrightarrow{F(g)} F(C) \to0
+\]
+For instance, $\cdot \otimes_R D:\mathcal{M}od_R \to \mathcal{M}od_R$ is a right exact functor in category of modules. But note that applying $F$ may lose the information on the left, namely $\ker f$.
+
+\subsubsection{Construction and Well-defined-ness}
+
+\begin{definition}{Left Derived Functors}\\
+Let $F:\mathcal{A} \to \mathcal{B}$ be a right exact functor between two abelian categories, let $A\in \text{Ob} (\mathcal{A})$ be an object of $\mathcal{A}$ and take a projective resolution 
+\[
+\cdots \to P_n \xrightarrow{d_n} P_{n-1} \to \cdots \to P_1 \xrightarrow{d_1} P_0 \xrightarrow{\epsilon} A\to 0
+\]
+of $A$. Consider a chain complex $P:= (\cdots \to P_2 \xrightarrow{d_2} P_1 \xrightarrow{d_1} P_0\to0)$. Then we define the \textit{left derived functors} $L_iF $ ($i\in \mathbb{N} \cup \{0\}$) of $F$ by the homology groups
+\[
+L_iF(A):= H_i(F(P))= \ker F(d_i)/ \text{im }F(d_{i+1})
+\]
+\end{definition}
+
+\begin{proposition}{$0$-th Left Derived Functor Proposition}\\
+Given any $F: \mathcal{A} \to \mathcal{B}$ right exact functor between two abelian categories and any $A\in \text{Ob} (\mathcal{A})$, we always have
+\[
+L_0F(A) \cong F(A)
+\]
+\end{proposition}
+
+\begin{proof}
+    By the def of right exact functors, we have an exact sequence
+    \[
+    \cdots \to F(P_1) \xrightarrow{F(d_1)} F(P_0) \xrightarrow{F(\epsilon)} F(A)\to 0
+    \]
+    Hence, we get: $(*):\ker F(\epsilon)= \text{im }F(d_1)$ and $(**): F(\epsilon)$ is surjective. Therefore,
+    \[
+    L_0F(A) := F(P_0)/ \text{im } F(d_1) \xlongequal{(*)} F(P_0)/ \ker F(\epsilon) \overset{\text{1st isom thm}}{\cong} \text{im }F(\epsilon) \overset{(**)}{\cong} F(A)
+    \]
+\end{proof}
+
+\begin{lemma}{Comparison Theorem}\\
+Let $M,N$ be objects of an abelian category $\mathcal{A}$, take $P$ to be a projective resolution of $M$ and let $f' \in \text{Hom}_\mathcal{A} (M,N)$. Then for every projective resolution $Q$ of $N$, there is a chain map $f:P \to Q$ lifting $f'$ in the sense that $\epsilon_Q \circ f_0= f'\circ \epsilon_P$. The chain map $f$ is unique up to chain homotopy.
+\[
+\begin{tikzcd}
+    \cdots \arrow[r] &P_n \arrow[r] \arrow[d, "f_n"] &P_{n-1} \arrow[r] \arrow[d, "f_{n-1}"] &\cdots \arrow[r] &P_1 \arrow[r] \arrow[d, "f_1"]& P_0 \arrow[r, "\epsilon_P"] \arrow[d, "f_0"]&M \arrow[r] \arrow[d, "f'"] &0\\
+    \cdots \arrow[r] &Q_n\arrow[r]& Q_{n-1}\arrow[r] &\cdots \arrow[r] &Q_1\arrow[r] &Q_0\arrow[r, "\epsilon_Q"] &N\arrow[r] &0
+\end{tikzcd}
+\]
+\end{lemma}
+
+\noindent\textbf{Remark:} The Comparison Theorem is the general version of the Induced Maps on Ext-and-Homotopy Independence Lemma.
+
+\begin{proposition}{Well-defined-ness of Left Derived Functors Proposition}\\
+The objects $L_iF(A)$ of $\mathcal{B}$ are well-defined up to natural isomorphism, namely, if we take another projective resolution
+\[
+\cdots \to Q_n \xrightarrow{d_n^Q} Q_{n-1} \to \cdots \to Q_1 \xrightarrow{d_1^Q} Q_0 \xrightarrow{\epsilon^Q} A\to0
+\]
+of $A$ with $Q=(\cdots \to Q_2 \xrightarrow{d_2^Q} Q_1 \xrightarrow{d_1^Q} Q_0\to0)$, then there is a canonical isomorphism
+\[
+L_i F(A)= H_i (F(P)) \xrightarrow{\cong} H_i(F(Q))
+\]
+where "canonical" means that uniquely determined and independent of choice of the projective resolutions. In particular, a different choice of would yield new functors $\hat{L}_iF$, which are naturally isomorphic to $L_iF$.
+\end{proposition}
+
+
+\begin{proof}
+    By the Comparison Theorem, there is a chain map $f:P\to Q$ lifting the identity map $f'=\text{id}_A$, yielding a map $f_i: H_iF(P) \to H_iF(Q)$, and any other such chain map $\hat{f}: P\to Q$ is a chain homotopic to $f$, so $f_i=\hat{f}_i$. Hence, the map $f_i$ is canonical. Similarly, there is a chain map $g: Q\to P$ lifting $\text{id}_A$ and a map $g_i$. Since $g\circ f$ and $\text{id}_P$ are both chain map $P\to P$ lifting $\text{id}_A$, then we have
+    \[
+    g_i \circ f_i= (g\circ f)_i =\text{id}_{H_iF(P)}
+    \]
+    and similarly $f_i \circ g_i= \text{id}_{H_iF(Q)}$, which shows that $f_i$ and $g_i$ are isomorphisms.
+\end{proof}
+
+\noindent\textbf{Remark:} This prop shows that no matter which resolution we choose, the resulted homology groups are the same in the sense of isomorphism, so we have the well-defined-ness of our construction of left derived functors $L_iH(A)$.
+
+\begin{corollary}{of Well-defined-ness of Left Derived Functors Proposition}\\
+If $A$ is projective, thn $L_iF(A)=0$ for $i\neq 0$.
+\end{corollary}
+
+\begin{proof}
+    By the Well-defined-ness of Left Derived Functors Prop, we can focus on the trivial projective resolution $0\to A \xrightarrow{\text{id}_A} A\to0$ of $A$, so for $i\neq 0$, we have
+    \[
+    L_iF(A):= H_i (F(P))= \text{ker }(0\to0)/ \text{im }(0\to0)=0
+    \]
+\end{proof}
+
+
+\subsubsection{Functoriality}
+\begin{lemma}{Induction-of-Morphisms-on-Left Derived Functors Lemma}\\
+For any map $f: A'\to A$ in any abelian category $\mathcal{A}$, there is induced map $L_iF(f): L_iF(A') \to L_iF(A)$ for each $i$.
+\end{lemma}
+
+\begin{proof}
+    Let $P,P'$ be projective resolutions of $A$ respectively $A'$. By thw Comparison Theorem, there is a lift $f$ of a chain map $\tilde{f}:P'\to P$, hence a map $\tilde{f}_i :H_i(F(P')) \to H_i (F(P))$, and the map $\tilde{f}_i$ is independent of the choice of $f$. Then $L_iF(f):= \tilde{f}_i$.
+\end{proof}
+
+\begin{proposition}{Additivity-of-Left Derived Functors Proposition}\\
+Each $L_iF$ is an additive functor from $\mathcal{A}$ to $\mathcal{B}$.
+\end{proposition}
+
+\begin{proof}
+    \begin{itemize}
+        \item To prove the functoriality of $L_iF$, by the Induction-of-Morphisms-on-Left Derived Functors Lemma, it suffices to show that $L_iF$ preserves identity morphism and composition:
+        \begin{itemize}
+            \item $L_iF(\text{id}_A) := (\text{id}_P)_i = \text{id}_{L_iF(A)}$
+            \item Given $A'\xrightarrow{f} A\xrightarrow{g} A''$ with $A,A',A'' \in \text{Ob} (\mathcal{A})$, $f,g$ morphisms, take their projective resolutions $P,P',P''$ and chain maps $\tilde{f}:P'\to P', \tilde{g}:P \to P''$ lifting $f,g$. Then $\tilde{g} \circ \tilde{f}: P'\to P''$ lifts $g\circ f$, so
+            \[
+            L_iF(g \circ f)= (\tilde{g} \circ \tilde{f})_i= \tilde{g}_i \circ \tilde{f}_i= L_iF(g) \circ L_iF(f)
+            \]
+        \end{itemize}
+
+        \item $\forall f_1,f_2 \in \text{Hom}_\mathcal{
+        A
+        }(A,A')$, where $A,A' \in \text{Ob} (\mathcal{A})$ are with projective resolutions $P$ respectively $P'$, by the Comparison Theorem, there are chain maps $\tilde{f}_1, \tilde{f}_2: P'\to P$ lifting $f_1$ respectively $f_2$. Then
+        \[
+        (\tilde{f}_1+ \tilde{f_2})_i \xlongequal{\text{def}} (\tilde{f}_1)_i +(\tilde{f}_2) _i:P_i' \to P_i
+        \]
+        is a well-defined chain map where $\tilde{f}_1+ \tilde{f_2}$ lifts $f_1+f_2$. Applying the additive functor $F$, we can get $F(\tilde{f}_1+ \tilde{f_2})= F(\tilde{f}_1)+ F(\tilde{f_2})$. Hence,
+        \[
+        (F(\tilde{f}_1)+ F(\tilde{f_2}))_i= F(\tilde{f}_1)_i+ F(\tilde{f_2})_i
+        \]
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}{Long Exact Sequence-in-Left Derived Functors Theorem}\\
+The left derived functors $L_iF$ form a homological $\delta$-fuctor.
+\end{theorem}
+
+\begin{proof}
+    Given a short sequence $0\to A'\to A\to A''\to0$ in $\mathcal{A}$ with projective resolutions $P'$ of $A'$ and $P''$ of $A''$. By the general version of Horseshoe Lemma, there is a projective resolution $P$ of $A$ with a short exact sequence $0\to P
+    '\to P'\to P''\to0$ and each short exact sequence $0\to P_n' \to P_n\to P_n''\to0$ is split. Since $F$ is an additive functor, then applying $F$ on a split exact sequence still can retain the splitness and exactness, i.e.:each sequence $0\to F(P_n') \to F(P_n) \to F(P_n'') \to 0$ is split exact in $\mathcal{B}$. Therefore, $0\to F(P') \to F(P) \to F(P'')\to0$ is a short exact sequence of chain complexes. Then by the dual version for homology of the Long Exact Sequence-in-Cohomology Theorem, there is a long exact homology sequence
+    \[
+    \cdots \xrightarrow{\partial_{i+1}} L_iF(A') \to L_iF(A) \to L_iF(A'') \xrightarrow{\partial_i} L_{i-1} F(A') \to L_{i-1} F(A) \to L_{i-1} F(A'') \xrightarrow{\partial_{i-1}} \cdots
+    \]
+    with corresponding connecting homomorphisms.
+
+    Not yet, we still need to prove that the connecting homomorphisms $\partial_n$ are natural in $A$, that is, if we have two short exact sequences and a morphism between them:
+    \[
+    \begin{tikzcd}
+        0\arrow[r] &A' \arrow[r, "i_A"] \arrow[d, "f'"] &A\arrow[r, "\pi_A"] \arrow[d, "f"] &A'' \arrow[r] \arrow[d, "f''"] &0\\
+        0\arrow[r] &B' \arrow[r, "i_B"] &B\arrow[r, "\pi_B"] &B'' \arrow[r] &0
+    \end{tikzcd}
+    \]
+    then the blocks corresponding to the long exact sequence they induce must be commutative:
+    \[
+    \begin{tikzcd}
+        L_i F(A'') \arrow[r, "\partial_i^A"] \arrow[d, "L_iF(f'')"] &L_{i-1}F(A') \arrow[d, "L_{i-1}F(f')"]\\
+        L_iF(B'') \arrow[r, "\partial_i^B"] &L_{i-1}F(B')
+    \end{tikzcd}
+    \]
+    Consider the projective resolutions $P'$ of $A'$, $P''$ of $A''$, $Q'$ of $B'$ and $Q''$ of $B''$ with $\epsilon': P_0'\to A', \epsilon'': P_0''\to A'' ,\eta ':Q_0' \to B'$ and $\eta'': Q_0''\to B''$ and use the general case of the Horseshoe Lemma to get the projective resolutions $P$ of $A$ and $Q$ of $B$ with $\epsilon: P_0\to A$ and $\eta: Q_0\to B$. Then by the Comparison Theorem, we have chain map $g': P'\to Q'$ and $g'': P''\to Q''$ lifting the maps $f'$ respectively $f''$.
+
+    Now we need to show that there is a chain map $g: P\to Q$ lifting $f$ and giving a commutative diagram of chain complexes with exact rows:
+    \[
+    \begin{tikzcd}
+        0\arrow[r] &P'\arrow[r] \arrow[d, "g'"] &P\arrow[r] \arrow[d, "g"] &P''\arrow[r] \arrow[d, "g''"] &0\\
+        0\arrow[r] &Q' \arrow[r]&Q \arrow[r]&Q'' \arrow[r]&0
+    \end{tikzcd}
+    \]
+    which shall give the naturality of $\partial_n$ and finish the proof:
+
+    In order to produce $g$, we will construct maps (\textit{not} chain maps) $\gamma_n: P_n''\to Q_n'$ such that $g_n$ is
+    \[
+    g_n =\begin{pmatrix}
+        g_n' &\gamma_n\\
+        0& g_n''
+    \end{pmatrix}
+    :P_n= P_n' \oplus P_n'' \to Q_n= Q_n' \oplus Q_n'' \text{ given by } g_n(p',p'') = (g_n'(p')+\gamma_n(p'') ,g''(p''))
+    \]
+    We first construct $\gamma_0$: Note that for our desired form, $g_0|_{P_0'}=g_0'$ since $\gamma_0$ is on $P_0''$, so we only focus on $g_0|_{P_0''}$. Let $\lambda_P'': P_0'' \to A$ and $\lambda_Q: Q_0'' \to B$ be the restrictions of $\epsilon$ respectively $\eta$, i.e.: $\lambda_P:= \epsilon|_{P_0''} \text{ and } \lambda_Q:= \eta|_{Q_0''}$. Note that
+    \begin{align*}
+        \pi_B\circ (f\circ \lambda_P -\lambda_Q\circ g_0'')&= \pi_B \circ f\circ \lambda_P -\pi_B \circ \lambda_Q \circ g_0''\\
+        &= f''\circ \pi_A \circ \lambda_P -\eta'' \circ g_0''\\
+        &=f'' \circ \epsilon''- \eta''\circ g_0''=0
+    \end{align*}
+    Since also $\pi_B \circ i_B=0$, then by the universal property of kernel, $\exists! \beta_0:P_0'' \to B'$, s.t.: $i
+    _B \circ \beta_0= f\circ \lambda_P- \lambda_Q\circ g_0''$. Therefore, by the projectivity of $P_0''$, we can define $\gamma_0$ to be a lift of $\beta_0$ to $Q_0'$:
+    \[
+    \begin{tikzcd}
+        &P_0'' \arrow[ld, dashed, "\gamma_0"'] \arrow[d, "\beta_0"]\\
+        Q_0' \arrow[r, "\eta'"] &B' \arrow[r]&0
+    \end{tikzcd}
+    \]
+
+    In order for $g$ to be a chain map, we must have the following commutative diagram
+    \[
+    \begin{tikzcd}
+        P_n \arrow[r, "d_n^P"] \arrow[d, "g_n"] &P_{n-1} \arrow[d, "g_{n-1}"]\\
+        Q_n \arrow[r, "d_n^Q"] &Q_{n-1}
+    \end{tikzcd}
+    \]
+    Similarly for defining $\lambda_P$ and $\lambda_Q$, we define $\lambda_n^P: P_n'' \to P_{n-1}'$ and $\lambda_n^Q: Q_n''\to Q_{n-1}'$ by
+    \begin{align*}
+        &d_n^P= \begin{pmatrix}
+            d_n^{P'} &\lambda_n^P\\
+            0 &d_n^{P''}
+        \end{pmatrix}
+        :P_n= P_n'\oplus P_n''\to P_{n-1}= P_{n-1} '\oplus P_{n-1}''\\
+        &d_n^Q= \begin{pmatrix}
+            d_n^{Q'} &\lambda_n^Q\\
+            0 &d_n^{Q''}
+        \end{pmatrix}
+        :Q_n= Q_n'\oplus Q_n''\to Q_{n-1}= Q_{n-1} '\oplus Q_{n-1}''
+    \end{align*}
+    of which easily to prove the existence. Then the commutative diagram above can be "translated" as
+    \begin{align*}
+        0&= d_n^Q\circ g_n-g_{n-1} \circ d_n^{P}= \begin{pmatrix}
+            d_n^{Q'} &\lambda^Q_n\\
+            0&d_n^{Q''}
+        \end{pmatrix}
+        \circ \begin{pmatrix}
+            g_n' &\gamma_n\\
+            0&g_n''
+        \end{pmatrix}
+        - \begin{pmatrix}
+            g_{n-1}' &\gamma_{n-1}\\
+            0&g_{n-1}''
+        \end{pmatrix}
+        \circ \begin{pmatrix}
+            d_n^{P'} &\lambda^P_n\\
+            0&d_n^{P''}
+        \end{pmatrix}
+        \\
+        &=\begin{pmatrix}
+            d_n^{Q'} \circ g_n'- g_{n-1}' \circ d_n^{P'} &d_n^{Q'} \circ \gamma_n- \gamma_{n-1} \circ d_n^{P''}+ \lambda_n^Q\circ g_n''- g_{n-1}' \circ \lambda_n^P\\
+            0 &d_n^{Q''} \circ g_n''- g_{n-1}''\circ d_n^{P''}
+        \end{pmatrix}
+        \\
+        &=\begin{pmatrix}
+            0&d_n^{Q'} \circ \gamma_n- \gamma_{n-1} \circ d_n^{P''}+ \lambda_n^Q\circ g_n''- g_{n-1}' \circ \lambda_n^P\\
+            0&0
+        \end{pmatrix}
+    \end{align*}
+    To guarentee this, we need: $d_n^{Q'} \circ \gamma_n= \gamma_{n-1} \circ d_n^{P''}- \lambda_n^Q\circ g_n''+ g_{n-1}' \circ \lambda_n^P$. Since we've already obtained $\gamma_0$, then we can construct $\gamma_n$, inductively: Suppose $\gamma_i$ defined for $i<m$, and denote $h_n:= \gamma_{n-1} \circ d_n^{P''}- \lambda_n^Q\circ g_n''+ g_{n-1}' \circ \lambda_n^P$. Note that by the def of $\lambda_k^P,\lambda_k^Q$, we have
+    \begin{align*}
+        0&= d_{n-1}^P \circ d_n^P= \begin{pmatrix}
+            d_{n-1}^{P'} &\lambda_{n-1}^P\\
+            0&d_{n-1}^{P''}
+        \end{pmatrix}
+        \circ \begin{pmatrix}
+            d_n^{P'} &\lambda_n^P\\
+            0&d_n^{P''}
+        \end{pmatrix}
+        =\begin{pmatrix}
+            d_{n-1}^{P'} \circ d_n^{P'} &d_{n-1}^{P'} \circ \lambda_n^{P} +\lambda_{n-1}^P \circ d_n^{P''}\\
+            0& d_{n-1}^{P''} \circ d_n^{P''}
+        \end{pmatrix}
+        \\
+        &=\begin{pmatrix}
+            0&d_{n-1}^{P'} \circ \lambda_n^{P} +\lambda_{n-1}^P \circ d_n^{P''}\\
+            0&0
+        \end{pmatrix}
+    \end{align*}
+    Hence, we have
+    \begin{equation*}
+        d_{n-1}^{P'} \circ \lambda_n^P= -\lambda_{n-1}^{P} \circ d_n^{P''} \text{ and similarly } d_{n-1}^{Q'} \circ \lambda_n^Q=- \lambda_{n-1}^Q \circ d_n^{Q''} \tag{*}
+    \end{equation*}
+    Therefore, we see that:
+    \begin{align*}
+        d_{n-1}^{Q'} \circ h_n&:= d_{n-1}^{Q'} \circ \gamma_{n-1} \circ d_n^{P''}- d_{n-1}^{Q'} \circ \lambda^Q_n \circ g_n''+ d_{n-1}^{Q'} \circ g_{n-1}'\circ \lambda^P_n\\
+        &\overset{1}{=} h_{n-1} \circ d_n^{P''} + \lambda_{n-1}^{Q} \circ d_n^{Q''} \circ g_n'' +g_{n-2}' \circ d_{n-1}^{P'} \circ \lambda_n^P\\
+        &\overset{2}{=} \gamma_{n-2} \circ d_{n-1}^{P''} \circ d_n^{P''}- \lambda_{n-1}^Q \circ g_{n-1}'' \circ d_n^{P''} +g_{n-2}' \circ \lambda_n^P \circ d_n^{P''} \\
+        &\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\;\; +\lambda_{n-1}^Q \circ d_n^{Q''} \circ g_n'' - g_{n-2}' \circ \lambda_n^P \circ d_n^{P''}\\
+        &\overset{3}{=}0
+    \end{align*}
+    where the explanation for each equation is:
+    \begin{enumerate}
+        \item By the inductive hypothesis, we have: $d_{n-1}^{Q'} \circ \gamma_{n-1}= g_{n-1}$; by $(*)$, we have $d_{n-1}^{Q'} \circ \lambda_n^Q= -\lambda_{n-1}^Q \circ d_n^{Q''}$; since $g'$ is a chain map, then we have $d_{n-1}^{Q'} \circ g_{n-1}' = g_{n-2}' \circ d_{n-1}^{P'}$.
+
+        \item By $(*)$, we have $d_{n-1}^{P'} \circ \lambda_n^P= -\lambda_n^P \circ d_n^{P''}$; by the def of $h_{n-1}$, $h_{n-1}= \gamma_{n-2} \circ d_{n-1}^{P''}- \lambda_{n-1}^Q \circ g_{n-1}''+ g_{n-2}' \circ \lambda_n^P$.
+
+        \item $d_{n-1}^{P''} \circ d_{n}^{P''}=0$; since $g''$ is a chain map, then we have $g''_{n-1} \circ d_n^{P''}= d_n^{Q''} \circ g_n''$.
+    \end{enumerate}
+    Therefore, $\text{im }g_n \subseteq \text{ker }d_{n-1}^{Q'}= \text{im }d_n^{Q'}$, so $\exists! \beta_n:P_n'' \to \text{im }d_n^{Q'}$, s.t.: the following diagram commutes:
+    \[
+    \begin{tikzcd}[row sep=large]
+        &\text{im }d_n^{Q'} \arrow[d, hook]\\
+        P_n'' \arrow[ru, "\exists !\beta_n"] \arrow[r, "h_n"]&Q_{n-1}'
+    \end{tikzcd}
+    \]
+    and we then define $\gamma_n$ to be any lift of $\beta_n$ to $Q_n'$.
+\end{proof}
+
+\subsubsection{Dimension Shifting / Syzygy Theory}
+
+\noindent\textbf{Intuition:} The calculation for $L_iF(A)$ is complicated when taking projective resolutions, so we introduce a way to calculating $L_iF(A)$.
+
+\begin{definition}{Acyclic Objects}\\
+Let $F: \mathcal{A}\to \mathcal{B}$ be a right exact functor between two abelian categories. An object $Q\in \text{Ob} (\mathcal{A})$ is called \textit{$F$-acyclic} if $L_i F(Q)=0$ for all $i\neq 0$.
+\end{definition}
+
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item By the coro of the Well-defined-ness of Left Derived Functors Prop, projectives are $F$-acyclic for every right exact functor $F$.
+
+    \item Flat modules are acyclic for tensor products.
+\end{itemize}
+
+\begin{definition}{Acyclic Resolutions}\\
+An \textit{$F$-acyclic resolution} of $A$ is a left resolution $\cdots \to Q_2 \to Q_1\to Q_0 \to A\to0$ for each $Q_i$ is $F$-acyclic.
+\end{definition}
+
+\begin{proposition}{One-Step Dimension Shifting Proposition}\\
+Let $F: \mathcal{A} \to \mathcal{B}$ be a right exact functor between abelian categories. If $0\to M\to P\to A\to0$ is an exact sequence in $\mathcal{A}$ with $P$ $F$-acyclic (e.g. projective), then
+\begin{enumerate}
+    \item $L_iF(A) \cong L_{i-1}F(M)$, for all $i\geq 2$, and
+    \item $L_1F(A) \cong \ker (F(M) \to F(P))$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    By the Long Exact Sequence-in-Left Derived Functors Theorem, apply $L_kF$ to the short exact sequence $0\to M\to P\to A\to0$ to get a long exact sequence
+    \[
+    \cdots \to L_iF(P) \to L_iF(A) \xrightarrow{\partial} L_{i-1} F(M) \to L_{i-1} F(P) \to \cdots
+    \]
+    Since $P$ is $F$-acyclic, then $L_kF(P)=0$ for all $k\geq 1$.
+    \begin{itemize}
+        \item For $i\geq 2$, the exactness of sequence $0\to L_iF(A) \xrightarrow{\partial} L_{i-1}F(M) \to 0$ gives
+        \[
+        L_iF(A) \cong L_{i-1} F(M)
+        \]
+
+        \item For $i=1$, the sequence $0\to L_1F(A) \to L_0F(M) \to L_0F(P)$ is exact. By the $0$-th Left Derived Functor Prop, we have an exact sequence $0\to L_1F(A) \to F(M) \to F(P)$ and hence we're done.
+    \end{itemize}
+\end{proof}
+
+\begin{theorem}{General Dimension Shifting}\\
+Let $F:\mathcal{A} \to \mathcal{B}$ be a right exact functor between categories. If $0\to M_m \to P_m\to P_{m-1} \to \cdots \to P_0 \to A$ is exact with $P_j$ $F$-acyclic, then
+\begin{enumerate}
+    \item $L_iF(A) \cong L_{i-m-1} F(M_m)$ for all $i\geq m+2$, and
+    \item $L_{m+1} F(A) \cong \ker (F(M_m) \to F(P_m))$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    Consider $K_0:= \ker(P_0\to A)$ and $K_j:=\ker (P_j\to P_{j-1})$ for $1\leq j\leq m-1$. Then we have the short exact sequences
+    \begin{align*}
+        &0\to K_0\to P_0 \to A\to0\\
+        &0\to K_j\to P_j\to K_{j-1}\to0 \text{ for } 1\leq j\leq m-1\\
+        &0\to M_m\to P_m\to K_{m-1}\to 0
+    \end{align*}
+    Apply the One-Step Dimension Shifting Prop.1 to these short exact sequences and then we get
+    \begin{align*}
+        &L_iF(A) \cong L_{i-1}F(K_0) \text{ for } i\geq 2\\
+        &L_iF(K_0) \cong L_{i-2}F(K_1) \text{ for } i-1\geq 2\\
+        & \;\;\;\;\;\;\vdots\\
+        &L_{i-j} F(K_{j-1}) \cong L_{i-j-1} F(K_j) \text{ for } i-j\geq 2
+    \end{align*}
+    Hence, iteratively, $L_iF(A) \cong L_{i-1} F(K_0) \cong \cdots \cong L_{i-m} F(K_{m-1}) \cong L_{i-(m+1)} F(M_m)$ for $i-m\geq 2 \Leftrightarrow i\geq m+2$. For $i=m+1$, we have $L_{m+1} F(A) \cong L_1F(K_{m-1})$. On the last step, apply the One-Step Dimension Shifting Prop.2 to the short exact sequence $0\to M_m\to P_m \to K_{m-1}\to 0$ and then we get
+    \[
+    L_1F(K_{m-1}) \cong \ker (F(M_m) \to F(P_m))
+    \]
+\end{proof}
+
+\begin{definition}{Syzygy}\\
+The object $M_m$ is called the \textit{$m$-th syzygy} of $A$.
+\end{definition}
+
+\begin{theorem}{Acyclic Resolution Theorem}\\
+Let $F:\mathcal{A} \to \mathcal{B}$ be a right exact sequence between abelian categories. If $\cdots \to P_2\xrightarrow{d_2} P_1 \xrightarrow{d_1} P_0\xrightarrow{\epsilon} A\to0$ is a $F$-acyclic resolution of $A$, then for any $i\geq 0$,
+\[
+L_iF(A) \cong H_i (F(P))
+\]
+where $P=(\cdots \to P_2\xrightarrow{d_2} P_1 \xrightarrow{d_1} P_0 \to0)$.
+\end{theorem}
+
+
+\begin{proof}
+    \begin{itemize}
+        \item For $i=0$, since $F$ is a right exact functor, then $F(P_1) \xrightarrow{F(d_1)} F(P_0) \xrightarrow{F(\epsilon)} F(A) \to0$ is exact. Hence,
+        \begin{align*}
+            H_0 (F(P))&= \text{ker }F(\epsilon)/ \text{im }F(d_1)
+            =F(P_0)/ \text{ker } F(\epsilon) \cong
+            \text{im } F(\epsilon)= F(A) \cong L_0F(A)
+        \end{align*}
+
+        \item $i\geq1$, consider $M_m:= \ker d_m= \text{im }d_{m+1}$ for $m\geq 0$ and we have a long exact sequence $0\to M_{i-1} \hookrightarrow P_{i-1} \to P_{i-2} \to \cdots \to P_0\to A\to0$. By the General Dimension Shifting Theorem, we can get
+        \[
+        L_i F(A) \cong \text{ker }(F(M_{i-1}) \xrightarrow{\iota:= F(M_{i-1} \hookrightarrow P_{i-1})} F(P_{i-1}))
+        \]
+        Note that $0\to M_i\to P_i\to M_{i-1} \to0$ is exact (since $M_i= \text{im }d_{i+1}$). Since $F$ is a right exact functor, then $F(M_i) \to F(P_i) \xrightarrow{\pi} F(M_{i-1}) \to0$ is exact, which gives $\pi$ is surjective and that $\text{ker }\pi= \text{im }(F(M_i) \to F(P_i))$. Note that $F(d_i)= \iota \circ \pi$. By the First Isomorphism Theorem, $\ker \iota= \ker (\iota\circ \pi)/ \ker \pi= \ker F(d_i)/ \ker \pi$.\\
+        Consider the short exact sequence $0\to M_{i+1} \to P_{i+1} \to M_i\to0$ and then similarly we have an exact sequence $F(P_{i+1}) \to F(M_i) \to 0$, which gives $F(P_{i+1}) \twoheadrightarrow F(M_i)$ is surjective. Therefore,
+        \[
+        \text{im }F(d_{i+1})= \text{im }(F(P_{i+1}) \twoheadrightarrow F(M_i) \to F(P_i)) = \text{im }(F(M_i) \to F(P_i))
+        \]
+        By the exactness of $F(M_i)\to F(P_i) \xrightarrow{\pi} F(M_{i-1})$, we then have $\text{im }F(d_{i+1})= \text{ker }\pi$, so we're done:
+        \[
+        L_iF(A) \cong \ker \iota \cong \ker F(d_i)/ \text{im}\, F(d_{i+1})
+        \]
+    \end{itemize}
+\end{proof}
+
+\subsubsection{Universality}
+
+\begin{theorem}{Universal Property of Left Derived Functors}\\
+Assume that $\mathcal{A}$ has enough projectives. Then for any righta exact functor $F:\mathcal{A} \to \mathcal{B}$, the left derived functors $L_iF$ form a universal $\delta$-functor.
+\end{theorem}
+
+
+\begin{proof}
+    Suppose that $T$ is a homological $\delta$-functor and that $\varphi_0: T_0\to L_0F\cong F$ is a given natural transformation, i.e.: $\forall A\in \text{Ob} (\mathcal{A})$, $\varphi_0$ induces a morphism $\varphi_{0,A}\in \text{Hom}_\mathcal{B} (T_0(A) ,F(A))$ in $\mathcal{B}$, this transformation must be commutative for all morphisms in category, namely, $\forall f \in \text{Hom}_\mathcal{A} (A,B)$, the following diagram commutes:
+    \[
+    \begin{tikzcd}
+        T_0(A) \arrow[r, "\varphi_{0,A}"] \arrow[d, "T_0(f)"] &F(A) \arrow[d, "F(f)"]\\
+        T_0(B) \arrow[r, "\varphi_{0,B}"] &F(B)
+    \end{tikzcd}
+    \]
+    We need to show that $\varphi_0$ admits a unique extension to a morphism $\varphi: T\to \{L_iF\}$ of $\delta$-functors. Do induction on $n$: Suppose that $\forall 0\leq k<n$, we can uniquely construct a natural transformation $\varphi_k: T_k\to L_kF$ and that they commute with all $\delta_i$'s. Given $A\in \text{Ob} (\mathcal{A})$, consider an exact sequence $0\to K:= \ker \pi\to P\xrightarrow{\pi} A\to0$ with $P\in \text{Ob} (\mathcal{A})$ projective, and hence $L_nF(P)=0$. Then we have a commutative diagram with exact rows
+    \[
+    \begin{tikzcd}
+        &T_n (A)\arrow[r, "\delta_n^T"] &T_{n-1}(K) \arrow[r] \arrow[d, "\varphi_{n-1} (K)"]& T_{n-1} (P) \arrow[d, "\varphi_{n-1}(P)"]\\
+        0=L_nF(P) \arrow[r] &L_nF(A) \arrow[r, "\delta_n^L"] &L_{n-1}F(K) \arrow[r] &L_{n-1}F(P)
+    \end{tikzcd}
+    \]
+    Hence, $\delta_n^L: L_nF(A) \to L_{n-1} F(K)$ is injective. Consider $h:=\varphi _{n-1} (K) \circ \delta_n^T: T_n(A) \to L_{n-1} F(K)$. By the commutativity,
+    \[
+    (L_{n-1} F(K)\to L_{n-1} F(P)) \circ h=(T_n(A) \xrightarrow{\delta_n^T} T_{n-1} (K) \to T_{n-1} (P) \xrightarrow{\varphi_{n-1} (P)} L_{n-1} F(P)) \xlongequal{\text{exactness}} 0
+    \]
+    Therefore, $\text{im }h \subseteq \text{ker } (L_{n-1} F(K) \to L_{n-1} F(P))= \text{im }\delta_n^L$. By the projectivity of $P$, $\delta_n^L$ is injective and then by the universal property of kernel, there is a unique $\varphi_n(A): T_n(A) \to L_nF(A)$, s.t.:
+    \[
+    \delta_n^L \circ \varphi_n (A)= \varphi_{n-1} (K) \circ \delta_n^T
+    \]
+    Now for every $A\in \text{Ob} (\mathcal{A})$, we've constructed a unique $\varphi_n(A)$, so we need to show, for the well-defined-ness of $\varphi_n(A)$, that $\varphi_n (A)$ is independent of the choice of $P\xrightarrow{\pi} A\to0$. Before this, we shall first prove the naturality if $\varphi_n(A)$, i.e.: $\forall f\in \text{Hom}_\mathcal{A} (A',A)$, $\varphi_n$ commutes with $f$. Take $0\to K':= \ker \pi' \to P'\xrightarrow{\pi'} A' \to0$ and $0\to K\to P\xrightarrow{\pi}A \to0$ with $P,P'$ projective. Then by the projectivity of $P$ and $P'$, we can lift $f$:
+    \[
+    \begin{tikzcd}
+        0\arrow[r] &K'\arrow[r] \arrow[d, "h"] &P'\arrow[r] \arrow[d, "g"] &A' \arrow[r] \arrow[d, "f"] &0\\
+        0\arrow[r] &K\arrow[r] &P\arrow[r] &A\arrow[r] &0
+    \end{tikzcd}
+    \]
+    This induces the commutativity of the innermost square of the following diagram:
+    \[
+    \begin{tikzcd}[row sep=2.5em, column sep=3em]
+    T_n(A') \arrow[rrr, "T_n(f)"] \arrow[ddd, "\varphi_n(A')"'] \arrow[dr, "\delta{'}_n^T"] & & & T_n(A) \arrow[ddd, "\varphi_n(A)"] \arrow[dl, "\delta_n^T"'] \\
+    & T_{n-1}(K') \arrow[r, "T_{n-1}(h)"] \arrow[d, "\varphi_{n-1}(K')"] & T_{n-1}(K) \arrow[d, "\varphi_{n-1}(K)"] & \\
+    & L_{n-1}F(K') \arrow[r, "L_{n-1}F(h)"] & L_{n-1}F(K) & \\
+    L_n F(A') \arrow[rrr, "L_n F(f)"] \arrow[ur, "\delta{'}_n^L"] & & & L_n F(A) \arrow[ul, "\delta_n^L"']
+    \end{tikzcd}
+    \]
+    We now need to show that outmost square commutes, i.e.: $\varphi_n (A)\circ T_n(f)= L_nF(f) \circ \varphi_n(A')$. Note that 
+    \begin{align*}
+        \delta_n^L \circ (\varphi_n(A) \circ T_n(f)) &= (\delta_n^L \circ \varphi_n(A)) \circ T_n(f) \xlongequal{\text{def of } \varphi_n(A)} \varphi_{n-1} (K) \circ \delta_n^T \circ T_n(f)\\
+        &\xlongequal{T \text{ homological }\delta \text{-functor}} \varphi_{n-1} (K) \circ T_{n-1} (h) \circ \delta_n^T\\
+        &\xlongequal{\text{innermost square commutes}} L_{n-1} F(h) \circ \varphi_{n-1} (K') \circ \delta_n^T\\
+        &\xlongequal{\text{def of }\varphi_n(A')} L_{n-1} F(h) \circ \delta_n^L \circ \varphi_n(A')\\
+        &\xlongequal{T\text{ homological }\delta \text{-functor}} \delta_n^L \circ L_nF(f) \circ \varphi_n (A')= \delta_n^L \circ (L_nF(f)\circ \varphi_n (A'))
+    \end{align*}
+    By the injectivity of $\delta_n^L$, we have $\varphi_n (A) \circ T_n(f) =L_n F(f) \circ \varphi_n (A')$, which gives the naturality of $\varphi_n(A)$. Then for the well-defined-ness of $\varphi_n(A)$, we take $A'=A$ and $f=\text{id}_A$ and then we're done.
+
+    Next, we need to verify that $\varphi_n$ commutes with $\delta_n$: Given a short exact sequence $0\to A'\xrightarrow{\alpha} A\xrightarrow{\beta} A''\to0$, take an exact sequence $0\to K'':= \ker \pi'' \to P''\xrightarrow{\pi''} A''\to0$ with $P''$ projective. By the projectivity of $P''$, we can lift $\text{id}_{A''}$:
+    \[
+    \begin{tikzcd}
+        0\arrow[r] &K'' \arrow[r] \arrow[d, "g"] &P'' \arrow[r] \arrow[d, "f"] &A'' \arrow[r] \arrow[d, "\text{id}_{A''}"] &0\\
+        0\arrow[r] &A' \arrow[r] &A\arrow[r] &A''\arrow[r]&0
+    \end{tikzcd}
+    \]
+    This yields a commutative diagram:
+    \[
+    \begin{tikzcd}
+        T_n(A'') \arrow[r, "\delta_n{''}^T"] \arrow[d, "\varphi_n(A{''})"] &T_{n-1} (K) \arrow[r, "T_{n-1}(g)"] \arrow[d, "\varphi_{n-1} (K{''})"] &T_{n-1} (A')\arrow[d, "\varphi_{n-1} (A{'})"]\\
+        L_nF(A'') \arrow[r, "\delta_n{''}^L"] &L_{n-1}F(K'') \arrow[r, "L_{n-1} F(g)"] &L_{n-1} F(A')
+    \end{tikzcd}
+    \]
+    Then we have:
+    \begin{align*}
+        \varphi_{n-1} (A') \circ \delta_n^T &\xlongequal{T \text{ homological }\delta \text{-functor}} \varphi_{n-1} (A') \circ T_{n-1} (g) \circ \delta_n''^T \\
+        &\xlongequal{\text{inductive hypothesis for naturality of }\varphi_{n-1}} L_{n-1} F(g) \circ \varphi_{n-1} (K'') \circ \delta_n''^T\\
+        &\xlongequal{\text{def of }\varphi_n(A'')} L_{n-1} F(g) \circ \delta_n''^L \circ \varphi(A'') \xlongequal{L_{n-1}F \text{ homological }\delta \text{-functor}} \delta_n''^L\circ \varphi_n (A'')
+    \end{align*}
+
+    Finally, for the uniqueness of $\varphi$, suppose that there is another $\delta$-functor $\psi= (\psi_n:T_n \to L_nF)_{n\geq 0}$ with $\psi_0=\varphi_0$. Inductively suppose $\psi_{n-1} =\varphi_{n-1}$. Then for any $A\in \text{Ob} (\mathcal{A})$, take $0\to \ker \pi \to P\xrightarrow{\pi} A\to0$ with $P$ projective. Since $\psi$ is a $\delta$-functor, then
+    \[
+    \delta_n^L \circ \psi_n (A)= \psi_{n-1} (K) \circ \delta_n^T= \varphi_{n-1} (K) \circ \delta_n^T= \delta_n^T \circ \varphi_n(A) \overset{\delta_n^L \text{ injective}}{\Rightarrow} \psi_n (A)=\varphi
+    \]
+\end{proof}
+
+
+\subsection{Right Derived Functors}
+
+\noindent\textbf{Method:} Dually to the left derived functors, we can construct the right derived functor by using left exact functor and injective resolution, namely, if $F:\mathcal{A} \to \mathcal{B}$ is a left exact functor between abelian categories, if $\mathcal{A}$ has enough injectives, and if $A$ is an object of $\mathcal{A}$ with an injective resolution $0\to A\xrightarrow{\epsilon} I^0 \xrightarrow{d^0} I^1 \xrightarrow{d^1} \cdots$ where $I:= (0\to I^0 \xrightarrow{d^0} I^1 \to \cdots)$, then we can define the right derived functor by
+\[
+R^iF(A):= H^i(F(I))
+\]
+
+\begin{proposition}{Relations-between-Left and Right Derived Functors Proposition}\\
+Let $F:\mathcal{A} \to \mathcal{B}$ be a left exact functor between abelian categories and let $\mathcal{A}$ have enough injectives. Then $\forall A\in \text{Ob} (\mathcal{A})$, we have
+\[
+R^iF(A) = (L_iF^{op})^{op} (A)
+\]
+\end{proposition}
+
+\begin{proof}
+    Note that $F^{op}:\mathcal{A} ^{op} \to \mathcal{B} ^{op}$ is a right exact functor and that $\mathcal{A}^{op}$ has enough projectives.
+\end{proof}
+
+\noindent\textbf{Remark:} Hence, all the results about right exact functors can apply to left derived functors: The right derived functors are well-defined, satisfy $R^0F(A) \cong F(A)$, form a universal cohomological $\delta$-functor and $R^iF(I)=0$ for all $i\neq 0$ whenever $I$ is injective. Also, in Syzygy Theory, if $R^iF(Q)=0$ ($i\neq 0$), then we call the object $Q$ $F$-acyclic and we can compute the right derived functors of $F$ form $F$-acyclic resolutions.
+
+\noindent\textbf{Example:} Ext functors are right derived functors of $\text{Hom}_R(A,\cdot)$, say
+\[
+\text{Ext}_R^i (A,B)= R^i\text{Hom}_R(A,\cdot) (B)
+\]
+
+\section{Homological Dimensions}
+
+\subsection{Global Dimension and Tor-Dimension}
+
+\begin{definition}{Projective, Injective and Flat Dimensions}\\
+Let $A$ be a right $R$-module.
+\begin{itemize}
+    \item The \textit{projective dimension} $pd(A)$ is minimum integer $n$ (if it exists) such that there is a resolution of $A$ by projective modules
+    \[
+    0\to P_n\to \cdots\to P_1\to P_0\to A\to0
+    \]
+    \item The \textit{injective dimension} $id(A)$ is the minimum integer $n$ (if it exists) such that there is a resolution of $A$ by injective modules
+    \[
+    0\to A\to E^0\to E^1\to \cdots \to E^n\to0
+    \]
+    \item The \textit{flat dimension} $fd(A)$ is the minimum integer $n$ (if it exists) such that there is a resolution of $A$ by flat modules
+    \[
+    0\to F_n\to \cdots \to F_1\to F_0\to A\to0
+    \]
+\end{itemize}
+If no finite resolution exists, then we set $pd(A),id(A)$, or $fd(A)$ equal to $\infty$.
+\end{definition}
+
+\begin{lemma}{pd Lemma}\\
+Let $A$ be a right $R$-module. The followings are equivalent:
+\begin{enumerate}
+    \item $pd(A) \leq d$.
+    \item $\text{Ext}_R^n (A,B)=0$ for all $n>d$ and all $R$-modules $B$.
+    \item $\text{Ext}_R^{d+1}(A,B)=0$ for all $R$-modules $B$.
+    \item If $0\to M_d\to P_{d-1} \to P_{d-2} \to \cdots \to P_1\to P_0\to A\to 0$ is any resolution with $P_i$ projective, then the \textit{syzygy} $M_d$ is also projective.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    It's clear that $(4\Rightarrow 1\Rightarrow 2\Rightarrow 3)$, so it suffices to prove $(3\Rightarrow 4)$. By the General Dimension Shifting Theorem, $\text{Ext}_R^{d+1} (A,B)\cong \text{Ext}_R^1 (M_d,B)$. Hence, by 3, $\text{Ext}_R^1 (M_d,B)=0$ for all $R$-modules $B$, which, by the Ext-Criterion-for-Projective Modules Prop, is equivalent to that $M_d$ is projective.
+\end{proof}
+
+\noindent\textbf{Remark:} Similarly, we have the following two lemmas, where these three lemmas are key tools for characterizing dimensions.
+
+\begin{lemma}{id Lemma}\\
+Let $B$ be a right $R$-module $B$. The followings are equivalent:
+\begin{enumerate}
+    \item $id (B)\leq d$.
+    \item $\text{Ext}_R^n (A,B)=0$ for all $n>d$ and all $R$-modules $A$.
+    \item $\text{Ext}_R^{d+1} (A,B)=0$ for all $R$-modules $B$.
+    \item If $0\to B\to E^0\to \cdots \to E^{d-1} \to M^d\to0$ is a resolution with the $E^j$ injective, then $M^d$ is also injective.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}{fd Lemma}\\
+Let $A$ be a right $R$-module. The followings are equivalent:
+\begin{enumerate}
+    \item $fd(A)\leq d$.
+    \item $\text{Tor}_n^R(A,B)=0$ for all $n>d$ and all left $R$-module $B$.
+    \item $\text{Tor}_{d+1}^R (A,B)=0$ for all left $R$-module $B$.
+    \item If $0\to M_d \to F_{d-1} \to F_{d-2} \to \cdots \to F_0\to A\to 0$ is a resolution with $F_i$ flat, then $M_d$ is also a flat $R$-module.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}{Ext Form of Baer's Criterion}\\
+A left $R$-module $B$ is injective iff Ext$_R^1(R/I,B)=0$ for all left ideals $I$.
+\end{lemma}
+
+\begin{proof}
+    Applying $\text{Hom}_R(\cdot, B)$ to $0\to I \hookrightarrow R\twoheadrightarrow R/I\to0$, we have a long exact sequence
+    \[
+    0\to \text{Hom}_R(R/I,B) \to \text{Hom}_R(R,B) \xrightarrow{\tau} \text{Hom}_R(I,B) \xrightarrow{\delta_0} \text{Ext}_R^1(R/I,B) \to \text{Ext}_R^1 (R,B) \to \cdots
+    \]
+    is exact. By the \textit{Baer's Criterion}, $B$ is injective $\Leftrightarrow$ $\tau$ is surjective $\Leftrightarrow$ $\text{Ext}_R^1 (R/I,B)=0$.
+\end{proof}
+
+\begin{theorem}{Global Dimension Theorem}\\
+Let $R$ be any ring. The following numbers are the same:
+\begin{enumerate}
+    \item $\text{sup } \{ id (B)\mid B\in \text{Ob}(\mathcal{M}od_R) \}$
+    \item $\text{sup } \{pd (A) \mid A\in \text{Ob} (\mathcal{M}od_R) \}$
+    \item $\text{sup } \{ pd (R/I) \mid I$ right ideal of $R\}$
+    \item $\text{sup } \{d \mid \text{Ext}_R^d (A,B)\neq 0$ for some $A,B\in (\mathcal{M}od_R)\}$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    By the $pd$ Lemma and the $id$ Lemma, we can immediately get $\text{sup}(1)= \text{sup} (2)= \text{sup} (4)$. Note that $\text{sup}(2) \geq \text{sup} (3)$. Hence, we may assume that $d:= \text{sup} (3)<\infty$ and that $id(B)>d$ for some module $B$. Then take an resolution
+    \[
+    0\to B\to E^0 \to E^1\to \cdots \to E^{d-1} \to M\to0
+    \]
+    with $E^i$ injective, where $M$ denotes the cokernel of $E^{d-2}\to E^{d-1}$. Then by the General Dimension Shifting Theorem, we have $\text{Ext}_R^{d+1} (R/I,B) \cong \text{Ext}_R^1 (R/I,M)$. By the $id$ Lemma, we have $0= \text{Ext}_R^{d+1} (R/I,B)$. Hence, 
+    \[
+    \text{Ext}_R^1 (R/I,M)=0
+    \]
+    Therefore, by the Ext Form of Baer's Criterion, $M$ is injective, contradicting the assumption that $id(B)>d$.
+\end{proof}
+
+\begin{definition}{Global Dimension}\\
+The common number (possible $\infty$) in the Global Dimension Theorem is called the \textit{right global} (or \textit{homological}) \textit{dimension} of $R$, denoted as $r.gl.\text{dim} (R)$.
+\end{definition}
+
+\noindent\textbf{Remark:} Similarly, one may define the left global dimension $l.gl.\text{dim} (R)$. If $R$ is commutative, we clearly have $l.gl.\text{dim} (R)= r.gl. \text{dim} (R)$.
+
+\begin{theorem}{Tor-Dimension Theorem}\\
+Let $R$ any ring. The following numbers are the same:
+\begin{enumerate}
+    \item $\text{sup } \{fd(A) \mid A\in \text{Ob} (\mathcal{M}od_R) \}$
+    \item $\text{sup } \{fd(R/J) \mid J$ right ideal of $R\}$
+    \item $\text{sup } \{ fd(B) \mid B\in \text{Ob} (_R\mathcal{M}od)\}$
+    \item $\text{sup } \{ fd(R/I) \mid I$ left ideal of $R\}$
+    \item $\text{sup } \{d\mid \text{Tor}_d^R(A,B)\neq 0$ for some $R$-modules $A,B\}$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+    The $fd$ Lemma characterizing $fd(A)$ over $R$ shows that $\text{sup}(5)= \text{sup}(1)\geq \text{sup}(2)$, and the $fd$ Lemma characterizing $fd(A)$ over $R^{op}$ shows that $\sup(5)=\sup(3) \geq \sup(4)$. Suppose that $d:= \sup(2) \leq \sup(4)$. If $d=\infty$, then we're done. Otherwise, if $d<\infty$, then we have $d= \sup(2) \leq \sup(4)\leq \sup(3)$, so we can suppose on the contrary that $fd(B)>d$ for some left $R$-module $B$. Then take a resolution
+    \[
+    0\to M\to F_{d-1} \to \cdots \to F_0\to B\to 0
+    \]
+    with $F_i$ flat, where $M$ denots the kernel of $F_{d-1}\to F_{d-2}$. Then by the General Dimension Shifting Theorem, we have $\text{Tor}_{d+1}^R (R/J,B) \cong \text{Tor}_1^R (R/J,M)$. By the Tor-Criterion-for-Flat Modules Prop, $\text{Tor}_{d+1} ^R(R/J,B)=0$. Hence, $\text{Tor}_1^R (R/J,M)=0 \Leftrightarrow M$ is flat, contradicting $fd(B)>d$.
+\end{proof}
+
+\begin{definition}{Tor-Dimension}\\
+The common number (possible $\infty$) in the Tor-Dimension Theorem is called the \textit{Tor-dimension} of $R$ (or the \textit{weak dimension} of $R$).
+\end{definition}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item For every field $F$, since any module $V$ over $F$ is a vector space, which must be free with its basis, then any resolution of $V$ stops in step $0$, so $F$ has both global dimension and Tor-dimension zero.
+
+    \item $R= \mathbb{Z}$. Since $\mathbb{Z}$ is a PID having the property that every submodule of free module over a PID is again free. For any $\mathbb{Z}$-module (abelian group) $A$, take a resolution $0\to K:=\ker \pi \to F\xrightarrow{\pi} A\to0$ of $A$ with $F$ free and $K\subseteq F$ submodule of $F$. Hence, $K$ is free, which shows that $\mathbb{Z}$ has global dimension $1$ and Tor-dimension $1$.
+
+    \item $R= \mathbb{Z}/ m\mathbb{Z}$ with $p^2\mid m$ where $p$ is a prime integer. Consider $A= \mathbb{Z}/ p\mathbb{Z}$ which is a $\mathbb{Z}/ m\mathbb{Z}$-module. Let $m=p^2k$ where $k \in \mathbb{Z}_+$.
+    \begin{itemize}
+        \item Consider a map $d_1: R\to R$ given by $x\mapsto px$. Then
+        \begin{align*}
+            &\text{ker }d_1= \{x\in R\mid px=0\}=(pk)\\
+            &\text{im }d_1=(p) 
+        \end{align*}
+
+        \item Consider a map $d_2: R\to R$ given by $x\mapsto pkx$. Then
+        \begin{align*}
+            &\text{ker }d_1= \{x\in R\mid pkx=0\}=(p)\\
+            &\text{im }d_1=(pk)
+        \end{align*}
+    \end{itemize}
+    Note that $\text{ker }d_1=\text{im }d_2$ and $ \text{im }d_1= \text{ker }d_2$. Hence, we can construct an infinitely long and periodic \textit{free} resolution of $A$ over $R$
+    \[
+    \cdots \xrightarrow{d_2}R \xrightarrow{d_1} R\xrightarrow{d_2}R \xrightarrow{d_1} R\to A\to0
+    \]
+    Applying $\text{Hom}_R(\cdot, A)$ to $\cdots \xrightarrow{d_2}R \xrightarrow{d_1} R\xrightarrow{d_2}R \xrightarrow{d_1} R\to0$, we get, by $\text{Hom}_R(R,A) \cong A$, a cochain complex
+    \[
+    0\to A\xrightarrow{d_1^*} A\xrightarrow{d_2^*} A\xrightarrow{d_1^*}\cdots
+    \]
+    Note that $d_1^*: a\mapsto pa=0\in A$ and $d_2^*:a \mapsto kpa=0\in A$. Hence, all the differentials in this cochain complex are zero maps. Therefore, $\forall n\geq 0$, $\text{ker }d_{n+1}^*=A, \text{im }d_n^*=0$, so
+    \[
+    \text{Ext}_R^n (A,A):= \text{ker }d_{n+1}^*/ \text{im }d_n^*= A/0\cong A=\mathbb{Z}/p \mathbb{Z}\neq 0
+    \]
+    Similarly, applying $\cdot \otimes _RA$ to $\cdots \xrightarrow{d_2}R \xrightarrow{d_1} R\xrightarrow{d_2}R \xrightarrow{d_1} R\to0$, we can get $\text{Tor}_n^R (A,A) \cong A\neq 0 ,\forall n\geq 0$. Thus, $R=\mathbb{Z}/ m\mathbb{Z}$ with $p^2\mid m$, has global dimension $\infty$ and Tor-dimension $\infty$.\\
+    But in contrast, if $m$ has no square-divisors (e.g.: $m=6=2\times 3$), then by the Chinese Remainder Theorem, $\mathbb{Z}/ 6\mathbb{Z} \cong \mathbb{Z}/ 2\mathbb{Z} \times \mathbb{Z}/ 3\mathbb{Z}$ is a direct product of fields, having global dimension $0$ and Tor-dimension $0$.
+\end{itemize}
+
+\begin{proposition}{Equality-of-Dimension-over-Noetherian Rings Proposition}\\
+Let $R$ be a right Noetherian, i.e.: $R$ satisfies ACCP on right ideals, or equivalently, every right ideal in $R$ is finitely generated.
+\begin{enumerate}
+    \item $fd(A)=pd(A)$ for every finitely generated $R$-module $A$.
+    \item Tor-$\text{dim}(R)=r.gl.\text{dim} (R)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+    \begin{itemize}
+        \item \begin{definition}{Finitely Presented Modules}\\
+        An $R$-module $M$ is finitely presented if there is an exact sequence $R^m\to R^n\to M\to0$.
+        \end{definition}
+        \item \begin{lemma}{Govorov-Lacard Theorem}\\
+        Every finitely presented flat $R$-module $M$ is projective.
+        \end{lemma}
+    \end{itemize}
+    \begin{enumerate}
+        \item Since projective modules are flat, then $fd(A) \leq pd(A)$, so it suffices to suppose that $fd(A)=n <\infty$ and prove that $pd(A)\leq n$. Since $R$ is Noetherian, then there is a resolution
+        \[
+        0\to M\to P_{n-1} \to P_{n-2} \to \cdots\to P_1\to P_0\to A\to0
+        \]
+        where $P_i$ are finitely generated free modules and $M$ denotes the kernel of $P_{n-1} \to P_{n-2}$, which is finitely generated. By the $fd$ Lemma, $M$ is a flat $R$-module. Hence, by the Govorov-Lacard Theorem, $M$ is projective, so $pd(A)\leq n$.
+
+        \item Since by the Global Dimension Theorem and the Tor-Dimension Theorem, we can compute $r.gl.\text{dim} (R)$ and $\text{Tor}$-$\text{dim} (R)$ using the modules $R/I$, then 1 holding can immediately prove 2 holding.
+    \end{enumerate}
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Cohomology of Groups}
+
+\begin{definition}{Modules over Groups}\\
+Let $G$ be a group. An abelian group $A$ on which $G$ acts (on the left) as automorphisms is called a $G$-module. Precisely, the action on $A$ of $G$ satisfies: 
+\begin{itemize}
+    \item $(gh) \cdot a=g\cdot (h\cdot a)$ and $e\cdot a=a$
+    \item $g \cdot (a+b)=g \cdot a+g\cdot b$
+\end{itemize}
+where $g,h, e\in G$ with $e$ identity of $G$ and $a,b \in A$.
+\end{definition}
+
+\noindent\textbf{Remark:} A $G$-module is the same as an abelian group $A$ together with a homomorphism $\varphi:G \to \text{Aut} (A)$. Since an abelian group is the same as a $\mathbb{Z}$-module, then it's also easy to see that a $G$-module $A$ is the same as $\mathbb{Z}G$-module where
+$$\mathbb{Z}G:= \{a_1g_1 +\cdots+ a_ng_n \mid a_i\in \mathbb{Z} ,g_i\in G,n\in \mathbb{N}_+ \}$$
+is the \textit{integral group ring of $G$}.
+
+\begin{definition}{Fixed Points Subgroup}\\
+If $A$ is a $G$-module, then let $A^G:= \{a\in A\mid ga=a ,\forall g\in G\}$ be the set of elements of $A$ fixed by all the elements of $G$.
+\end{definition}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item If $ga=a$ for all $g\in G,a\in A$, i.e.: $A^G=A$, then $G$ is said to act \textit{trivially} on $A$. The abelian group $A=\mathbb{Z}$ will be assumed to have trivial $G$-action for any group $G$ unless otherwise stated.
+
+    \item For any $G$-module $A$, the fixed points $A^G$ of $A$ under the action of $G$ is clearly a $\mathbb{Z}G$-submodule of $A$ on which $G$ acts trivially.
+
+    \item If $V$ is an $n$-dim'l vector space over the field $F$ and $G=\text{GL}_n(F)$, then $V$ is a $G$-module. Since any nonzero element in $V$ can be taken to any other nonzero element in $V$ by some linear transformation, then $V^G=\{0\}$.
+\end{itemize}
+
+\noindent\textbf{Remark:} It's easy to see that a short exact sequence $0\to A\to B\to C\to0$ of $G$-modules can induce an exact sequence 
+\begin{equation}
+    0\to A^G\to B^G\to C^G \to 0 \label{eq:fp_intro}
+\end{equation}
+that in general can \textit{not} be extended to a short exact sequence. One way to see that (\ref{eq:fp_intro}) is exact is to observe that $A^G$ can be related to a Hom group:
+
+
+\begin{proposition}{Identification-of-Fixed Points Proposition}\\
+Let $A$ be a $G$-module and let Hom$_{\mathbb{Z}G} (\mathbb{Z},A)$ be the group of all $\mathbb{Z}G$-module homomorphisms from $\mathbb{Z}$ (with trivial $G$-action) to $A$. Then
+\[
+A^G \cong \text{Hom}_{\mathbb{Z}G} (\mathbb{Z},A)
+\]
+\end{proposition}
+
+
+\begin{proof}
+Note that any $\mathbb{Z}G$-module homomorphism $\alpha:\mathbb{Z} \to A$ is uniquely determined by evaluation on $1$. Let $\alpha_a$ denote the $\mathbb ZG$-module homomorphism with $\alpha(1)=a$. Since $\alpha_a$ is a $\mathbb{Z}G$-module homomorphism, then we have
+\[
+a= \alpha_a (1)=\alpha_a (g\cdot 1)=g\cdot \alpha_a(1)=g\cdot a,\forall g\in G
+\]
+and hence $a\in A^G$. Then $\alpha_a \mapsto a$ gives a $G$-module isomorphism between $\text{Hom}_{\mathbb{Z}G} (\mathbb{Z},A) \cong A$.
+\end{proof}
