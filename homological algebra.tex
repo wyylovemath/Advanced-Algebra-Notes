@@ -1775,32 +1775,9 @@ Let $R$ be a right Noetherian, i.e.: $R$ satisfies ACCP on right ideals, or equi
 \end{proof}
 
 
+\section{Group Cohomology}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Cohomology of Groups}
+\subsection{Basics}
 
 \begin{definition}{Modules over Groups}\\
 Let $G$ be a group. An abelian group $A$ on which $G$ acts (on the left) as automorphisms is called a $G$-module. Precisely, the action on $A$ of $G$ satisfies: 
@@ -1848,4 +1825,385 @@ Note that any $\mathbb{Z}G$-module homomorphism $\alpha:\mathbb{Z} \to A$ is uni
 a= \alpha_a (1)=\alpha_a (g\cdot 1)=g\cdot \alpha_a(1)=g\cdot a,\forall g\in G
 \]
 and hence $a\in A^G$. Then $\alpha_a \mapsto a$ gives a $G$-module isomorphism between $\text{Hom}_{\mathbb{Z}G} (\mathbb{Z},A) \cong A$.
+\end{proof}
+
+\begin{definition}{Standard Resolution}\\
+The \textit{standard resolution} or \textit{bar resolution} of $\mathbb{Z}$ is a projective resolution of $\mathbb{Z}$:
+\[
+\cdots \to F_n\xrightarrow{d_n} F_{n-1} \to \cdots \xrightarrow{d_1} F_0\xrightarrow{\text{aug}} \mathbb{Z} \to0
+\]
+where:
+\begin{itemize}
+    \item $F_n:= \overbrace{\mathbb{Z}G \otimes_\mathbb{Z} \cdots \otimes_\mathbb{Z} \mathbb{Z}G}^{(n+1)\text{-types}} = \mathbb{Z}G^{\otimes (n+1)}$ for $n\in \mathbb{N} \cup \{0\}$, which is a $G$-module under the action defined on simple tensor by
+    \[
+    g \cdot (g_0 \otimes g_1 \otimes \cdots \otimes g_n):= (gg_0) \otimes g_1 \otimes \cdots \otimes g_n
+    \]
+
+    \item $\text{aug}: F_0\to \mathbb{Z}$ is the \textit{augmentation map} defined by $\text{aug} (\sum \alpha_gg) := \sum\alpha_g$.
+
+    \item We define $d_n$ as follows:
+    \begin{itemize}
+        \item \textbf{Claim:} $F_n$ is a free $\mathbb{Z}G$-module of rank $|G|^n$ with $\mathbb{Z}G$-basis $1\otimes g_1\otimes \cdots \otimes g_n$ with $g_i\in G$.
+        \item \begin{proof}
+            \textit{of claim:} By the $G$-action on $F_n$, every pure tensor $g_0\otimes g_1 \otimes \cdots \otimes g_n \in F_n$ can be written as $g_0 \cdot (1 \otimes g_1\otimes \cdots \otimes g_n)$. Since $g_0\in G$ generates the free $\mathbb{Z}$-module $\mathbb{Z}
+            G$, then every element in $F_n$ can be uniquely expressed as $\mathbb{Z}G$-linear combination of the set $\mathcal{B}= \{1\otimes g_1 \otimes \cdots \otimes g_n \mid g_i \in G\}$ with $|\mathcal{B}|= |G|^n$.
+        \end{proof}
+    \end{itemize}
+    Now we define the $G$-module homomorphisms $d_n$ for $n\geq 1$ on the basis $\{1\otimes g_1\otimes \cdots \otimes g_n\mid g_i\in G\}$ by $d_1(1\otimes g_1):= g_1-1$ and for $n\geq 2$,
+    \begin{align*}
+        d_n(1 \otimes g_1\otimes \cdots \otimes g_n) := &g_1 \cdot (g_2 \otimes \cdots \otimes g_n)\\
+        &+ \sum_{i=1}^{n-1} (-1)^i (g_1 \otimes \cdots \otimes g_{i-1} \otimes (g_ig_{i+1}) \otimes g_{i+2} \otimes \cdots \otimes g_n)\\
+        &+(-1)^n (g_1 \otimes \cdots \otimes g_{n-1})
+    \end{align*}
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Remark:}\begin{itemize}
+    \item The def of $d_n$ is quite strange, so we here give the intuition for the construction of $d_n$: \textit{Homogeneous Resolution}.\\
+    Let $P_n$ denote the free $\mathbb{Z}$-module with basis $\{ (g_0, g_1 ,\cdots, g_n) \mid g_i\in G\}$ and define an action of $G$ on $P_n$ by $g\cdot (g_0 ,g_1 ,\cdots, g_n) := (gg_0 ,gg_1 ,\cdots, gg_n)$. For $n\geq 0$, we define $d_n^P: P_n\to P_{n-1}$ by
+    \[
+    d_n^P(g_0 ,g_1 ,\cdots, g_n) := \sum_{i=0}^n (-1)^i (g_0 ,\cdots, \hat{g_i} ,\cdots, g_n)
+    \]
+    Consider a $\mathbb{Z}G$-module homomorphism $\psi_n: P_n\to F_n$ given by $\psi_n(g_0 ,g_1 ,\cdots, g_n) := g_0 \otimes (g_0^{-1}g_1) \otimes (g_1^{-1}g_2) \otimes \cdots \otimes (g_{n-1}^{-1} g_n)$, which is easy to check that $\psi_n$ is an isomorphism with inverse $g_0 \otimes g_1\otimes \cdots \otimes g_n \mapsto (g_0, g_0g_1, \cdots, g_0g_1\cdots g_n)$, so we get $P_n\cong F_n$. Hence, $d_n$ is induced by $d_n^P$.
+
+    \item Applying $\text{Hom}_{\mathbb{Z}G} (\cdot, A)$ to the standard resolution we get a cochain complex
+    \[
+    0\to \text{Hom}_{\mathbb{Z}G} (F_0,A) \xrightarrow{d_1} \text{Hom}_{\mathbb{Z}G} (F_1,A) \xrightarrow{d_2} \text{Hom}_{\mathbb{Z}G} (F_2,A) \xrightarrow{d_3} \cdots
+    \]
+    the cohomology groups of which are $\text{Ext}_{\mathbb{Z}G}^n (\mathbb{Z},A)$. Then, as in the Long Exact Sequence-in-Cohomology Thm, the short exact sequence $0\to A\to B\to C\to0$ of $G$-modules can induce a long exact sequence whose first terms are $0\to A^G\to B^G \to C^G$, of fixed points groups, and whose higher terms are the cohomology groups $\text{Ext}_{\mathbb{Z}G}^n (\mathbb{Z},A)$.
+\end{itemize}
+
+\begin{definition}{Cochains of Groups}\\
+Let $G$ be a finite group and let $A$ be a $G$-module. We define $C^0(G,A) :=A$ and for $n\geq 1$, define $C^n(G,A):=$ the collection of all maps from $G^n= \underbrace{G\times \cdots \times G}_{n\text{-copies}}$ to $A$. The elements of $C^n (G,A)$ are called \textit{$n$-cochains} (\textit{of $G$ with values in $A$}).
+\end{definition}
+
+\noindent\textbf{Remark:} Each $C^n (G,A)$ is an abelian group.
+
+\begin{definition}{Coboundary Homomorphisms}\\
+For $n\geq 0$, we define the \textit{$n$-th coboundary homomorphism} from $C^n(G,A)$ to $C^{n+1} (G,A)$ by
+\begin{align*}
+    d_n(f) (g_1 ,\cdots, g_{n+1}) := &g_1\cdot f(g_2, \cdots, g_{n+1})\\
+    &+\sum_{i=1}^n (-1)^i f(g_1 ,\cdots, g_{i-1} ,g_ig_{i+1} ,g_{i+2} ,\cdots, g_{n+1})\\
+    &+(-1)^{n+1} f(g_1 ,\cdots, g_n)
+\end{align*}
+\end{definition}
+
+\noindent\textbf{Remark:} It's clear that $d_n$ are group homomorphisms with property that $d_n \circ d_{n-1}=0$ for $n\geq 1$.
+
+\begin{definition}{Cohomology Groups}\\
+\begin{itemize}
+    \item Let $Z^n(G,A):= \ker d_n$ for $n\geq0$. The elements of $Z^n (G,A)$ are called \textit{$n$-cocycles}.
+    \item Let $B^n(G,A):= \text{im }d_{n-1}$ for $n\geq 1$ where $B^0 (G,A)=1$. The elements of $B^n(G,A)$ are called \textit{$n$-boundaries}.
+    \item Since $d_n\circ d_{n-1}=0$ for $n\geq 1$, then $B^n(G,A) \subseteq Z^n(G,A)$, so we define the \textit{$n$-th cohomology group of $G$ with coefficients in $A$}, denoted as $H^n(G,A)$ for $n\geq 0$, by
+    \[
+    H^n(G,A) := Z^n(G,A)/ B^n(G,A)
+    \]
+\end{itemize}
+\end{definition}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item For $f=a \in C^0(G,A)$, we have $d_0 (f)(g)= g\cdot a-a$, so
+    \[
+    \ker d_0= \{a\in A\mid g\cdot a=a ,\forall g\in G\}
+    \]
+    i.e.: $Z^0(G,A)=A^G$ and hence $H^0(G,A)= A^G, \forall$ group $G$ and $G$-module $A$.
+
+    \item Suppose $G=1$ is the trivial group. Then $G^n=\{(1,1,\cdots, 1)\}$ is also trivial and hence $f\in C^n(G,A)$ is completely determined by $f(1,\cdots,1)=a \in A$. Identifying $f=a$, we obtain $C^n(G,A)=A$ for all $n\geq 0$, and
+    \[
+    d_n(f) (1,\cdots, 1)= a+\sum_{i=1}^n (-1)^ia+ (-1)^{n+1} a=\begin{cases}
+        0 &\text{, if }n \text{ is even}\\
+        1 &\text{, if }n \text{ is odd}
+    \end{cases}
+    \]
+    so $d_n=0$ if $n$ is even and $d_n=\text{id}$ if $n$ is odd. Therefore,
+    \begin{align*}
+        &H^0(1,A)=A^G=A\\
+        &H^n(1,A)=0 \text{ for all } n\geq1
+    \end{align*}
+
+    \item (\textit{Cohomology of a Finite Cyclic Group}) Suppose $G$ is cyclic of order $m$ with generator $\sigma$. Let $N=1+ \sigma+ \sigma^2+ \cdots +\sigma^{m-1} \in \mathbb{Z}G$. Then $N(\sigma-1)= (\sigma-1)N= \sigma^m-1=0 \in \mathbb{Z}G$, so we have a particularly simple free resolution
+    \[
+    \cdots \xrightarrow{\sigma-1} \mathbb{Z}G \xrightarrow{N} \mathbb{Z}G \xrightarrow{\sigma-1} \cdots \xrightarrow{N} \mathbb{Z}G \xrightarrow{\sigma-1} \mathbb{Z}G \xrightarrow{\text{aug}} \mathbb{Z}\to0
+    \]
+    where aug denotes the augmentation map given by $\text{aug} (\sum \alpha_gg)= \sum \alpha_g$. Applying $\text{Hom}_{\mathbb{Z}G} (\cdot, A)$ to this resolution $(\cdots \xrightarrow{N} \mathbb{Z}G\xrightarrow{\sigma-1}\mathbb{Z}G\to0)$ and using the identification $\text{Hom}_{\mathbb{Z}G} (\mathbb{Z}G,A)=A$, we can get a chain complex
+    \[
+    0\to A\xrightarrow{\sigma-1} A\xrightarrow{N} A\xrightarrow{\sigma-1}A \xrightarrow{N} \cdots
+    \]
+    whose cohomology computes the groups $H^n(G,A)$:
+    \[
+    H^0(G,A)= A^G \text{ and } H^n(G,A)=\begin{cases}
+        A^G/NA &\text{, if }n \text{ is even, } n\geq 2\\
+        A_N/(\sigma-1)A &\text{, if }n \text{ is odd, } n\geq 1
+    \end{cases}
+    \]
+    where $A_N:= \{a\in A\mid Na=0\}$ is the subgroup of $A$ annihilated by $N$, since the kernel of multiplication by $\sigma-1$ is $A^G$.\\
+    In particular, if $G= \langle \sigma\rangle$ acts trivially on $A$, then $Na=ma$, so, in this case, $H^0(G,A)=A$ and $H^n (G,A)= \begin{cases}
+        A/mA &\text{, if }n \text{ is even, } n\geq 2\\
+        A_m &\text{, if }n \text{ is odd, } n\geq 1
+    \end{cases}$
+\end{itemize}
+
+\begin{proposition}{Annihilator Inheritance Property Proposition}\\
+Suppose $mA=0$ for some integer $m\geq 1$, i.e.: the $G$-module $A$ has exponent dividing $m$ as an abelian group. Then for all $n\geq0$
+\[
+mZ^n(G,A)=m B^n(G,A)=m H^n(G,A)=0
+\]
+In particular, if $A$ has exponent $p$ for some prime $p$, then the abelian groups $Z^n(G,A), B^n(G,A)$ and $H^n(G,A)$ have exponent dividing $p$, so these groups are all vector spaces over the finite field $\mathbb{F}_p= \mathbb{Z}/p \mathbb{Z}$.
+\end{proposition}
+
+\begin{proof}
+    If $f\in C^n(G,A)$ is an $n$-cochain, then $f\in A$ (if $n=0$), in which case $mf=0$, or $f$ is a function from $G^n$ to $A$ (if $n\geq1$), in which case $mf$ is a function from $G^n$ to $mA=0$, so again $mf=0$. Hence, we immediately have
+    \[
+    mZ^n(G,A)=mB^n(G,A)=0
+    \]
+    so by def, $mH^n(G,A)=0$.
+\end{proof}
+
+\begin{theorem}{Long Exact Sequence-in-Group Cohomology Theorem}\\
+Suppose $0\to A\to B\to C\to0$ is a short exact sequence of $G$-modules. Then there is a long exact sequence of abelian groups:
+\begin{align*}
+    0\to A^G\to B^G\to C^G \xrightarrow{\delta_0} H^1(G,A) \to H^1(G,B) \to H^1(G,C) \xrightarrow{\delta_1} H^2(G,A)\to \cdots
+\end{align*}
+\end{theorem}
+
+\noindent\textbf{Remark:} This theorem gives a technique called \textit{dimension shifting} for cohomology groups, which is one of the particular versions of One-Step Dimension Shifting Prop.
+
+\begin{definition}{Cohomologically Trivial Modules over Groups}\\
+A $G$-module $M$ is called \textit{cohomologically trivial for $G$} if $H^n(G,M)=0, \forall n\geq 1$.
+\end{definition}
+
+\begin{corollary}{of Long Exact Seq.-in-Group Cohomology Thm: Dimension Shfting for Cohomology Groups}\\
+Suppose $0\to A\to M\to C\to0$ is a short exact sequence of $G$-modules and that $M$ is cohomologically trivial for $G$. Then there is an exact sequence
+\[
+0\to A^G\to B^G\to C^G\to H^1(G,A)\to0
+\]
+and
+\[
+H^{n+1} (G,A) \cong H^n(G,C) ,\forall n\geq 1
+\]
+\end{corollary}
+
+\begin{proof}
+    The first statement is clear since $H^1(G,M)=0$. For the second statement, since $M$ is cohomologically trivial for $G$, then we have the portion of the long exact sequence in the Long Exact Sequence-in-Group Cohomology Thm
+    \[
+    0=H^n(G,M)\to H^n(G,C) \to H^{n+1} (G,A) \to H^{n+1} (G,M) =0
+    \]
+    for $n\geq 1$.
+\end{proof}
+
+
+\subsection{Induced Modules}
+
+\noindent\textbf{Intuition:} For using the above tool, dimension shfting, of computing cohomology groups, we need to ensure that we can find the cohomologically trivial group $M$.
+
+\begin{definition}{Induced Modules}\\
+Let $G$ be a group, let $H$ be a subgroup of $G$ and let $A$ be an $H$-module. Define the \textit{induced $G$-module}, $M_H^G(A)$, by
+\[
+M_H^G(A):= \text{Hom}_{\mathbb{Z}H} (\mathbb{Z}G,A)
+\]
+In other words, $M_H^G(A)$ is the set of maps $f$ from $G$ to $A$ satisfying $f(hx)=h f(x)$ for every $x\in G$ and $h\in H$.
+\end{definition}
+
+\noindent\textbf{Remark:} \begin{itemize}
+    \item The action of an element $g\in G$ on $f\in M_H^G(A)$ is given by $(g\cdot f) (x)= f(xg)$ for $x\in G$.
+
+    \item Note that the module $\mathbb{Z}G \otimes _{\mathbb{Z}H}A$, obtained by extension of scalars from $\mathbb{Z}H$ to $\mathbb{Z}G$, is a $G$-module. For a finite group $G$, or more generally if $H$ has finite index in $G$, we have
+    \[
+    M_H^G(A) \cong \mathbb{Z}G \otimes_{\mathbb{Z}H} A
+    \]
+    where the module $\mathbb{Z}G\otimes_{\mathbb{Z}H} A$ is sometimes called the \textit{induced $G$-module} and the module $M_H^G(A)$ is sometimes referred to as the \textit{coinduced $G$-module}. Then the associativity of the tensor product shows that for subgroups $K\leq H\leq G$
+    \[
+    M_H^G(M_K^H(A))= M_K^G(A)
+    \]
+    In fact, the above equation holds in general.
+\end{itemize}
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item If $H$ is a subgroup of $G$ and $0\to A\to B\to C\to0$ is a short exact sequence of $H$-modules, then $0\to M_H^G(A) \to M_H^G(B) \to M_H^G(C)\to0$ is a short exact sequence of $G$-modules.
+
+    \item For the trivial group $H=1$, any abelian group $A$ is an $H$-module. The induced $G$-module $M_1^G(A)$ is just the collection of all maps $f$ from $G$ into $A$.
+
+    \item Suppose that $A$ is a $G$-module. Then there is a natural map $\varphi: A\to M_1^G(A)$ given by $a\mapsto f_a$ with $f_a (x):=xa ,\forall x\in G$. It's clear that $\varphi$ is a group homomorphism. Furthermore, $\varphi$ is a $G$-module homomorphism as well since
+    \[
+    f_{ga} (x):= x(ga)=(xg)a :=f_a(xg)=(g \cdot f_a) (x)
+    \]
+    Since $f_a(1)=a$, then $f_a=0 \Leftrightarrow a=0$, so $\varphi$ is injective. Hence, we can identify $A$ as a $G$-submodule of the induced $G$-module $M_1^G(A)$.\\
+    More generally, if $A$ is a $G$-module and $H$ is any subgroup of $G$, then $\varphi(a) := f_a\in M_H^G(A)$ since
+    \[
+    f_a(hx) := (hx)a= h(xa)= hf_a(x) \;\forall x\in G,h\in H
+    \]
+    say, $\varphi$ can be regarded as an injective $G$-module homomorphism from $A$ to $M_H^G(A)$.
+
+    \item The fixed points are
+    \begin{align*}
+        (M_H^G(A))^G &= \{f: G\to A\mid gf=f,\forall g\in G\}\\
+        &= \{f:G\to A\mid (gf)(x) = f(x) ,\forall g,x\in G\}\\
+        &= \{f:G\to A\mid f(xg)= f(x),\forall g,x\in G\}
+    \end{align*}
+    Taking $x=1,f(g)=f(1), \forall g\in G$, so $f$ is constant on all of $G$. Note that the constant function $f=a$ is an element of $M_H^G(A)$ iff $\forall h\in H$,
+    \[
+    a=f(hx)=hf(x)=ha
+    \]
+    Hence, $(M_H^G(A))^G\cong A^H$. Furthermore, an element $f_a(x)$ in the previous example is in $(M_H^G(A))^G$ iff $xa$ is constant $\forall x\in G$ iff $a\in A^G$.
+\end{itemize}
+
+
+\begin{theorem}{Shapiro's Lemma}\\
+For any subgroup $H$ of $G$, any $H$-module $A$ and any $n\geq 0$, we have
+\[
+H^n(G,M_H^G(A)) \cong H^n(H,A)
+\]
+\end{theorem}
+
+
+\begin{proof}
+    Let $\cdots \to P_1\to P_0\to \mathbb{Z}\to0$ be any resolution of $\mathbb{Z}$ bt projective $G$-modules. The cohomology groups on the LHS $C^n_{LHS} := H^n(G, M_H^G(A))$ are computed by taking homomorphisms from this resolution into $M_H^G(A):= \text{Hom}_{\mathbb{Z}H} (\mathbb{Z}G,A)$. On the other hand, since $\mathbb{Z}G$ is a free $\mathbb{Z}H$-module by Lagrange's, then this $G$-module resolution of $\mathbb{Z}$ is also a resolution of $\mathbb{Z}$ by projective $H$-modules, so by taking homomorphisms into $A$, the same resolution may be used to compute the cohomology groups on the RHS $C^n_{RHS} := H^n(H,A)$. To see that these two collections of cohomology groups, $C^n_{LHS}$ and $C^n_{RHS}$, are isomorphic, we use the natural isomorphism of abelian groups
+    \[
+    \Phi_n: \text{Hom}_{\mathbb{Z}G} (P_n, \text{Hom}_{\mathbb{Z}H} (\mathbb{Z}G,A)) \xrightarrow{\cong} \text{Hom}_{\mathbb{Z} H} (P_n,A)
+    \]
+    given by $\Phi_n(f)(p):= f(p)(1)$, for all $f\in \text{Hom}_{\mathbb{Z}G} (P_n,\text{Hom}_{\mathbb{Z}H} (\mathbb{Z}G,A))$ and $p\in P_n$. The inverse isomorphism $\Psi_n$ is defined by $\Psi_n(f') (p)(g) := f'(gp) \in A$ for all $f'\in \text{Hom}_{\mathbb{Z}H} (P_n,A), p\in P_n$ and $g\in G$. For the well-defined-ness of $\Phi_n$ and $\Psi_n$, $\forall h\in H$,
+    \begin{align*}
+        &\Phi_n(f)(hp) := f(hp)(1) =(h\cdot f(p)) (1)= f(p) (h)= f(p) (h\cdot 1) =h\cdot f(p)(1)= h\cdot \Phi_n(f)(p)\\
+        &\Psi_n(f') (p)(hg):= f' (hgp) =h\cdot f'(gp)=h \cdot \Psi_n(f') (p)(g)
+    \end{align*}
+    Note that the following diagram commutes:
+    \[
+    \begin{tikzcd}
+        C^n_{LHS} \arrow[r, "d_n^L"] \arrow[d, "\Phi_n"] &C_{LHS}^{n+1}\\
+        C_{RHS}^n \arrow[r, "d_n^R"] &C_{RHS}^{n+1}
+    \end{tikzcd}
+    \]
+    since $\forall f\in C^n_{LHS},p\in P_n$, we have
+    \begin{align*}
+        \Phi_{n+1} (d_n^L(f))(p)= d_n^L(f)(p)(1) =f(d_{n+1}^R(p)) (1)= \Phi_n(f) (d_{n+1}^R(p))= (d_{n+1}^R\circ \Phi_n) (f)(p)
+    \end{align*}
+    Then we're done.
+\end{proof}
+
+\begin{corollary}{1 of Shapiro's Lemma}\\
+For any $G$-module $A$, the module $M_1^G(A)$ is cohomologically trivial for $G$, i.e.: $H^n(G, M_1^G(A))=0$ for all $n\geq 1$.
+\end{corollary}
+
+\begin{proof}
+    This follows immediately from the Shapiro's Lemma by applying $H=1$ and from the secong example of cohomology groups.
+\end{proof}
+
+\noindent\textbf{Remark:} This coro shows that the third example of induced modules gives us a short exact sequence of $G$-modules
+\[
+0\to A\xrightarrow{\varphi} M\to C\to0
+\]
+where $M=M_1^G(A)$ is cohomologically trivial for $G$ and where $C=M/ \text{im }\varphi$. Then the Dimension Shifting for Cohomology Groups then becomes:
+
+\begin{corollary}{2 of Shapiro's Lemma}\\
+For any $G$-module $A$ and anny $n\geq 1$, we have
+\[
+H^{n+1} (G,A) \cong H^n(G,M_1^G(A)/A)
+\]
+\end{corollary}
+
+\subsection{Important Maps between Cohomology Groups}
+
+\noindent\textbf{Intuition:} In general, suppose we have two groups $G$ and $G'$ and that $A$ is a $G$-module and $A'$ is a $G'$-module. If $\varphi: G'\to G$ is a group homomorphism, then $A$ becomes a $G'$-module by defining $g'\cdot a:= \varphi(g')a$ for $g'\in G'$ and $a\in A$. If now $\psi:A\to A'$ is a homomorphism of abelian groups, then we consider whether $\psi$ is a $G'$-module homomorphism:
+
+\begin{definition}{Compatible Group Homomorphisms}\\
+Let $A$ be a $G$-module and let $A'$ be a $G'$-module. Th group homomorphisms $\varphi: G'\to G$ and $\psi:A\to A'$ are said to be \textit{compatible} if $\psi$ is a $G'$-module homomorphism when $A$ is made into a $G'$-module by means of $\varphi$, i.e.: if $\forall g'\in G',a\in A$,
+\[
+\psi(g'\cdot a)= \psi(\varphi(g')a)= g'\psi(a)
+\]
+\end{definition}
+
+\noindent\textbf{Remark:} The group homomorphism $\varphi:G'\to G$ induces a group homomorphism $\varphi^n:(G')^n \to G^n$ and hence a group homomorphism from $C^n(G,A)$ to $C^n(G',A)$ given by $f\mapsto f\circ \varphi^n$. Similarly, the group homomorphism $\psi: A\to A'$ induces a group homomorphism from $C^n(G',A)$ to $C^n(G',A')$ given by $f \mapsto \psi\circ f$. Therefore, taking the two induced group homomorphisms together, we obtain a final induced homomorphism
+\[
+\lambda_n: \substack{C^n(G,A) \;\to\; C^n(G',A')\\
+f \;\mapsto\; \psi\circ f\circ \varphi^n}
+\]
+If in addition $\varphi$ and $\psi$ are \textit{compatible} homomorphisms, then it's easy to check that the induced maps $\lambda_n$ commute with the coboundary homomorphisms:
+\[
+\lambda_{n+1} \circ d_n=d_n' \circ \lambda_n \;\;\;\forall n\geq 0
+\]
+which follows that $\lambda_n$ maps cocycles to cocycles and coboundaries to coboundaries, and hence induces a group homomorphism on cohomology groups
+\[
+\lambda_n:H^n(G,A) \to H^{n} (G',A')
+\]
+for $n\geq 0$.
+
+\noindent\textbf{Example:} \begin{itemize}
+    \item Suppose $G=G'$ and $\varphi=\text{id}_G$ is the identity map on $G$. Then the group homomorphism $\psi:A\to A'$ is immediately compatible with $\varphi$. Hence, any $G$-module homomorphism from $A$ to $A'$ induces a group homomorphism
+    \[
+    H^n(G,A)\to H^n(G,A') \text{ for }n\geq 0
+    \]
+    In particular, if $0\to A\to B\to C\to0$ is a short sequence of $G$-modules, then we obtain induced homomorphisms from $H^n(G,A)$ to $H^n(G,B)$ and from $H^n(G,B)$ to $H^n(G,C)$, for $n\geq0$.
+
+    \item (\textit{Restriction Homomorphism}) If $A$ is a $G$-module, then $A$ is also an $H$-module for any subgroup $H$ of $G$. Consider the inclusion map $\varphi:H \hookrightarrow G$ and the identity map $\psi=\text{id}_A:A\to A$ on $A$. Then it's clear that $\varphi$ and $\psi$ are compatible homomorphisms. The corresponding induced group homomorphism on cohomology is called the \textit{restriction homomorphism}:
+    \[
+    \text{Res}: H^n(G,A) \to H^n(H,A),n\geq 0
+    \]
+
+    \item (\textit{Inflation Homomorphism}) Suppose $H$ is a normal subgroup of $G$ and $A$ is a $G$-module. Note that the elements $A^H$ of $A$ that are fixed by $H$ are naturally a $(G/H)$-module under the action given by
+    \[
+    (gH) \cdot a=g\cdot a ,\forall g\in G,a\in A
+    \]
+    Hence, consider the projection map $\varphi:G\to G/H$ and this inclusion map $\psi:A^H \hookrightarrow A$, which are compatible homomorphisms. Then the corresponding group homomorphism on cohomology groups is called the \textit{inflation homomorphism}:
+    \[
+    \text{Inf}:H^n (G/H,A^H) \to H^n(G,A),n\geq0
+    \]
+
+    \item (\textit{Corestriction Homomorphism}) Suppose that $H$ is a subgroup of $G$ of index $m<\infty$ and that $A$ is a $G$-module. Let $g_1,\cdots,g_m$ be representatives for the left cosets of $H$ in $G$, i.e.: $G= g_1H\cup \cdots \cup g_mH$. Define a map
+    \[
+    \psi: \substack{M_H^G(A) \;\to\; A\\
+    f\;\mapsto\; \sum_{i=1}^m g_i\cdot f(g_i^{-1})}
+    \]
+    Since $(g_ih) f((g_ih)^{-1})= (g_ih)f(h^{-1}g_i^{-1})= (g_ihh^{-1})f(g_i^{-1})= g_if(g_i^{-1})$, then the map $\psi$ is independent of the choice of coset representatives. It's easy to see that $\psi$ is a $G$-module homomorphism and that it is surjective, so we obtain a group homomorphism $\widetilde{\psi}_n: H^n(G,M_H^G(A)) \to H^n(G,A), \forall n\geq 0$. Since $A$ is also an $H$-module, then by the Shapiro's Lemma, we have an isomorphism $\Psi_n:H^n(H,A) \xrightarrow{\cong} H^n(G,M_H^G(A))$. Then the composition of these two homomorphisms is called the \textit{corestriction homomorphism}:
+    \[
+    \text{Cor}:= \widetilde{\psi}_n \circ \Psi_n: H^n(H,A) \to H^n(G,A)
+    \]
+    More explicitly, we can write
+    \[
+    \text{Cor}(f)(g)= \sum_{i=1}^m g_i\cdot \Psi(f)(p)(g_i^{-1})
+    \]
+    where $\Psi$ is the isomorphism $\Psi$ in the proof of Shapiro's Lemma and hence
+    \[
+    \text{Cor}(f)(p)= \sum_{i=1}^m g_if(g_i^{-1}p)
+    \]
+    for $p\in P_n$.
+\end{itemize}
+
+\begin{proposition}{Fundamental Relation-between-Res-and-Cor Proposition}\\
+Suppose $H$ is a subgroup $G$ of index $m$. Then $\text{Cor} \circ \text{Res}=m$, i.e.: if $c$ is a cohomology class in $H^n(G,A)$ for some $G$-module $A$, then
+\[
+\text{Cor} (\text{Res}(c))=mc\in H^n(G,A) ,\forall n\geq0
+\]
+\end{proposition}
+
+\begin{proof}
+    This follows from the explicit formula for corestriction, as follows. If $f\in \text{Hom}_{\mathbb{Z}H} (P_n,A)$ is an element of $\text{Hom}_{\mathbb{Z}G} (P_n,A)$, i.e.: if $f$ is also a $G$-module homomorphism, then $g_if(g_i^{-1}p)= g_ig_i^{-1} f(p) =f(p)$, for $1\leq i\leq m$, where $g_i$ are the representatives for the left cosets of $H$ in $G$. Hence,
+    \[
+    \substack{\text{Hom}_{\mathbb{Z}G}(P_n,A) \;\xrightarrow{\text{Res}} \; \text{Hom}_{\mathbb{Z}H} (P_n,A)\;\xrightarrow{\text{Cor}} \; \text{Hom}_{\mathbb{Z}G} (P_n,A)\\
+    f\;\mapsto\; f\;\mapsto\; mf}
+    \]
+\end{proof}
+
+
+\begin{corollary}{1 of Fundamental Relation-between-Res-and-Cor Proposition}\\
+Suppose the finite group $G$ has order $m$. Then $mH^n(G,A)=0$ for all $n\geq 1$ and all $G$-modules $A$.
+\end{corollary}
+
+\begin{proof}
+    Let $H=1$ be the trivial subgroup of $G$. Then $[G:H]=m$, so by the Fundamental Relation-between-Res-and-Cor Prop, $\forall c\in H^n(G,A)$, we have
+    \[
+    mc=\text{Cor} (\text{Res} (c))
+    \]
+    Since $\forall n\geq1, \text{Res} (c)\in H^n(H,A)= H^n(1,A)=0$, then $\text{Res} (c)=0$. Hence, $mc=0$.
+\end{proof}
+
+\begin{corollary}{2 of Fundamental Relation-between-Res-and-Cor Proposition}\\
+If $G$ is a finite group, then $H^n(G,A)$ is a torsion abelian group for all $n\geq 1$ and all $G$-modules $A$.
+\end{corollary}
+
+\begin{corollary}{3 of Fundamental Relation-between-Res-and-Cor Proposition}\\
+Suppose $G$ is a finite group whose order is relatively prime to the exponent of the $G$-module $A$. Then $H^n(G,A)=0$ for all $n\geq1$. In particular, if $A$ is a finite abelian group with $(|G|,|A|)=1$, then $H^n(G,A)=0$ for all $n\geq 1$.
+\end{corollary}
+
+\begin{proof}
+    By the coro.1 of Fundamental Relation-between-Res-and-Cor Prop, $H^n(G,A)$ is annihilated by $|G|$ and by the Annihilator Inheritance Property Prop, $H^n(G,A)$ is annihilated by the exponent of $A$.
 \end{proof}
