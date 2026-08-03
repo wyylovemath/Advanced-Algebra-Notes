@@ -1,36 +1,57 @@
-# Commutative Algebra Notes
+# 📚 Advanced Algebra Notes
 
-This repository contains my personal LaTeX study notes on **Commutative Algebra**. The notes cover fundamental concepts, key theorems, rigorous proofs, and intuitive explanations.
-
----
-
-## 📖 Overview
-
-- **Language**: English
-- **Format**: PDF (compiled from LaTeX)
-- **Key Topics**: Rings and ideals, modules, localization, Noetherian and Artinian rings, primary decomposition, and dimension theory.
-- **Purpose**: To build a solid algebraic foundation for algebraic geometry and algebraic number theory.
+> A comprehensive set of lecture and study notes on Advanced Algebra and Homological Algebra, focusing on rigorous mathematical structures, detailed proofs, and theoretical frameworks.
 
 ---
 
-## 📂 File Directory
+## 📌 Overview
 
-* 📝 **[Commutative_Algebra-5.pdf](./Commutative_Algebra-5.pdf)**: The compiled PDF version of the notes. You can click on it to read online or download directly.
+This repository contains detailed notes on **Advanced Algebra**, covering topics from fundamental ring and module theory to homological algebra and group cohomology. 
 
----
-
-## 🛠️ Compilation & LaTeX Environment
-
-If you wish to compile or edit the source files yourself:
-1. The document is designed to be compiled using **XeLaTeX** (fully compatible with Overleaf).
-2. It relies on standard mathematical packages, including `amsmath`, `amssymb`, `amsthm`, and `tikz-cd` (for commutative diagrams).
+* **Author:** Wang Yuyao
+* **Target Audience:** Mathematics undergraduates, graduate students, and researchers interested in algebra.
+* **Core Topics:** Ring & Ideal Theory, Module Theory, Homological Algebra, and Group Cohomology.
 
 ---
 
-## 📬 Feedback & Contributions
+## 🗂️ Table of Contents
 
-Since these are personal study notes, typos or mathematical inaccuracies may exist. If you find any errors—ranging from simple typos to flawed proofs—please feel free to contribute:
-* Open an **Issue** to report any mistakes.
-* Submit a **Pull Request** with your corrections.
+### Chapter 0: Elementary Definitions and Conventions
+- **0.1** Rings and Ideals
+- **0.2** Unique Factorization
 
-*Your feedback is highly appreciated!*
+### Chapter 1: Introduction to Module Theory
+- **1.1** Basic Definitions and Examples ($\mathbb{Z}$-modules, $F[x]$-modules)
+- **1.2** Module Homomorphisms
+- **1.3** Generation of Modules
+- **1.4** Direct Products, Direct Sums, and Free Modules
+- **1.5** Tensor Products
+  - Tensor Products of Modules & Homomorphisms
+  - Extension of Scalars
+  - Tensor Product of Algebras
+  - Exact Sequences
+- **1.6** Projective, Injective, and Flat Modules
+
+### Chapter 2 & 3: Homological Algebra & Group Cohomology
+- Chain Complexes & Derived Functors ($\text{Ext}$ and $\text{Tor}$)
+- Group Cohomology
+- Restriction (`Res`) and Corestriction (`Cor`) Maps
+- Fundamental Relations and Applications to Finite Group Cohomology
+
+---
+
+## 📖 Accessing the PDF
+
+The full compiled notes are available in PDF format:
+- [`Advanced_Algebra.pdf`](./Advanced_Algebra.pdf)
+
+---
+
+## 🛠️ Usage & Compilation
+
+If you wish to clone this repository or modify the source files:
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+   cd your-repo-name
